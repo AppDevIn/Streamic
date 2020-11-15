@@ -7,6 +7,4 @@ const videoSchema = mongoose.Schema({
     sourceType: String,
 })
 
-const video = mongoose.model('video' , videoSchema)
-
-export default video
+export default mongoose.models.Video || mongoose.model('Video', videoSchema)
