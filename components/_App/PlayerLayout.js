@@ -4,7 +4,7 @@ import { Container } from "semantic-ui-react";
 import Header from "./Header";
 import HeadContent from "./HeadContent";
 
-function PlayerLayout({ children }) {
+function Layout({ children }) {
   return (
     <>
       <Head>
@@ -16,14 +16,15 @@ function PlayerLayout({ children }) {
           rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css"
         />
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet" />
         <title>Streamic</title>
       </Head>
       {/* <Header /> */}
-      <Container text style={{ paddingTop: "1em" }}>
+      <Container fluid className="mt-5">
         {children}
       </Container>
     </>
   );
 }
 
-export default PlayerLayout;
+export default Layout;
