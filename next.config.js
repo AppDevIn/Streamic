@@ -3,6 +3,7 @@ module.exports = {
         MONGO_SRV: "<mongodb>",
         JWT_SECRET: "<insert-jwt-secret>",
         CLOUDINARY_URL: "<insert-cloudinary-url>",
-        STRIPE_SECRET_KEY: "<insert-stripe-secret-key>"
+        STRIPE_SECRET_KEY: "<insert-stripe-secret-key>",
+        PORT: 8080
     }
 };
