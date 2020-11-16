@@ -4,11 +4,10 @@ const connection = {}
 
 async function connectDb() {
 
+    //To chcek if is already connected
     if (connection.isConnected) {
-
         console.log("Using existing connection")
         return;
-
     }
 
     //Use new database connection
