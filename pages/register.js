@@ -1,5 +1,7 @@
 import React from 'react'
 import { Button, Checkbox, Form } from 'semantic-ui-react'
+import baseUrl from '../utils/baseUrl'
+import axios from 'axios'
 
 const INITIAL_USER = {
   name:"",
@@ -30,6 +32,11 @@ export default function Register() {
     try {
       setLoading(true)
       console.log(user)
+
+      const url = `${baseUrl}/api/register`
+      const payload = {...user}
+      await axios.post(url, payload)
+
     } catch (error){
       setLoading(false)
       // TODO: Catch the error
