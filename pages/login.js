@@ -4,6 +4,7 @@ import baseUrl from '../utils/baseUrl'
 import axios from 'axios'
 import { handleLogin, handleRegister } from '../utils/auth'
 import Head from 'next/head'
+import Layout from '../components/Register/Layout'
 
 const INITIAL_USER = {
   email: "",
@@ -60,7 +61,8 @@ export default function Register() {
       <Head>
         <link rel="stylesheet" href="../static/register.css" />
       </Head>
-      <div>
+
+      <Layout>
         <Grid textAlign='left' style={{ height: '100vh' }} verticalAlign='middle'>
           <Grid.Column style={{ maxWidth: 450, margin: 55 }}>
             <Header as='h3' color='blue' textAlign='left'>
@@ -93,7 +95,8 @@ export default function Register() {
             </Form>
           </Grid.Column>
         </Grid>
-      </div>
+      </Layout>
+
     </>
 
 

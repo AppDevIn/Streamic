@@ -26,12 +26,21 @@ export default async(req, res) => {
         const newUser = await new User({
             username: name,
             email,
-            password: hash
-        }).save()
-        console.log({ newUser });
+            password: hash,
+            token: "token"
+        })
+
         //4) Create a token for the new user 
         const token = jwt.sign({ userId: newUser._id },
             process.env.JWT_SECRET, { expiresIn: "7d" })
+
+
+        //Update the token into the database
+        newUser.token = token
+
+        newUser.save()
+        console.log({ newUser });
+
 
         //5) Send back the token
         res.statusCode = 200

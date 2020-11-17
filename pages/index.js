@@ -2,10 +2,19 @@ import _ from 'lodash'
 import React from 'react'
 import Head from "next/head"
 import RoomList from '../components/Index/RoomList'
-import baseurl from '../utils/baseUrl'
+import baseUrl from '../utils/baseUrl'
 import axios from 'axios'
 import Room from '../components/Room/Room'
-import AddRoom from '../components/Room/AddRoom'
+import Fab from '@material-ui/core/Fab'
+import AddIcon from '@material-ui/icons/Add';
+import { Button } from 'semantic-ui-react'
+import mongoose from 'mongoose'
+
+
+const INITIAL_ROOM = {
+  name: "Hello world()",
+}
+
 
 
 //fetch mongodb list room
@@ -14,20 +23,58 @@ import AddRoom from '../components/Room/AddRoom'
 // add to rooms , creates room objects pushes to mongo. 
 
 export default function Home({ rooms }) {
+
+  const [room, setRoom] = React.useState(INITIAL_ROOM);
+
+  async function handleAddRoom(event) {
+    event.preventDefault();
+    try {
+
+      console.log(room)
+
+      const url = `${baseUrl}/api/room`
+      const payload = { ...room }
+      const response = await axios.post(url, payload)
+
+    } catch (error) {
+
+      // TODO: Catch the error
+      console.log(error);
+
+    } finally {
+
+    }
+  }
+
+
+  async function handleJoinRoom(event) {
+    event.preventDefault();
+
+    const url = `${baseUrl}/api/room`
+    const roomID = "Q2pNvkbaq"
+    //generate room id
+    const payload = { params: { roomID } }
+    const response = await axios.get(url, payload)
+    console.log(response.data);
+
+  }
+
   return (
     <>
       <Head>
         <link rel="stylesheet" type="text/css" href="../static/room.css" />
       </Head>
       <RoomList rooms={rooms} />
-      <AddRoom></AddRoom>
+      <Fab color="primary" aria-label="add" variant="extended" className="float-right">
+        <AddIcon /> Add Room
+      </Fab>
     </>
   )
 }
 
 Home.getInitialProps = async () => {
   //fetch data from server 
-  const url = `${baseurl}/api/rooms`
+  const url = `${baseUrl}/api/rooms`
   const response = await axios.get(url);
   // return response as a object 
   return { rooms: response.data };

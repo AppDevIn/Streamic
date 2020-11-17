@@ -1,4 +1,5 @@
 import { Card, Image  } from 'semantic-ui-react'
+import Layout from '../Index/Layout';
 
 function RoomList({ rooms }) {
 
@@ -8,14 +9,17 @@ function RoomList({ rooms }) {
              <Card raised key={room._id} >
              <Image size="large" circular src={room.mediaUrl} style={{ maxHeight: 200 }}/>
              <Card.Content>
-                 <Card.Header>{room.name}</Card.Header>
+                 <Card.Header>{room.roomName}</Card.Header>
              </Card.Content>
          </Card>
         ));
     }
 
-    return <Card.Group doubling stackable itemsPerRow = "4"
-    >{mapProductsToItems(rooms)}</Card.Group>;
+    return (
+    <Layout>
+    <Card.Group doubling stackable itemsPerRow = "6"
+    >{mapProductsToItems(rooms)}</Card.Group>
+    </Layout>);
     
     
 }
