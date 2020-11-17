@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
 .iframe-container {
     position: relative;
     width: 90%;
@@ -72,4 +73,34 @@
     margin-left: 10px;
     font-size: 16px;
     color: black
+}
+
+#brandname {
+    vertical-align: center;
+    color: white;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    user-select: none;
+}
+
+#searchForm {
+    width: 700px;
+}
+
+#searchForm input[type='text'] {
+    width: 67%;
+    background-color: black;
+    height: 35px;
+    border: 2px solid #202020;
+    font-size: 16px;
+    color: white;
+    opacity: 80%;
+    padding: 10px;
+}
+
+#searchBtn {
+    width: 65px;
+    height: 33px;
+    background-color: white;
+    color: black;
 }

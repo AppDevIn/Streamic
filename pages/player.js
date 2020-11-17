@@ -1,21 +1,32 @@
-import React, { useEffect } from 'react';
-import {Container, Row, Col} from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
 import io from "socket.io-client";
 import YoutubePlayer from "../components/player/YoutubePlayer";
+import PlayerHeader from "../components/_App/PlayerHeader"
+import { Container } from "semantic-ui-react";
+
+// Create context container in a global scope so it can be visible by every component
+const ContextContainer = React.createContext(null);
 
 function Player() {
 
-    // useEffect(() => {
-    //     const socket = io();
-    //     socket.emit("joinRoom");
+    const [parent_link, updateLink] = useState("");
 
-    //     return () => socket.disconnect();
-    // }, [])
+    useEffect(() => {
+        document.body.style.backgroundColor = "#A1A2AB"
+        // const socket = io();
+        // socket.emit("joinRoom");
 
-    return <>
-        <YoutubePlayer/>
-    </>
+        // return () => socket.disconnect();
+    }, [])
+
+    return <ContextContainer.Provider value={{ parent_link, updateLink}}>
+        <PlayerHeader />
+        <Container fluid className="mt-5 ct">
+            <YoutubePlayer/>
+        </Container>
+    </ContextContainer.Provider>
 
 }
 
+export {ContextContainer};
 export default Player;

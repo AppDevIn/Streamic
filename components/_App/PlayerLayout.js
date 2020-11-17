@@ -1,9 +1,6 @@
 import Head from "next/head";
 import { Container } from "semantic-ui-react";
 
-import Header from "./Header";
-import HeadContent from "./HeadContent";
-
 function Layout({ children }) {
   return (
     <>
@@ -19,10 +16,8 @@ function Layout({ children }) {
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet" />
         <title>Streamic</title>
       </Head>
-      {/* <Header /> */}
-      <Container fluid className="mt-5">
-        {children}
-      </Container>
+      {children}
+
     </>
   );
 }

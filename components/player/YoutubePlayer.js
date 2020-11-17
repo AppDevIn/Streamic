@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef, useContext} from 'react';
 import Youtube from 'react-youtube';
 import functions from '../../utils/player';
+import {ContextContainer} from '../../pages/player';
 
 function YoutubePlayer() {
     const [player, setPlayer] = useState(null);
@@ -10,6 +11,13 @@ function YoutubePlayer() {
     const [timeLine, setTimeLine] = useState("");
     
     const progress = useRef();
+
+    const {parent_link} = useContext(ContextContainer);
+
+    useEffect(() => {
+        console.log("changed");
+        // show search result here.
+    }, [parent_link])
 
     // call loopy once player is initialised
     useEffect(() => {
@@ -33,7 +41,7 @@ function YoutubePlayer() {
     };
 
     const onPlayerReady = (event) => {
-        event.target.playVideo();
+        event.target.pauseVideo();
         event.target.mute();
         setPlayer(event.target);
         setTitle(event.target.getVideoData().title);
