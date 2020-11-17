@@ -42,20 +42,18 @@ function YoutubePlayer() {
 
 
     const loopy = () => {
-        const time_total = convert_to_mins_and_secs(player.getDuration(), 0);
-        const current_time = convert_to_mins_and_secs(player.getCurrentTime() - 1, 0);
+        const time_total = convertTime(player.getDuration());
+        const current_time = convertTime(player.getCurrentTime());
         const width = (player.getCurrentTime() / player.getDuration()) * 100 + "%";
         setBarwidth(width);
         setTimeLine(current_time + " / " + time_total);
         setTimeout(loopy, 1000);
     }
-    
-    const convert_to_mins_and_secs = (seconds, minus1) => {
-        var mins = (seconds >= 60) ? Math.floor(seconds / 60) : 0;
-        var secs = (seconds % 60 != 0) ? Math.round(seconds % 60) : 0;
-        var secs = (minus1 == true) ? (secs - 1) : secs; //Youtube always displays 1 sec less than its duration time!!! Then we have to set minus1 flag to true for converting player.getDuration()
-        var time = mins + ":" + ((secs < 10) ? "0" + secs : secs);
-        return time;
+
+    function convertTime(value) {
+        const mins = Math.floor(value / 60);
+        const secs = value % 60 != 0 ? Math.floor(value % 60) : 0
+        return mins + ":" + ((secs < 10) ? "0" + secs : secs)
     }
 
     const play = () => {
@@ -75,7 +73,7 @@ function YoutubePlayer() {
     }
 
     return <div className={styles.left}>
-        <Youtube className={styles.ytplayer} id='player' videoId='8toBW1MJE0I' opts={opts} onReady={onPlayerReady} ></Youtube>
+        <Youtube className={styles.ytplayer} id='player' videoId='GTcM3qCeup0' opts={opts} onReady={onPlayerReady} ></Youtube>
         <div onClick={loopy} id={styles.title}>{title}</div>
         <div id={styles.author}>{author}</div>
 
