@@ -20,9 +20,8 @@ function Layout({ children }) {
       </Head>
       {/* <Header /> */}
       {/* {children} */}
-      <div style={{ padding: "3em" }}>
+      
         {children}
-      </div> 
     </>
   );
 }
