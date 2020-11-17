@@ -4,6 +4,10 @@ import Head from "next/head"
 import RoomList from '../components/Index/RoomList'
 import baseurl from '../utils/baseUrl'
 import axios from 'axios'
+import Room from '../components/Room/Room'
+import Fab from '@material-ui/core/Fab'
+import AddIcon from '@material-ui/icons/Add';
+
 
 
 
@@ -20,7 +24,9 @@ export default function Home({rooms}) {
        <link rel="stylesheet" type="text/css" href="../static/room.css"/>
      </Head>
      <RoomList rooms={rooms}/>
-     
+     <Fab color="primary" aria-label="add" variant="extended" className="float-right">
+            <AddIcon /> Add Room
+        </Fab>
     </>
   )
 }
