@@ -16,14 +16,28 @@ function Layout({ children }) {
           rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css"
         />
+<<<<<<< HEAD
         <title>Streamic</title>
       </Head>
       {/* <Header /> */}
       <Container text style={{ paddingTop: "1em" }}>
         {children}
       </Container>
+=======
+        <title>ReactReserve</title>
+      </Head>
+      {/* <Header /> */}
+      {/* {children} */}
+      <Container text style={{ paddingTop: "1em" }}>
+        {children}
+      </Container> 
+>>>>>>> master
     </>
   );
 }
 
+<<<<<<< HEAD
 export default Layout;
+=======
+export default Layout;
+>>>>>>> master

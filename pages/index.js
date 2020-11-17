@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import _ from 'lodash'
 import 'semantic-ui-css/semantic.min.css'
 import React from 'react'
@@ -13,6 +14,8 @@ import AddRoom from '../components/AddRoom'
 //update the room , displays all the rooms
 // add to rooms , creates room objects pushes to mongo. 
 
+=======
+>>>>>>> master
 export default function Home() {
   return( 
     <>

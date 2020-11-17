@@ -1,18 +1,4 @@
-<<<<<<< HEAD
-import styles from '../styles/Home.module.css'
-import LoginForm from '../components/LoginForm'
-import 'semantic-ui-css/semantic.min.css'
-import login from '../styles/Login.module.css'
-
-export default function Login() {
-    return (
-        <div class="login"> 
-            <LoginForm></LoginForm> 
-        </div>
-    )
-}
-=======
-import React, {useRef} from 'react'
+import React from 'react'
 import {Grid, Header, Form, Message, Button} from 'semantic-ui-react'
 import baseUrl from '../utils/baseUrl'
 import axios from 'axios'
@@ -20,7 +6,8 @@ import {handleLogin, handleRegister} from '../utils/auth'
 import Head from 'next/head'
 
 const INITIAL_USER = {
-  email:"",
+  name:"",
+  email:"jeyavishnu22@yahoo.com",
   password:""
 
 }
@@ -30,33 +17,28 @@ export default function Register() {
   const [user, setUser] = React.useState(INITIAL_USER);
   const [disabled, setDisabled] = React.useState(true)
   const [loading, setLoading] = React.useState(false)
-  const formInput = useRef();
 
-  
   React.useEffect(() => {
     const isUser = Object.values(user).every(el => Boolean(el))
     setDisabled(!isUser);
-  },[user])  
-    
+  },[user])
 
   //Put inside the onChange 
   function handleChange(event){
     const {name, value} = event.target
     setUser((prevState) => ({...prevState, [name]:value}))
-    console.log(user)
   }
-
 
   async function handleSubmit(event){
     event.preventDefault();
     try {
       setLoading(true)
-      console.log("Submitting",user)
+      console.log(user)
 
-      const url = `${baseUrl}/api/login`
+      const url = `${baseUrl}/api/register`
       const payload = {...user}
       const response = await axios.post(url, payload)
-      handleLogin(response.data)
+      handleRegister(response.data);
 
     } catch (error){
       setLoading(false)
@@ -81,15 +63,17 @@ export default function Register() {
           <a href='/'>Back to Home</a>
         </Header>
         <Form size='large'>
-            
             <Form.Input
-              value=""
+            onChange={handleChange}
+            name="email"
+            iconPosition='left' placeholder='Email Address' />
+            <Form.Input 
               onChange={handleChange}
-              name="email"
+              name="name"
               fluid
               iconPosition='left'
-              placeholder='Email'
-              type='Email'
+              placeholder='Username'
+              type='Username'
             />  
              <Form.Input 
               onChange={handleChange}
@@ -100,10 +84,7 @@ export default function Register() {
               type='password'
             />
         
-       
-            <Message >
-                <a href='/register'>Sign Up</a> . <a href='/forgotpassword'>Forgot Password</a> . <a onClick={handleSubmit}>Log In</a>
-            </Message>
+        <Button fluid onClick={handleSubmit} active={disabled || loading} type='submit'>Submit</Button>
         
         </Form>
         </Grid.Column>
@@ -116,4 +97,3 @@ export default function Register() {
     )
 }
 
->>>>>>> master
