@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef} from 'react';
 import Youtube from 'react-youtube';
-import styles from '../../styles/player.module.css';
+import functions from '../../utils/player';
 
 function YoutubePlayer() {
     const [player, setPlayer] = useState(null);
@@ -37,7 +37,10 @@ function YoutubePlayer() {
         event.target.mute();
         setPlayer(event.target);
         setTitle(event.target.getVideoData().title);
-        setAuthor(event.target.getVideoData().author);
+        functions.getVideoTitle(event.target.getVideoData().video_id)
+        .then(result => {
+            setAuthor(result);
+        });
     }
 
 
@@ -72,24 +75,24 @@ function YoutubePlayer() {
         player.seekTo(tl, true);
     }
 
-    return <div className={styles.left}>
-        <Youtube className={styles.ytplayer} id='player' videoId='GTcM3qCeup0' opts={opts} onReady={onPlayerReady} ></Youtube>
-        <div onClick={loopy} id={styles.title}>{title}</div>
-        <div id={styles.author}>{author}</div>
+    return <div className="left">
+        <Youtube className="ytplayer" id='player' videoId='GTcM3qCeup0' opts={opts} onReady={onPlayerReady} ></Youtube>
+        <div onClick={loopy} id="title">{title}</div>
+        <div id="author">{author}</div>
 
-        <div ref={progress} onClick={seek} id={styles.progress}>
-            <div id={styles.bar} style={{width : barWidth}}></div>
+        <div ref={progress} onClick={seek} id="progress">
+            <div id="bar" style={{width : barWidth}}></div>
         </div>
 
         <div className='mt-2'>
-            <button onClick={play} id={styles.play} type="button" className="btn btn-default">
+            <button onClick={play} id="play" type="button" className="btn btn-default">
                 <span className="glyphicon glyphicon-play"></span>
             </button>
-            <button onClick={pause} id={styles.pause} type="button" className="ml-2 btn btn-default">
+            <button onClick={pause} id="pause" type="button" className="ml-2 btn btn-default">
                 <span className="glyphicon glyphicon-pause"></span>
             </button>
 
-            <span id={styles.timeline}>{timeLine}</span>
+            <span id="timeline">{timeLine}</span>
         </div>
     </div>
 }
