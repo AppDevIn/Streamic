@@ -51,7 +51,7 @@ export default function Home({rooms}) {
     event.preventDefault();
 
     const url = `${baseUrl}/api/room`
-    const roomID = "Q2pNvkbaq"
+    const roomID = "Q2pNvkbaq" //TODO: get the roomid code
     const payload = {params: {roomID}}
     const response = await axios.get(url, payload)
     console.log(response.data);
