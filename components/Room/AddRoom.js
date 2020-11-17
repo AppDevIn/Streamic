@@ -1,52 +1,78 @@
 import React from 'react'
-import { Button, Header, Image, Modal } from 'semantic-ui-react'
+import { Button, Header, Image, Modal, Form } from 'semantic-ui-react'
+import Fab from '@material-ui/core/Fab'
+import AddIcon from '@material-ui/icons/Add';
+import baseUrl from '../../utils/baseUrl'
+import axios from 'axios'
+
+const INITIAL_ROOM = {
+    name: ""
+}
 
 export default function AddRoom() {
-    return ( <
-        Modal onClose = {
-            () => setOpen(false)
-        }
-        onOpen = {
-            () => setOpen(true)
-        }
-        open = { open }
-        trigger = { < Button > Show Modal < /Button>} > <
-            Modal.Header > Select a Photo < /Modal.Header> <
-            Modal.Content image >
-            <
-            Image size = 'medium'
-            src = 'https://react.semantic-ui.com/images/avatar/large/rachel.png'
-            wrapped / >
-            <
-            Modal.Description >
-            <
-            Header > Default Profile Image < /Header> <
-            p >
-            We 've found the following gravatar image associated with your e-mail
-            address. <
-            /p> <
-            p > Is it okay to use this photo ? < /p> < /
-            Modal.Description > <
-            /Modal.Content> <
-            Modal.Actions >
-            <
-            Button color = 'black'
-            onClick = {
-                () => setOpen(false)
-            } >
-            Nope <
-            /Button> <
-            Button
-            content = "Yep, that's me"
-            labelPosition = 'right'
-            icon = 'checkmark'
-            onClick = {
-                () => setOpen(false)
-            }
-            positive /
-            >
-            <
-            /Modal.Actions> < /
-            Modal >
-        )
+    const [open, setOpen] = React.useState(false)
+
+    const [room, setName] = React.useState(INITIAL_ROOM);
+
+    function handleChange(event) {
+        const { name, value } = event.target
+        setName((prevState) => ({ ...prevState, [name]: value }))
+        console.log(room)
     }
+
+    async function handleAddRoom(event) {
+        event.preventDefault();
+        try {
+            console.log(room)
+            const url = `${baseUrl}/api/rooms`
+            const payload = { ...room }
+            const response = await axios.post(url, payload)
+
+        } catch (error) {
+            // TODO: Catch the error
+            console.log(error);
+
+        } finally {
+            setOpen(false)
+        }
+    }
+
+    // React.useEffect(() => {
+    //     const isUser = Object.values(user).every(el => Boolean(el))
+    //     setDisabled(!isUser);
+    // }, [user])
+
+    return (
+        <Modal
+            onClose={() => setOpen(false)}
+            onOpen={() => setOpen(true)}
+            open={open}
+            trigger={<Fab color="primary" aria-label="add" variant="extended" className="float-right"> <AddIcon /> Add Room </Fab>}
+        >
+            <Modal.Header>Create a room</Modal.Header>
+            <Modal.Content>
+                <Form.Field>
+                    <Form.Input
+                        onChange={handleChange}
+                        fluid
+                        iconPosition='left'
+                        placeholder='Room Name'
+                        type="Email"
+                    />
+                </Form.Field>
+            </Modal.Content>
+            <Modal.Actions>
+                <Button color='black' onClick={() => setOpen(false)}>
+                    Cancel
+                </Button>
+                <Button
+                    content="Create"
+                    labelPosition='right'
+                    icon='checkmark'
+                    onClick={() => handleAddRoom}
+                    positive
+                />
+            </Modal.Actions>
+        </Modal>
+    )
+}

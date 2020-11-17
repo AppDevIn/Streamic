@@ -5,8 +5,7 @@ import RoomList from '../components/Index/RoomList'
 import baseurl from '../utils/baseUrl'
 import axios from 'axios'
 import Room from '../components/Room/Room'
-import Fab from '@material-ui/core/Fab'
-import AddIcon from '@material-ui/icons/Add';
+import AddRoom from '../components/Room/AddRoom'
 
 
 //fetch mongodb list room
@@ -14,17 +13,14 @@ import AddIcon from '@material-ui/icons/Add';
 //update the room , displays all the rooms
 // add to rooms , creates room objects pushes to mongo. 
 
-export default function Home({rooms}) {
-  return( 
+export default function Home({ rooms }) {
+  return (
     <>
-     <Head>
-       <link rel="stylesheet" type="text/css" href="../static/room.css"/>
-       <link rel="stylesheet" type="text/css" href="../static/room.css"/>
-     </Head>
-     <RoomList rooms={rooms}/>
-     <Fab color="primary" aria-label="add" variant="extended" className="float-right">
-            <AddIcon /> Add Room
-        </Fab>
+      <Head>
+        <link rel="stylesheet" type="text/css" href="../static/room.css" />
+      </Head>
+      <RoomList rooms={rooms} />
+      <AddRoom></AddRoom>
     </>
   )
 }
@@ -34,7 +30,7 @@ Home.getInitialProps = async () => {
   const url = `${baseurl}/api/rooms`
   const response = await axios.get(url);
   // return response as a object 
-  return {rooms:response.data};
+  return { rooms: response.data };
   //note: thios object will be merged with exisiting props
-  
+
 }
