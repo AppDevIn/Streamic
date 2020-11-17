@@ -11,14 +11,17 @@ import {Button} from 'semantic-ui-react'
 import mongoose from 'mongoose'
 
 
+<<<<<<< HEAD
 const INITIAL_ROOM = {
   name:"Hello world()",
 }
 
 
 
+=======
+>>>>>>> b6167f27bbfaa024956081d381b728414a28cb8b
 //fetch mongodb list room
-//set count
+//set count 
 //update the room , displays all the rooms
 // add to rooms , creates room objects pushes to mongo. 
 
