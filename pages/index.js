@@ -7,12 +7,12 @@ import axios from 'axios'
 import Room from '../components/Room/Room'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add';
-import {Button} from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react'
 import mongoose from 'mongoose'
 
 
 const INITIAL_ROOM = {
-  name:"Hello world()",
+  name: "Hello world()",
 }
 
 
@@ -22,32 +22,32 @@ const INITIAL_ROOM = {
 //update the room , displays all the rooms
 // add to rooms , creates room objects pushes to mongo. 
 
-export default function Home({rooms}) {
+export default function Home({ rooms }) {
 
   const [room, setRoom] = React.useState(INITIAL_ROOM);
 
-  async function handleAddRoom(event){
+  async function handleAddRoom(event) {
     event.preventDefault();
     try {
-      
+
       console.log(room)
 
       const url = `${baseUrl}/api/room`
-      const payload = {...room}
+      const payload = { ...room }
       const response = await axios.post(url, payload)
 
-    } catch (error){
-      
+    } catch (error) {
+
       // TODO: Catch the error
       console.log(error);
 
     } finally {
-      
+
     }
   }
 
 
-  async function handleJoinRoom(event){
+  async function handleJoinRoom(event) {
     event.preventDefault();
 
     const url = `${baseUrl}/api/room`
@@ -58,15 +58,14 @@ export default function Home({rooms}) {
 
   }
 
-  return( 
+  return (
     <>
-     <Head>
-       <link rel="stylesheet" type="text/css" href="../static/room.css"/>
-       <link rel="stylesheet" type="text/css" href="../static/room.css"/>
-     </Head>
-     <RoomList rooms={rooms}/>
-     <Fab color="primary" aria-label="add" variant="extended" className="float-right">
-            <AddIcon /> Add Room
+      <Head>
+        <link rel="stylesheet" type="text/css" href="../static/room.css" />
+      </Head>
+      <RoomList rooms={rooms} />
+      <Fab color="primary" aria-label="add" variant="extended" className="float-right">
+        <AddIcon /> Add Room
       </Fab>
     </>
   )
@@ -77,7 +76,7 @@ Home.getInitialProps = async () => {
   const url = `${baseUrl}/api/rooms`
   const response = await axios.get(url);
   // return response as a object 
-  return {rooms:response.data};
+  return { rooms: response.data };
   //note: thios object will be merged with exisiting props
-  
+
 }
