@@ -10,6 +10,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { Button } from 'semantic-ui-react'
 import mongoose from 'mongoose'
 import AddRoom from '../components/Room/AddRoom'
+import Layout from '../components/Index/Layout'
 
 
 const INITIAL_ROOM = {
@@ -64,9 +65,10 @@ export default function Home({ rooms }) {
       <Head>
         <link rel="stylesheet" type="text/css" href="../static/room.css" />
       </Head>
+      <Layout>
       <RoomList rooms={rooms} />
       <AddRoom></AddRoom>
-
+      </Layout>
     </>
   )
 }
