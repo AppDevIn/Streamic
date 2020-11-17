@@ -10,13 +10,11 @@ import AddIcon from '@material-ui/icons/Add';
 import { Button } from 'semantic-ui-react'
 import mongoose from 'mongoose'
 import AddRoom from '../components/Room/AddRoom'
-
+import JoinRoom from '../components/Room/JoinRoom'
 
 const INITIAL_ROOM = {
   name: "Hello world()",
 }
-
-
 
 //fetch mongodb list room
 //set count 
@@ -65,6 +63,7 @@ export default function Home({ rooms }) {
         <link rel="stylesheet" type="text/css" href="../static/room.css" />
       </Head>
       <RoomList rooms={rooms} />
+      <JoinRoom></JoinRoom>
       <AddRoom></AddRoom>
 
     </>
