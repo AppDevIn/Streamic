@@ -9,6 +9,7 @@ import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add';
 import { Button } from 'semantic-ui-react'
 import mongoose from 'mongoose'
+import AddRoom from '../components/Room/AddRoom'
 
 
 const INITIAL_ROOM = {
@@ -52,7 +53,7 @@ export default function Home({ rooms }) {
 
     const url = `${baseUrl}/api/room`
     const roomID = "Q2pNvkbaq" //TODO: get the roomid code
-    const payload = {params: {roomID}}
+    const payload = { params: { roomID } }
     const response = await axios.get(url, payload)
     console.log(response.data);
 
@@ -64,9 +65,8 @@ export default function Home({ rooms }) {
         <link rel="stylesheet" type="text/css" href="../static/room.css" />
       </Head>
       <RoomList rooms={rooms} />
-      <Fab color="primary" aria-label="add" variant="extended" className="float-right">
-        <AddIcon /> Add Room
-      </Fab>
+      <AddRoom></AddRoom>
+
     </>
   )
 }
