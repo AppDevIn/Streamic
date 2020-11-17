@@ -7,10 +7,8 @@ import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add';
 
 
-
-
 //fetch mongodb list room
-//set count
+//set count 
 //update the room , displays all the rooms
 // add to rooms , creates room objects pushes to mongo. 
 
@@ -26,6 +24,7 @@ export default function Home() {
         <Fab color="primary" aria-label="add" variant="extended" className="float-right">
             <AddIcon /> Add Room
         </Fab>
+        <AddRoom></AddRoom>
        </>
     )
 }
