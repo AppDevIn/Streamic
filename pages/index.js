@@ -2,8 +2,9 @@ import _ from 'lodash'
 import 'semantic-ui-css/semantic.min.css'
 import React from 'react'
 import Head from "next/head"
-import Room from '../components/Room'
-import AddRoom from '../components/AddRoom'
+import Room from '../components/Room/Room'
+import Fab from '@material-ui/core/Fab'
+import AddIcon from '@material-ui/icons/Add';
 
 
 
@@ -14,22 +15,17 @@ import AddRoom from '../components/AddRoom'
 // add to rooms , creates room objects pushes to mongo. 
 
 export default function Home() {
-    return ( <
-        >
-        <
-        Head >
-        <
-        link rel = "stylesheet"
+    return ( 
+        <>
+        <Head >
+        < link rel = "stylesheet"
         type = "text/css"
         href = "../static/room.css" / >
-        <
-        link rel = "stylesheet"
-        type = "text/css"
-        href = "../static/room.css" / >
-        <
-        /Head> <
-        Room > < /Room> <
-        AddRoom > < /AddRoom> <
-        />
+        </Head> 
+        <Room > </Room> 
+        <Fab color="primary" aria-label="add" variant="extended" className="float-right">
+            <AddIcon /> Add Room
+        </Fab>
+       </>
     )
 }

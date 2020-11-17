@@ -30,4 +30,6 @@
   .control-ps{
     position: relative;
   }
-  
+.float-right{ 
+  float:right;
+}
