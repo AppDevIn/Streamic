@@ -26,7 +26,7 @@ const userSchema = mongoose.Schema({
         type: String
     },
     rooms: {
-        type: { type: mongoose.Schema.Types.ObjectID, ref: "rooms" }
+        type: [{ type: mongoose.Schema.Types.ObjectID, ref: "rooms" }]
     }
 })
 
