@@ -12,6 +12,7 @@
         "mongoose": "^5.10.14",
         "next": "^10.0.1",
         "nprogress": "^0.2.0",
+        "passport": "^0.4.1",
         "react": "^16.14.0",
         "react-dom": "^16.14.0",
         "semantic-ui-css": "^2.4.1",

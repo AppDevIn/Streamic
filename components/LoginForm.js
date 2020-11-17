@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react';
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
 
-const LoginForm = () => (
-  <Grid textAlign='left' style={{ height: '100vh' }} verticalAlign='middle'>
+function LoginForm() {
+  const [username, setUsername] = useState("")
+  return(
+    <Grid textAlign='left' style={{ height: '100vh' }} verticalAlign='middle'>
     <Grid.Column style={{ maxWidth: 450 , margin : 50}}>
     <Header as='h3' color='blue' textAlign='left'>
         <a href='/'>Back to Home</a>
@@ -21,6 +23,8 @@ const LoginForm = () => (
       </Form>
     </Grid.Column>
   </Grid>
-)
+  )
+ 
+}
 
 export default LoginForm
