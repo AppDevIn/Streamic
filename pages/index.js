@@ -12,12 +12,11 @@ import mongoose from 'mongoose'
 import AddRoom from '../components/Room/AddRoom'
 import Layout from '../components/Index/Layout'
 
+import JoinRoom from '../components/Room/JoinRoom'
 
 const INITIAL_ROOM = {
   name: "Hello world()",
 }
-
-
 
 //fetch mongodb list room
 //set count 
@@ -67,6 +66,7 @@ export default function Home({ rooms }) {
       </Head>
       <Layout>
       <RoomList rooms={rooms} />
+      <JoinRoom></JoinRoom>
       <AddRoom></AddRoom>
       </Layout>
     </>
