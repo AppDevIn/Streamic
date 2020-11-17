@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef, useContext} from 'react';
 import Youtube from 'react-youtube';
 import functions from '../../utils/player';
 import {ContextContainer} from '../../pages/player';
-import YoutubeCard from './youtubeCard'
-import { Card, CardGroup, Image } from 'semantic-ui-react'
+import YoutubeCard from './youtubeCard';
+import { Card, CardGroup, Image } from 'semantic-ui-react';
+import io from "socket.io-client";
 
 function YoutubePlayer() {
     const [player, setPlayer] = useState(null);
@@ -17,6 +18,8 @@ function YoutubePlayer() {
     const progress = useRef();
 
     const {parent_link} = useContext(ContextContainer);
+
+    const socket = io();
 
     useEffect(() => {
         functions.getRecommendations(parent_link)
@@ -36,6 +39,19 @@ function YoutubePlayer() {
     useEffect(() => {
         if (player != null){
             loopy();
+            console.log("initialising....");
+            socket.emit("joinRoom");
+    
+            socket.on("message", (message) => {
+                console.log(message);
+            });
+    
+            socket.on("streaming", (data) => {
+                console.log(data);
+                handleActions(data);
+            });
+    
+            return () => socket.disconnect();
         }
     },[player]);
 
@@ -53,8 +69,23 @@ function YoutubePlayer() {
         // }
     };
 
+    const handleActions = (data) => {
+        if (player){
+            switch (data.state){
+                case 1:
+                    player.playVideo();
+                    player.seekTo(data.timeline, true);
+                    break;
+                case 2:
+                    player.pauseVideo();
+                    player.seekTo(data.timeline, true);
+                    break;
+            }
+        }
+    }
+
     const onPlayerReady = (event) => {
-        event.target.pauseVideo();
+        event.target.playVideo();
         event.target.mute();
         setPlayer(event.target);
         setTitle(event.target.getVideoData().title);
@@ -81,19 +112,29 @@ function YoutubePlayer() {
     }
 
     const play = () => {
-        player.playVideo();
+        // player.playVideo();
+        var state = 1;
+        var timeline = player.getCurrentTime();
+        const data = {state, timeline};
+        socket.emit("changes", data);
     }
 
     const pause = () => {
-        player.pauseVideo();
+        // player.pauseVideo();
+        var state = 2;
+        var timeline = player.getCurrentTime();
+        const data = {state, timeline};
+        socket.emit("changes", data);
     }
 
     const seek = (event) => {
         const x = event.pageX - progress.current.getBoundingClientRect().left;
         const bw = progress.current.scrollWidth;
-        const tl = x / bw * player.getDuration();
+        const timeline = x / bw * player.getDuration();
         setBarwidth(x);
-        player.seekTo(tl, true);
+        var state = player.getPlayerState();
+        const data = {state, timeline};
+        socket.emit("changes", data);
     }
 
     const playVideo = (info) => {

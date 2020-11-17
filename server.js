@@ -1,6 +1,7 @@
-const app = require('express')()
-const server = require('http').Server(app)
-const next = require('next')
+const app = require('express')();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+const next = require('next');
 require('dotenv').config();
 
 
@@ -25,7 +26,13 @@ const nextHandler = nextApp.getRequestHandler()
 io.on('connection', socket => {
     socket.on('joinRoom', () => {
         console.log(`${socket.id} has joined the room`);
+        socket.emit("message", "Welcome to Streamic.");
+        socket.join("room1");
     });
+
+    socket.on('changes', (data) => {
+        io.to("room1").emit('streaming', data);
+    })
 
     // Runs when client disconnects
     socket.on('disconnect', () => {

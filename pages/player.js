@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import io from "socket.io-client";
 import YoutubePlayer from "../components/player/YoutubePlayer";
 import PlayerHeader from "../components/_App/PlayerHeader"
 import { Container } from "semantic-ui-react";
@@ -12,11 +11,7 @@ function Player() {
     const [parent_link, updateLink] = useState("");
 
     useEffect(() => {
-        document.body.style.backgroundColor = "#A1A2AB"
-        // const socket = io();
-        // socket.emit("joinRoom");
-
-        // return () => socket.disconnect();
+        document.body.style.backgroundColor = "#A1A2AB";
     }, [])
 
     return <ContextContainer.Provider value={{ parent_link, updateLink}}>
