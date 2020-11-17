@@ -87,13 +87,20 @@ function YoutubePlayer() {
     const pause = () => {
         player.pauseVideo();
     }
-    
+
     const seek = (event) => {
         const x = event.pageX - progress.current.getBoundingClientRect().left;
         const bw = progress.current.scrollWidth;
         const tl = x / bw * player.getDuration();
         setBarwidth(x);
         player.seekTo(tl, true);
+    }
+
+    const playVideo = (info) => {
+        player.loadVideoById(info.id);
+        setTitle(info.title);
+        setAuthor(info.publisher);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     return <div className="left">
@@ -120,7 +127,7 @@ function YoutubePlayer() {
 
         <CardGroup className='mt-4' itemsPerRow='3'>
             {cardList.map(card => {
-                return <YoutubeCard info={card} key={card.id} ></YoutubeCard>
+                return <YoutubeCard info={card} key={card.id} onClick={() => playVideo(card)} ></YoutubeCard>
             })}
         </CardGroup>
         

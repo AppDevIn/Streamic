@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, Image } from 'semantic-ui-react'
 
 const youtubeCard = (props) => (
-  <Card>
+  <Card onClick={props.onClick}>
     <Image src={props.info.thumbnail} wrapped ui={false} />
     <Card.Content>
       <Card.Header>{props.info.title}</Card.Header>
