@@ -1,0 +1,33 @@
+.t,img{
+    position: relative;
+    border-radius:50%;
+  }
+  .card{
+    
+    padding: 10px;
+    width: 420px;
+    height: 460px;
+  }
+  .paragarph-center{
+    text-align: center;
+  }
+  .circle-photo{
+    margin: -100px 0px 0px 110px;
+    
+    width: 180px;
+    height: 180px;
+    
+    
+    position: relative;
+  }
+  .title{
+    margin-top: 20px;
+    
+  }
+  .ps{
+    margin: 100px;
+  }
+  .control-ps{
+    position: relative;
+  }
+  
