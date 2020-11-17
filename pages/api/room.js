@@ -1,5 +1,6 @@
 import connectDb from '../../utils/connectDb.js'
 import Room from '../../models/Room.js'
+import User from '../../models/User'
 import mongoose from 'mongoose'
 
 
@@ -27,13 +28,19 @@ async function handlePostRequest(req, res) {
     const { name } = req.body
     console.log(name);
     try {
+        const user = await User.findOne({ token: req.cookies.token })
         const newRoom = await new Room({
             roomName: name,
             isTemporary: false,
-            admins: mongoose.Types.ObjectId("5fb35ed0e7301e9e38f6028b")
+            admins: mongoose.Types.ObjectId(user._id)
 
         }).save()
         console.log({ newRoom });
+
+
+        const update = { $push: { rooms: mongoose.Types.ObjectId(newRoom._id) } };
+        await user.updateOne(update);
+
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
     } catch (error) {
@@ -45,8 +52,11 @@ async function handlePostRequest(req, res) {
 
 async function handleGetRequest(req, res) {
     const { roomID } = req.query;
-    console.log(req.cookies);
     const room = await Room.findOne({ roomID });
+    const user = await User.findOne({ token: req.cookies.token })
+
+    const update = { $push: { rooms: mongoose.Types.ObjectId(room._id) } };
+    await user.updateOne(update);
 
     res.status(200).json(room)
 }

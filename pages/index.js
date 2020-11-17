@@ -12,7 +12,7 @@ import mongoose from 'mongoose'
 
 
 const INITIAL_ROOM = {
-  name:"Hello world",
+  name:"Hello world()",
 }
 
 
@@ -68,7 +68,7 @@ export default function Home({rooms}) {
      <Fab color="primary" aria-label="add" variant="extended" className="float-right">
             <AddIcon /> Add Room
       </Fab>
-      <Button onClick={handleJoinRoom} >Click me </Button>
+      <Button onClick={handleAddRoom} >Click me </Button>
     </>
   )
 }
