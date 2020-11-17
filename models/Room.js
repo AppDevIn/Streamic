@@ -1,14 +1,18 @@
 import mongoose from 'mongoose'
+import shortid from 'shortid'
 
 const { String, Boolean } = mongoose.Schema.Types
 
 const roomSchema = mongoose.Schema({
-    roomID: String,
+    roomID: {
+        type: String,
+        default: shortid.generate()
+    },
     roomName: String,
     isTemporary: Boolean,
     mediaUrl: {
         type: String,
-        default: "<Defaulf linl>"
+        default: "https://react.semantic-ui.com/images/avatar/large/matthew.png"
     },
     admins: { type: mongoose.Schema.Types.ObjectID, ref: "User" },
     Messages: [{ type: mongoose.Schema.Types.ObjectID, ref: "Message" }],

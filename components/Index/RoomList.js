@@ -8,7 +8,7 @@ function RoomList({ rooms }) {
              <Card raised key={room._id} >
              <Image size="large" circular src={room.mediaUrl} style={{ maxHeight: 200 }}/>
              <Card.Content>
-                 <Card.Header>{room.name}</Card.Header>
+                 <Card.Header>{room.roomName}</Card.Header>
              </Card.Content>
          </Card>
         ));

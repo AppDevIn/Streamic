@@ -2,12 +2,17 @@ import _ from 'lodash'
 import React from 'react'
 import Head from "next/head"
 import RoomList from '../components/Index/RoomList'
-import baseurl from '../utils/baseUrl'
+import baseUrl from '../utils/baseUrl'
 import axios from 'axios'
 import Room from '../components/Room/Room'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add';
+import {Button} from 'semantic-ui-react'
 
+
+const INITIAL_ROOM = {
+  name:"Hello world",
+}
 
 
 
@@ -17,6 +22,30 @@ import AddIcon from '@material-ui/icons/Add';
 // add to rooms , creates room objects pushes to mongo. 
 
 export default function Home({rooms}) {
+
+  const [room, setRoom] = React.useState(INITIAL_ROOM);
+
+  async function handleAddRoom(event){
+    event.preventDefault();
+    try {
+      
+      console.log(room)
+
+      const url = `${baseUrl}/api/room`
+      const payload = {...room}
+      const response = await axios.post(url, payload)
+      handleRegister(response.data);
+
+    } catch (error){
+      
+      // TODO: Catch the error
+      console.log(error);
+
+    } finally {
+      
+    }
+  }
+
   return( 
     <>
      <Head>
@@ -26,14 +55,15 @@ export default function Home({rooms}) {
      <RoomList rooms={rooms}/>
      <Fab color="primary" aria-label="add" variant="extended" className="float-right">
             <AddIcon /> Add Room
-        </Fab>
+      </Fab>
+      <Button onClick={handleAddRoom} >Click me </Button>
     </>
   )
 }
 
 Home.getInitialProps = async () => {
   //fetch data from server 
-  const url = `${baseurl}/api/rooms`
+  const url = `${baseUrl}/api/rooms`
   const response = await axios.get(url);
   // return response as a object 
   return {rooms:response.data};
