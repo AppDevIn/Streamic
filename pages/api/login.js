@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-
-export default function loginhandler(req,res) => { 
-    res.statusCode = 200
-    res.json({name : 'John Doe'})
-=======
 import connectDb from '../../utils/connectDb.js'
 import User from '../../models/User.js'
 import bcrypt from 'bcrypt'
@@ -40,5 +34,4 @@ export default async(req, res) => {
     }
 
 
->>>>>>> master
 }

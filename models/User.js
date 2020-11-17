@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema({
     photo: {
         type: String
     },
-    room: {
+    rooms: {
         type: { type: mongoose.Schema.Types.ObjectID, ref: "rooms" }
     }
 })
