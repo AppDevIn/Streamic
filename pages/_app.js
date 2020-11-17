@@ -1,4 +1,3 @@
-import '../styles/globals.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from "next/app";
 import Layout from '../components/_App/Layout';
