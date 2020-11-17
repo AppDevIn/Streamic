@@ -19,9 +19,10 @@ function Layout({ children }) {
         <title>ReactReserve</title>
       </Head>
       {/* <Header /> */}
+      {/* {children} */}
       <Container text style={{ paddingTop: "1em" }}>
         {children}
-      </Container>
+      </Container> 
     </>
   );
 }
