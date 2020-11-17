@@ -13,9 +13,9 @@ export default async(req, res) => {
 
     try {
         //1) Check if the user already exist
-        const user = User.findOne({ email: email })
+        const user = await User.findOne({ email: email })
 
-        if (user.email) {
+        if (user) {
             console.log(`User already exist with ${email}`)
             res.status(422).send(`User already exist with ${email}`)
             return

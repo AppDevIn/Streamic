@@ -2,7 +2,7 @@ import React from 'react'
 import {Grid, Header, Form, Message, Button} from 'semantic-ui-react'
 import baseUrl from '../utils/baseUrl'
 import axios from 'axios'
-import {handleLogin} from '../utils/auth'
+import {handleLogin, handleRegister} from '../utils/auth'
 import Head from 'next/head'
 
 const INITIAL_USER = {
@@ -38,7 +38,7 @@ export default function Register() {
       const url = `${baseUrl}/api/register`
       const payload = {...user}
       const response = await axios.post(url, payload)
-      handleLogin(response.data);
+      handleRegister(response.data);
 
     } catch (error){
       setLoading(false)
