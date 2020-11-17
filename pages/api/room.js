@@ -45,7 +45,8 @@ async function handlePostRequest(req, res) {
 
 async function handleGetRequest(req, res) {
     const { roomID } = req.query;
-    console.log("Querying", req.query);
+    console.log(req.cookies);
     const room = await Room.findOne({ roomID });
+
     res.status(200).json(room)
 }

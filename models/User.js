@@ -27,6 +27,9 @@ const userSchema = mongoose.Schema({
     },
     rooms: {
         type: [{ type: mongoose.Schema.Types.ObjectID, ref: "rooms" }]
+    },
+    token: {
+        type: String
     }
 })
 
