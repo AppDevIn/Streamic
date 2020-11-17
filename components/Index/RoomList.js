@@ -17,7 +17,7 @@ function RoomList({ rooms }) {
 
     return (
     <Layout>
-    <Card.Group doubling stackable itemsPerRow = "4"
+    <Card.Group doubling stackable itemsPerRow = "6"
     >{mapProductsToItems(rooms)}</Card.Group>
     </Layout>);
     
