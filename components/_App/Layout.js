@@ -19,9 +19,10 @@ function PlayerLayout({ children }) {
         <title>Streamic</title>
       </Head>
       {/* <Header /> */}
+      {/* {children} */}
       <Container text style={{ paddingTop: "1em" }}>
         {children}
-      </Container>
+      </Container> 
     </>
   );
 }
