@@ -6,8 +6,6 @@ import mongoose from 'mongoose'
 
 connectDb()
 export default async(req, res) => {
-
-    console.log(req.method);
     switch (req.method) {
         case "GET":
             await handleGetRequest(req, res);
@@ -43,6 +41,7 @@ async function handlePostRequest(req, res) {
 
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
+        res.json({})
     } catch (error) {
         console.log(error);
         res.status(500).send(" Room try again later")

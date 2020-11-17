@@ -21,12 +21,13 @@ export default function AddRoom() {
     }
 
     async function handleAddRoom(event) {
+        
         event.preventDefault();
         try {
             console.log(room)
-            const url = `${baseUrl}/api/rooms`
+            const url = `${baseUrl}/api/room`
             const payload = { ...room }
-            const response = await axios.post(url, payload)
+            await axios.post(url, payload)
 
         } catch (error) {
             // TODO: Catch the error
@@ -58,6 +59,7 @@ export default function AddRoom() {
                         iconPosition='left'
                         placeholder='Room Name'
                         type="Email"
+                        name="name"
                     />
                 </Form.Field>
             </Modal.Content>
@@ -69,7 +71,7 @@ export default function AddRoom() {
                     content="Create"
                     labelPosition='right'
                     icon='checkmark'
-                    onClick={() => handleAddRoom}
+                    onClick={handleAddRoom}
                     positive
                 />
             </Modal.Actions>
