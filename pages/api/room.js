@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 connectDb()
 export default async(req, res) => {
 
+    console.log(req.method);
     switch (req.method) {
         case "GET":
             await handleGetRequest(req, res);
@@ -43,7 +44,8 @@ async function handlePostRequest(req, res) {
 
 
 async function handleGetRequest(req, res) {
-    const { _id } = req.query;
-    const room = await Room.findOne({ _id });
+    const { roomID } = req.query;
+    console.log("Querying", req.query);
+    const room = await Room.findOne({ roomID });
     res.status(200).json(room)
 }

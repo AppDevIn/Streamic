@@ -8,6 +8,7 @@ import Room from '../components/Room/Room'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add';
 import {Button} from 'semantic-ui-react'
+import mongoose from 'mongoose'
 
 
 const INITIAL_ROOM = {
@@ -34,7 +35,6 @@ export default function Home({rooms}) {
       const url = `${baseUrl}/api/room`
       const payload = {...room}
       const response = await axios.post(url, payload)
-      handleRegister(response.data);
 
     } catch (error){
       
@@ -44,6 +44,18 @@ export default function Home({rooms}) {
     } finally {
       
     }
+  }
+
+
+  async function handleJoinRoom(event){
+    event.preventDefault();
+
+    const url = `${baseUrl}/api/room`
+    const roomID = "Q2pNvkbaq"
+    const payload = {params: {roomID}}
+    const response = await axios.get(url, payload)
+    console.log(response.data);
+
   }
 
   return( 
@@ -56,7 +68,7 @@ export default function Home({rooms}) {
      <Fab color="primary" aria-label="add" variant="extended" className="float-right">
             <AddIcon /> Add Room
       </Fab>
-      <Button onClick={handleAddRoom} >Click me </Button>
+      <Button onClick={handleJoinRoom} >Click me </Button>
     </>
   )
 }
