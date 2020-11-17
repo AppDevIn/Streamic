@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef, useContext} from 'react';
 import Youtube from 'react-youtube';
 import functions from '../../utils/player';
 import {ContextContainer} from '../../pages/player';
+import YoutubeCard from './youtubeCard'
+import { Card, CardGroup, Image } from 'semantic-ui-react'
 
 function YoutubePlayer() {
     const [player, setPlayer] = useState(null);
@@ -9,15 +11,26 @@ function YoutubePlayer() {
     const [author, setAuthor] = useState("");
     const [barWidth, setBarwidth] = useState("0px");
     const [timeLine, setTimeLine] = useState("");
+    const [cardList, setCardList] = useState([]);
     
+    const dummy = useRef(null);
     const progress = useRef();
 
     const {parent_link} = useContext(ContextContainer);
 
     useEffect(() => {
-        console.log("changed");
-        // show search result here.
+        functions.getRecommendations(parent_link)
+        .then(res => {
+            setCardList(res);
+        });
+
     }, [parent_link])
+
+    useEffect(() => {
+        if (cardList.length != 0 && dummy != null){
+            dummy.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [cardList])
 
     // call loopy once player is initialised
     useEffect(() => {
@@ -102,6 +115,15 @@ function YoutubePlayer() {
 
             <span id="timeline">{timeLine}</span>
         </div>
+
+        <div ref={dummy}></div>
+
+        <CardGroup className='mt-4' itemsPerRow='3'>
+            {cardList.map(card => {
+                return <YoutubeCard info={card} key={card.id} ></YoutubeCard>
+            })}
+        </CardGroup>
+        
     </div>
 }
 
