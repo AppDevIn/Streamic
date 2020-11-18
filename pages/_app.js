@@ -19,9 +19,9 @@ class MyApp extends App {
       pageProps = await Component.getInitialProps(ctx)
     }
 
-    console.log("token from _app.js",token)
+    
     if(!token){
-    const isProtectedPath = ctx.pathname !== "/index" || ctx.pathname !== "/"
+    const isProtectedPath = ctx.pathname !== "/index" || ctx.pathname !== "/" || ctx.pathname !== "/login" || ctx.pathname !== "/register"
       if(isProtectedPath){
         redirectUser(ctx, '/login')
       } 

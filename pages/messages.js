@@ -65,14 +65,6 @@ export default function Messages({ roomID, user, messages }) {
     
 }
 
-async function getUser(token) {
-
-    const url = `${baseUrl}/api/user`
-    const payload = { params: { token } }
-    const response = await axios.get(url, payload)
-    return response.data
-
-}
 
 
 Messages.getInitialProps = async ({query : {_id}, req: {cookies: {token}}}) => {

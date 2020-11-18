@@ -1,14 +1,18 @@
 import React from 'react'
 import { Button, Comment, Form, Header } from 'semantic-ui-react'
 
+
 export default function ChatBox({messages} ) {
 
-    function mapMessagesToItems(messages) {
+    
+
+    async function mapMessagesToItems(messages) {
+        
         return messages.map(message => (
             <Comment key={message._id}>
                 <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
                 <Comment.Content>
-                    <Comment.Author as='a'>{message.authorID}</Comment.Author>
+                    <Comment.Author as='a'></Comment.Author>
                     <Comment.Metadata>
                         <div>Today at 5:42PM</div>
                     </Comment.Metadata>
@@ -25,7 +29,7 @@ export default function ChatBox({messages} ) {
         // <Layout>
         <Comment.Group>
             <Header as='h3' dividing>
-                Comments
+                Messages
             </Header>
 
             {mapMessagesToItems(messages)}

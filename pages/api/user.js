@@ -20,11 +20,7 @@ export default async(req, res) => {
 
 
 export async function getUser(req, res) {
-    // const { token } = req.query
 
-    // res.statusCode = 200
-    // res.setHeader('Content-Type', 'application/json')
-    // res.json(user)
 
     console.log("header", req.headers)
 
