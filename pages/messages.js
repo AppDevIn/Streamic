@@ -2,20 +2,16 @@ import React, {useEffect, useState} from 'react'
 import io from "socket.io-client";
 import {Button} from 'semantic-ui-react'
 
-export default function Messages(){
+export default function Messages({roomID}){
 
     const [socket, setSocket] = useState(null)
     
     React.useEffect(()=>{
 
-        if(socket == null){
-            setSocket(io())
-        }
-
     },[])
 
     useEffect(() =>{
-        if (socket){
+        if (socket != null){
 
             //Pass the idea to the socket server
             socket.emit("joinRoom", "f48k6mnSC" );
@@ -28,7 +24,9 @@ export default function Messages(){
             socket.on("messageChanges", (message) => {
                 console.log(message)
         })
-        }
+        } else 
+            setSocket(io())
+
     }, [socket])
 
 
@@ -41,3 +39,6 @@ export default function Messages(){
 
 
 }
+
+
+Messages
