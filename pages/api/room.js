@@ -6,12 +6,18 @@ import Video from '../../models/Video'
 
 connectDb()
 export default async(req, res) => {
+
     switch (req.method) {
         case "GET":
             await handleGetRequest(req, res);
             break;
         case "POST":
-            await handlePostRequest(req, res);
+            const type = req.query.type;
+            if (type == '1') {
+                await updateRoomWatching(req, res);
+            } else {
+                await handlePostRequest(req, res);
+            }
             break;
         default:
             res.status(405).send(`Method ${req.method} not allowed`)
@@ -46,6 +52,32 @@ async function handlePostRequest(req, res) {
         console.log(error);
         res.status(500).send(" Room try again later")
     }
+}
+
+async function updateRoomWatching(req, res) {
+    const { roomID, data } = req.body;
+    const videoID = data.id;
+
+    const room = await Room.findOne({ roomID: roomID });
+    const video = await Video.findOne({ videoID: videoID });
+
+    if (video == null) {
+        const newVideo = await new Video({
+            videoID: data.id,
+            videoName: data.title,
+            thumbnail: data.thumbnail
+        }).save()
+
+        const update = { $set: { Playing: mongoose.Types.ObjectId(newVideo._id) } };
+        await room.updateOne(update);
+    } else {
+        const update = { $set: { Playing: mongoose.Types.ObjectId(video._id) } };
+        await room.updateOne(update);
+    }
+
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'application/json')
+    res.json({})
 }
 
 

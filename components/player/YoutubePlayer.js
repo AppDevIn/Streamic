@@ -71,7 +71,6 @@ function YoutubePlayer({user, roomInfo}) {
                 var timeline = player.getCurrentTime();
                 var isVideoChanged = false;
                 const data = {state, timeline, isVideoChanged};
-                console.log(`pass => ${data}`)
                 socket.emit('changes', {roomID, data});
             });
         }

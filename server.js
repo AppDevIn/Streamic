@@ -2,6 +2,8 @@ const app = require('express')();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const next = require('next');
+const baseUrl = 'http://localhost:3000';
+const axios = require('axios').default;
 require('dotenv').config();
 
 
@@ -32,6 +34,16 @@ io.on('connection', socket => {
 
     socket.on('changes', ({ roomID, data }) => {
         io.to(roomID).emit('streaming', data);
+        if (data.isVideoChanged) {
+            // update the video playing for the room
+            async function updateRoomWatching() {
+                const url = `${baseUrl}/api/room?type=1`
+                const payload = { roomID, data }
+                const response = await axios.post(url, payload)
+            }
+
+            updateRoomWatching();
+        }
     });
 
     socket.on('router', (roomID) => {

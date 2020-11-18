@@ -9,7 +9,6 @@ const ContextContainer = React.createContext(null);
 function Room(props) {
 
     const [parent_link, updateLink] = useState("");
-    console.log(props)
 
     useEffect(() => {
         document.body.style.backgroundColor = "#A1A2AB";
