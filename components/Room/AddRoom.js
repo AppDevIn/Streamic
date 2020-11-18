@@ -17,20 +17,16 @@ export default function AddRoom() {
     const [open, setOpen] = React.useState(false)
 
     const [room, setName] = React.useState(INITIAL_ROOM);
-    const [image, setImage] = React.useState('');
 
     function handleChange(event) {
         const { name, value } = event.target
-        if (name == 'file') {
-            uploadfile(event.target.files[0])
-            setName((prevState) => ({ ...prevState, [name]: image }))
-        } else {
-            setName((prevState) => ({ ...prevState, [name]: value }))
-        }
+        setName((prevState) => ({ ...prevState, [name]: value }))
         console.log(room)
     }
 
-    async function uploadfile(file) {
+    async function uploadfile(event) {
+        const { name, value } = event.target
+        const file = event.target.files[0]
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
@@ -38,7 +34,8 @@ export default function AddRoom() {
         try {
             const res = await axios.post(CLOUDINARY_URL, formData);
             const imageUrl = res.data.secure_url;
-            setImage(imageUrl)
+            setName((prevState) => ({ ...prevState, [name]: imageUrl }))
+            console.log(room)
             console.log(imageUrl)
         } catch (err) {
             console.error(err);
@@ -46,22 +43,22 @@ export default function AddRoom() {
     }
 
     async function handleAddRoom(event) {
-
         event.preventDefault();
         try {
             console.log(room)
             const url = `${baseUrl}/api/room`
             const payload = { ...room }
             await axios.post(url, payload)
+            console.log(room)
 
         } catch (error) {
             // TODO: Catch the error
             console.log(error);
-
         } finally {
             setOpen(false)
         }
     }
+
     // React.useEffect(() => {
     //     const isUser = Object.values(user).every(el => Boolean(el))
     //     setDisabled(!isUser);
@@ -72,6 +69,7 @@ export default function AddRoom() {
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             open={open}
+            size={'tiny'}
             trigger={<Fab color="primary" aria-label="add" variant="extended" className="float-right"> <AddIcon /> Add Room </Fab>}
         >
             <Modal.Header>Create a room</Modal.Header>
@@ -86,7 +84,7 @@ export default function AddRoom() {
                         name="name"
                     />
                     <Form.Input
-                        onChange={handleChange}
+                        onChange={e => uploadfile(e)}
                         fluid
                         iconPosition='left'
                         placeholder='Room Name'
