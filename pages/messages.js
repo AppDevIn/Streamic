@@ -52,6 +52,7 @@ export default function Messages({ roomID, user, messages }) {
             roomID
         }
         const M = await postMessage(message)
+        M.authorID = user
 
         socket.emit("sendMessage", { roomID, message: M })
         

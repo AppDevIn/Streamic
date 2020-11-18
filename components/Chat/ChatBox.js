@@ -4,7 +4,6 @@ import { Button, Comment, Form, Header } from 'semantic-ui-react'
 
 export default function ChatBox({messages} ) {
 
-    console.log("Updating the chatbox");
     function mapMessagesToItems(messages) {
         
         
