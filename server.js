@@ -27,11 +27,16 @@ io.on('connection', socket => {
     socket.on('joinRoom', () => {
         console.log(`${socket.id} has joined the room`);
         socket.emit("message", "Welcome to Streamic.");
-        socket.join("room1");
+        socket.join("f48k6mnSC");
     });
 
     socket.on('changes', (data) => {
         io.to("room1").emit('streaming', data);
+    })
+
+
+    socket.on('sendMessage', (data) => {
+        io.to("f48k6mnSC").emit('messageChanges', data);
     })
 
     // Runs when client disconnects
