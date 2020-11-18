@@ -6,13 +6,15 @@ import { handleLogin, handleRegister } from '../utils/auth'
 import Head from 'next/head'
 import Layout from '../components/Register/Layout'
 
+
 const INITIAL_USER = {
   email: "",
   password: ""
 
 }
 
-export default function Register(props) {
+export default function Login(props) {
+
 
 
 
@@ -105,4 +107,8 @@ export default function Register(props) {
 
   )
 }
+
+
+
+
 

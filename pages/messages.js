@@ -10,6 +10,8 @@ export default function Messages({roomID, user}){
     const [socket, setSocket] = useState(null)
 
 
+
+
     async function postMessage(message) {
     
         const url = `${baseUrl}/api/message`
@@ -70,9 +72,10 @@ async function getUser(token) {
 
 
 Messages.getInitialProps = async ({query : {_id}, req: {cookies: {token}}}) => {
-    const user = await getUser(token)
+    
+    // const user = await getUser(token)
     console.log("id",_id) 
-    return {roomID:_id, user}
+    return {roomID:_id}
 };
   
 

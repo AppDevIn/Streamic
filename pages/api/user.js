@@ -1,7 +1,7 @@
-import User from '../../models/User.js'
+import User from '../../models/User'
 import connectDB from '../../utils/connectDb'
 import mongoose from 'mongoose'
-
+import jwt from "jsonwebtoken"
 
 connectDB()
 export default async(req, res) => {
@@ -20,12 +20,34 @@ export default async(req, res) => {
 
 
 export async function getUser(req, res) {
-    const { token } = req.query;
-    console.log("token", token);
-    const user = await User.findOne({ token });
+    // const { token } = req.query
 
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'application/json')
-    res.json(user)
+    // res.statusCode = 200
+    // res.setHeader('Content-Type', 'application/json')
+    // res.json(user)
+
+    console.log("header", req.headers)
+
+
+
+    if (!("authorization" in req.headers)) {
+        res.status(401).send("No authorization token")
+    } else {
+
+
+        try {
+            const { userId } = await jwt.verify(req.headers.authorization, process.env.JWT_SECRET)
+            const user = await User.findOne({ _id: userId });
+
+
+            if (user) {
+                res.status(200).json(user)
+            } else {
+                res.status(404).send("user not found")
+            }
+        } catch {
+            res.status(403).send("Invaiold token")
+        }
+    }
 
 }

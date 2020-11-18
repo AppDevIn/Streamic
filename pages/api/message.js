@@ -19,13 +19,13 @@ export default async(req, res) => {
 
         newMessage.save()
 
-        console.log("Room ID", roomID)
 
         const room = await Room.findOne({ roomID })
         const update = { $push: { Messages: mongoose.Types.ObjectId(room._id) } };
 
-        console.log(room);
         await room.updateOne(update);
+
+        res.status(200).json({})
 
 
 
