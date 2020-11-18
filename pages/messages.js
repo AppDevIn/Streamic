@@ -1,21 +1,22 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import io from "socket.io-client";
-import {Button} from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react'
+import ChatBox from '../components/Chat/ChatBox'
 
-export default function Messages({roomID}){
+export default function Messages({ roomID }) {
 
     const [socket, setSocket] = useState(null)
-    
-    React.useEffect(()=>{
 
-    },[])
+    React.useEffect(() => {
 
-    useEffect(() =>{
-        if (socket != null){
+    }, [])
+
+    useEffect(() => {
+        if (socket != null) {
 
             //Pass the idea to the socket server
-            socket.emit("joinRoom", "f48k6mnSC" );
-        
+            socket.emit("joinRoom", "f48k6mnSC");
+
             //Receive the messages
             socket.on("message", (message) => {
                 console.log(message);
@@ -23,22 +24,23 @@ export default function Messages({roomID}){
 
             socket.on("messageChanges", (message) => {
                 console.log(message)
-        })
-        } else 
+            })
+        } else
             setSocket(io())
 
     }, [socket])
 
 
-    function sendMessage(event){
+    function sendMessage(event) {
         console.log("Sending message ")
-        socket.emit("sendMessage", {message:"HELLO_WORLD()"})
+        socket.emit("sendMessage", { message: "HELLO_WORLD()" })
     }
 
-    return <><Button onClick={sendMessage}>Send</Button></>
-
-
+    return <>
+        {/* <ChatBox></ChatBox> */}
+        <Form reply>
+            <Form.TextArea />
+            <Button content='Add Reply' labelPosition='left' icon='edit' primary onClick={sendMessage} />
+        </Form>
+    </>
 }
-
-
-Messages
