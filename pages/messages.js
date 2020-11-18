@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import io from "socket.io-client";
-import { Button } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 import ChatBox from '../components/Chat/ChatBox'
 
 import baseUrl from '../utils/baseUrl'
 import axios from 'axios'
 
-export default function Messages({ roomID, user }) {
+export default function Messages({ roomID, user, messages }) {
 
     const [socket, setSocket] = useState(null)
 
@@ -54,7 +54,7 @@ export default function Messages({ roomID, user }) {
     }
 
     return (<>
-        <ChatBox messages={}></ChatBox>
+        <ChatBox messages={messages}></ChatBox>
         <Form reply>
             <Form.TextArea />
             <Button content='Add Reply' labelPosition='left' icon='edit' primary onClick={sendMessage} />
