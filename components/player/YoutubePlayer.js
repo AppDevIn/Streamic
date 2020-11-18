@@ -67,7 +67,8 @@ function YoutubePlayer() {
             socket.on("existingUser", () => {
                 var state = player.getPlayerState();
                 var timeline = player.getCurrentTime();
-                const data = {state, timeline};
+                var isVideoChanged = false;
+                const data = {state, timeline, isVideoChanged};
                 socket.emit('changes', data);
             });
         }
@@ -89,15 +90,22 @@ function YoutubePlayer() {
 
     const handleActions = (data) => {
         if (player){
-            switch (data.state){
-                case 1:
-                    player.playVideo();
-                    player.seekTo(data.timeline, true);
-                    break;
-                case 2:
-                    player.pauseVideo();
-                    player.seekTo(data.timeline, true);
-                    break;
+            if (data.isVideoChanged){
+                player.loadVideoById(data.id);
+                setTitle(data.title);
+                setAuthor(data.publisher);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }else{
+                switch (data.state){
+                    case 1:
+                        player.playVideo();
+                        player.seekTo(data.timeline, true);
+                        break;
+                    case 2:
+                        player.pauseVideo();
+                        player.seekTo(data.timeline, true);
+                        break;
+                }
             }
         }
     }
@@ -151,15 +159,14 @@ function YoutubePlayer() {
         const timeline = x / bw * player.getDuration();
         setBarwidth(x);
         var state = player.getPlayerState();
-        const data = {state, timeline};
+        var isVideoChanged = false;
+        const data = {state, timeline, isVideoChanged};
         socket.emit("changes", data);
     }
 
     const playVideo = (info) => {
-        player.loadVideoById(info.id);
-        setTitle(info.title);
-        setAuthor(info.publisher);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        info["isVideoChanged"] = true;
+        socket.emit('changes', info);
     }
 
     return <div className="left">
