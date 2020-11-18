@@ -4,6 +4,7 @@ module.exports = {
         JWT_SECRET: "jkksalkejrwejhrkjwehkjarbjfbadjsb",
         CLOUDINARY_URL: "<insert-cloudinary-url>",
         STRIPE_SECRET_KEY: "<insert-stripe-secret-key>",
-        PORT: 3000
+        PORT: 8080,
+        YOUTUBE_API_KEY: "AIzaSyCxjJTkWXcxUgzWku5xei3MqnSO0F_qKX8"
     }
 };

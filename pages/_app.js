@@ -1,6 +1,8 @@
-import '../styles/globals.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import App from "next/app";
 import Layout from '../components/_App/Layout';
+import PlayerLayout from '../components/_App/PlayerLayout';
+
 
 class MyApp extends App {
 
@@ -16,12 +18,23 @@ class MyApp extends App {
   }
 
   render() {
-    const { Component, pageProps } = this.props;
-    return (
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    );
+    const { Component, pageProps, router } = this.props;
+    
+    if (!router.pathname.startsWith('/player')) {
+      // container
+      return (
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      );
+    }else{
+      // container fluid
+      return (
+        <PlayerLayout>
+          <Component {...pageProps} />
+        </PlayerLayout>
+      );
+    }
   }
 }
 
