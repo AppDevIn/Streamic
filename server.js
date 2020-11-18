@@ -32,11 +32,11 @@ io.on('connection', socket => {
 
     socket.on('changes', (data) => {
         io.to("room1").emit('streaming', data);
-    })
+    });
 
     socket.on('router', () => {
         socket.broadcast.to("room1").emit('existingUser');
-    })
+    });
 
     // Runs when client disconnects
     socket.on('disconnect', () => {

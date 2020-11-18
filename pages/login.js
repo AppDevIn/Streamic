@@ -6,13 +6,17 @@ import { handleLogin, handleRegister } from '../utils/auth'
 import Head from 'next/head'
 import Layout from '../components/Register/Layout'
 
+
 const INITIAL_USER = {
   email: "",
   password: ""
 
 }
 
-export default function Register() {
+export default function Login(props) {
+
+
+
 
   const [user, setUser] = React.useState(INITIAL_USER);
   const [disabled, setDisabled] = React.useState(true)
@@ -103,4 +107,8 @@ export default function Register() {
 
   )
 }
+
+
+
+
 
