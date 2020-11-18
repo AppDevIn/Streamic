@@ -7,6 +7,7 @@ import {redirectUser} from '../utils/auth'
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 
+
 class MyApp extends App {
 
   static async getInitialProps({Component, ctx}) {
@@ -19,7 +20,9 @@ class MyApp extends App {
 
     
     if(!token){
-    const isProtectedPath = ctx.pathname !== "/index" || ctx.pathname !== "/" || ctx.pathname !== "/login" || ctx.pathname !== "/register"
+      const isProtectedPath = ctx.pathname !== "/login" && ctx.pathname !== "/register"
+
+      console.log("Path",isProtectedPath)
       if(isProtectedPath){
         redirectUser(ctx, '/login')
       } 

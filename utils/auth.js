@@ -17,12 +17,12 @@ export function handleLogin(token) {
 }
 
 
-export function redirectUser(ctx, loction) {
-    // console.log(location);
-    // if (ctx.req) {
-    //     ctx.res.writeHead(302, { Location: location })
-    //     ctx.res.end()
-    // } else {
-    //     Router.push(location)
-    // }
+export function redirectUser(ctx, location) {
+    console.log("Redirecting");
+    if (ctx.req) {
+        ctx.res.writeHead(302, { Location: location })
+        ctx.res.end()
+    } else {
+        Router.push(location)
+    }
 }
