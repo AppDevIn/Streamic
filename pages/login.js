@@ -12,7 +12,9 @@ const INITIAL_USER = {
 
 }
 
-export default function Register() {
+export default function Register(props) {
+
+
 
   const [user, setUser] = React.useState(INITIAL_USER);
   const [disabled, setDisabled] = React.useState(true)

@@ -3,6 +3,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const next = require('next');
 require('dotenv').config();
+const mongoose = require('mongoose')
 
 
 // const bodyParser = require('body-parser');
@@ -23,11 +24,12 @@ const nextApp = next({ dev })
 const nextHandler = nextApp.getRequestHandler()
 
 
+
 io.on('connection', socket => {
-    socket.on('joinRoom', () => {
-        console.log(`${socket.id} has joined the room`);
+    socket.on('joinRoom', (roomID, user) => {
+        console.log(`${user._id} has joined the room`);
         socket.emit("message", "Welcome to Streamic.");
-        socket.join("f48k6mnSC");
+        socket.join(roomID);
     });
 
     socket.on('changes', (data) => {
@@ -36,7 +38,8 @@ io.on('connection', socket => {
 
 
     socket.on('sendMessage', (data) => {
-        io.to("f48k6mnSC").emit('messageChanges', data);
+        const { message, roomID } = data
+        io.to(roomID).emit('messageChanges', message);
     })
 
     // Runs when client disconnects

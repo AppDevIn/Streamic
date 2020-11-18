@@ -3,44 +3,85 @@ import io from "socket.io-client";
 import { Button } from 'semantic-ui-react'
 import ChatBox from '../components/Chat/ChatBox'
 
-export default function Messages({ roomID }) {
+import baseUrl from '../utils/baseUrl'
+import axios from 'axios'
+
+export default function Messages({ roomID, user }) {
 
     const [socket, setSocket] = useState(null)
 
-    React.useEffect(() => {
 
-    }, [])
+    async function postMessage(message) {
 
-    useEffect(() => {
-        if (socket != null) {
+        const url = `${baseUrl}/api/message`
+        const payload = { ...message }
+        const response = await axios.post(url, payload)
 
-            //Pass the idea to the socket server
-            socket.emit("joinRoom", "f48k6mnSC");
-
-            //Receive the messages
-            socket.on("message", (message) => {
-                console.log(message);
-            });
-
-            socket.on("messageChanges", (message) => {
-                console.log(message)
-            })
-        } else
-            setSocket(io())
-
-    }, [socket])
-
-
-    function sendMessage(event) {
-        console.log("Sending message ")
-        socket.emit("sendMessage", { message: "HELLO_WORLD()" })
     }
 
-    return <>
-        {/* <ChatBox></ChatBox> */}
-        <Form reply>
-            <Form.TextArea />
-            <Button content='Add Reply' labelPosition='left' icon='edit' primary onClick={sendMessage} />
-        </Form>
-    </>
+
+    React.useEffect(() => {
+
+        React.useEffect(() => {
+
+        }, [])
+
+        useEffect(() => {
+            if (socket != null) {
+
+                //Pass the idea to the socket server
+                socket.emit("joinRoom", roomID, user);
+
+                //Receive the messages
+                socket.on("message", (message) => {
+                    console.log(message);
+                });
+
+                socket.on("messageChanges", (message) => {
+                    console.log("client", message)
+                })
+            } else
+                setSocket(io())
+
+        }, [socket])
+
+
+        function sendMessage(event) {
+            const message = {
+                msg: "HELLO_WORLD()",
+                user,
+                roomID
+            }
+            postMessage(message)
+
+            socket.emit("sendMessage", { roomID, message: "HELLO_WORLD()" })
+        }
+
+        return <>
+            {/* <ChatBox messages={}></ChatBox> */}
+            <Form reply>
+                <Form.TextArea />
+                <Button content='Add Reply' labelPosition='left' icon='edit' primary onClick={sendMessage} />
+            </Form>
+        </>
+    }
+    
 }
+
+async function getUser(token) {
+
+    const url = `${baseUrl}/api/user`
+    const payload = { params: { token } }
+    const response = await axios.get(url, payload)
+    return response.data
+
+}
+
+
+Messages.getInitialProps = async ({ query: { _id }, req: { cookies: { token } } }) => {
+    const user = await getUser(token)
+    console.log("id", _id)
+    return { roomID: _id, user }
+};
+
+
