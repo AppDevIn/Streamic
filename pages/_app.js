@@ -15,9 +15,7 @@ class MyApp extends App {
 
     let pageProps = {}
 
-    if(Component.getInitialProps){
-      pageProps = await Component.getInitialProps(ctx)
-    }
+
 
     
     if(!token){
@@ -36,6 +34,12 @@ class MyApp extends App {
       } catch (error){
         console.log("Error getting the user", error);
       }
+    }
+
+    if(Component.getInitialProps){
+      const u = pageProps.user
+      pageProps = await Component.getInitialProps(ctx, pageProps.user)
+      pageProps.user = u
     }
     return { pageProps }
   }

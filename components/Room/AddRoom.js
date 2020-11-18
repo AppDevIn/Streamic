@@ -9,7 +9,7 @@ const INITIAL_ROOM = {
     name: ""
 }
 
-export default function AddRoom() {
+export default function AddRoom({user}) {
     const [open, setOpen] = React.useState(false)
 
     const [room, setName] = React.useState(INITIAL_ROOM);
@@ -26,7 +26,8 @@ export default function AddRoom() {
         try {
             console.log(room)
             const url = `${baseUrl}/api/room`
-            const payload = { ...room }
+            console.log(user);
+            const payload = { ...room, ...user}
             await axios.post(url, payload)
 
         } catch (error) {
