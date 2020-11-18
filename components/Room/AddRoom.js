@@ -5,6 +5,9 @@ import AddIcon from '@material-ui/icons/Add';
 import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
 
+const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dbccwphl1/image/upload"
+const CLOUDINARY_UPLOAD_PRESET = 'midfduhh';
+
 const INITIAL_ROOM = {
     name: "",
     file: ""
@@ -14,44 +17,32 @@ export default function AddRoom() {
     const [open, setOpen] = React.useState(false)
 
     const [room, setName] = React.useState(INITIAL_ROOM);
-    const [filename, setFilename] = React.useState("")
-    const [imageUrl, setImageUrl] = React.useState("")
+    const [image, setImage] = React.useState('');
 
     function handleChange(event) {
         const { name, value } = event.target
-        setName((prevState) => ({ ...prevState, [name]: value }))
+        if (name == 'file') {
+            uploadfile(event.target.files[0])
+            setName((prevState) => ({ ...prevState, [name]: image }))
+        } else {
+            setName((prevState) => ({ ...prevState, [name]: value }))
+        }
         console.log(room)
     }
 
-    function handlefileUpload(file) {
-        let reader = new FileReader(file)
-        reader.readAsDataURL(file)
-        reader.onloadend = async function () {
-            setFilename(file.name)
-
-            //  To be explained later
-            let secureUrl = await doUploadImage(reader.result)
-            setImageUrl(secureUrl)
-        }
-        const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dbccwphl1/image/upload"
-        const CLOUDINARY_UPLOAD_PRESET = 'moox1jnq';
-        const file = event.target.files[0];
+    async function uploadfile(file) {
         const formData = new FormData();
-        console.log(file)
         formData.append('file', file);
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-        fetch(CLOUDINARY_URL, {
-            method: 'POST',
-            body: formData,
-        })
-            .then(response => response.json())
-            .then((data) => {
-                if (data.secure_url !== '') {
-                    const uploadedFileUrl = data.secure_url;
-                    localStorage.setItem('passportUrl', uploadedFileUrl);
-                }
-            })
-            .catch(err => console.error(err));
+        console.log(formData)
+        try {
+            const res = await axios.post(CLOUDINARY_URL, formData);
+            const imageUrl = res.data.secure_url;
+            setImage(imageUrl)
+            console.log(imageUrl)
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     async function handleAddRoom(event) {
@@ -61,7 +52,6 @@ export default function AddRoom() {
             console.log(room)
             const url = `${baseUrl}/api/room`
             const payload = { ...room }
-            uploadImage()
             await axios.post(url, payload)
 
         } catch (error) {
@@ -96,9 +86,10 @@ export default function AddRoom() {
                         name="name"
                     />
                     <Form.Input
-                        onChange={e => handlefileUpload(e.target.files[0])}
+                        onChange={handleChange}
                         fluid
                         iconPosition='left'
+                        placeholder='Room Name'
                         type="file"
                         name="file"
                     />
