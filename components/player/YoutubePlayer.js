@@ -41,6 +41,10 @@ function YoutubePlayer({user, roomInfo}) {
             console.log("initialising socket....");
             initSocket(io());
         }
+
+        return () => {
+            socket.disconnect();
+        }
     }, [])
 
     useEffect(() => {

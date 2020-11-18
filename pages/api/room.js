@@ -83,7 +83,7 @@ async function updateRoomWatching(req, res) {
 
 async function handleGetRequest(req, res) {
     const { roomID } = req.query;
-    console.log("room", roomID);
+
     const room = await Room.findOne({ roomID });
     const user = await User.findOne({ token: req.cookies.token })
 
