@@ -41,7 +41,7 @@ export async function getTrendingVideo() {
             const apiList = res.data.items;
             for (var i = 0; i < apiList.length; i++) {
                 var info = {};
-                var id = apiList[i]["id"]["videoId"];
+                var id = apiList[i]["id"];
                 var title = apiList[i]["snippet"]["title"];
                 var thumbnail = apiList[i]["snippet"]["thumbnails"]["medium"]["url"];
                 var publisher = apiList[i]["snippet"]["channelTitle"];
