@@ -13,13 +13,12 @@ function YoutubePlayer() {
     const [barWidth, setBarwidth] = useState("0px");
     const [timeLine, setTimeLine] = useState("");
     const [cardList, setCardList] = useState([]);
+    const [socket, initSocket] = useState(null);
     
     const dummy = useRef(null);
     const progress = useRef();
 
     const {parent_link} = useContext(ContextContainer);
-
-    const socket = io();
 
     useEffect(() => {
         functions.getRecommendations(parent_link)
@@ -28,6 +27,13 @@ function YoutubePlayer() {
         });
 
     }, [parent_link])
+
+    useEffect(() => {
+        if (socket == null){
+            console.log("initialising socket....");
+            initSocket(io());
+        }
+    }, [])
 
     useEffect(() => {
         if (cardList.length != 0 && dummy != null){
@@ -39,19 +45,21 @@ function YoutubePlayer() {
     useEffect(() => {
         if (player != null){
             loopy();
-            console.log("initialising....");
-            socket.emit("joinRoom");
-    
-            socket.on("message", (message) => {
-                console.log(message);
-            });
-    
-            socket.on("streaming", (data) => {
-                console.log(data);
-                handleActions(data);
-            });
-    
-            return () => socket.disconnect();
+            if (socket != null){
+                console.log("initialising socket action....");
+                socket.emit("joinRoom");
+        
+                socket.on("message", (message) => {
+                    console.log(message);
+                });
+        
+                socket.on("streaming", (data) => {
+                    console.log(data);
+                    handleActions(data);
+                });
+
+            }
+       
         }
     },[player]);
 
