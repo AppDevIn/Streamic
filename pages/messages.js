@@ -53,7 +53,7 @@ export default function Messages({ roomID, user, messages }) {
         }
         const M = await postMessage(message)
         M.authorID = user
-
+        
         socket.emit("sendMessage", { roomID, message: M })
         
         setM((prevState) => ({ value:"" }))
@@ -87,7 +87,7 @@ Messages.getInitialProps = async ({query : {_id}, req: {cookies: {token}}}) => {
     console.log("id",_id) 
 
     const url = `${baseUrl}/api/messages`
-    const response = await axios.get(url);
+    const response = await axios.get(url, {params:{roomID:_id}});
     return {roomID:_id,  messages: response.data}
 };
 
