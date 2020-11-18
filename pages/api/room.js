@@ -2,7 +2,7 @@ import connectDb from '../../utils/connectDb.js'
 import Room from '../../models/Room.js'
 import User from '../../models/User'
 import mongoose from 'mongoose'
-
+import Video from '../../models/Video'
 
 connectDb()
 export default async(req, res) => {
@@ -30,11 +30,11 @@ async function handlePostRequest(req, res) {
         const newRoom = await new Room({
             roomName: name,
             isTemporary: false,
-            admins: mongoose.Types.ObjectId(user._id)
+            admins: mongoose.Types.ObjectId(user._id),
+            Playing: mongoose.Types.ObjectId("5fb49a75acb6446fbc182927")
 
         }).save()
         console.log({ newRoom });
-
 
         const update = { $push: { rooms: mongoose.Types.ObjectId(newRoom._id) } };
         await user.updateOne(update);

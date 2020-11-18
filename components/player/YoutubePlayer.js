@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useContext} from 'react';
 import Youtube from 'react-youtube';
 import functions from '../../utils/player';
-import {ContextContainer} from '../../pages/player';
+import {ContextContainer} from '../../pages/room';
 import YoutubeCard from './youtubeCard';
 import { Card, CardGroup, Image } from 'semantic-ui-react';
 import io from "socket.io-client";
@@ -32,7 +32,19 @@ function YoutubePlayer() {
         if (socket == null){
             console.log("initialising socket....");
             initSocket(io());
-        }else{
+        }
+    }, [])
+
+    useEffect(() => {
+        if (parent_link != "" && cardList.length != 0 && dummy != null){
+            dummy.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [cardList])
+
+    // call loopy once player is initialised
+    useEffect(() => {
+        if (player != null){
+            loopy();
             console.log("initialising socket action....");
             socket.emit("joinRoom");
     
@@ -44,19 +56,6 @@ function YoutubePlayer() {
                 console.log(data);
                 handleActions(data);
             });
-        }
-    }, [socket])
-
-    useEffect(() => {
-        if (cardList.length != 0 && dummy != null){
-            dummy.current.scrollIntoView({ behavior: "smooth" });
-        }
-    }, [cardList])
-
-    // call loopy once player is initialised
-    useEffect(() => {
-        if (player != null){
-            loopy();
         }
     },[player]);
 
