@@ -6,7 +6,7 @@ function RoomList({ rooms }) {
     function mapProductsToItems(rooms) {
         return rooms.map(room => (
         
-             <Card href={`/room?_id=${room._id}`} raised key={room._id} >
+             <Card href={`/room?_id=${room.roomID}`} raised key={room._id} >
              <Image size="large" circular src={room.mediaUrl} style={{ maxHeight: 200 }}/>
              <Card.Content>
                  <Card.Header>{room.roomName}</Card.Header>

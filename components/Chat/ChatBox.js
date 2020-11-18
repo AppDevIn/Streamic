@@ -4,9 +4,9 @@ import { Button, Comment, Form, Header } from 'semantic-ui-react'
 
 export default function ChatBox({messages} ) {
 
-    
-
+    console.log("Updating the chatbox");
     function mapMessagesToItems(messages) {
+        
         
         return messages.map(message => (
             <Comment key={message._id}>
@@ -14,12 +14,9 @@ export default function ChatBox({messages} ) {
                 <Comment.Content>
                     <Comment.Author as='a'>{message.authorID.username}</Comment.Author>
                     <Comment.Metadata>
-                        <div>Today at 5:42PM</div>
+                        <div>{message.dateTime}</div>
                     </Comment.Metadata>
                     <Comment.Text>{message.messageContent}</Comment.Text>
-                    <Comment.Actions>
-                        <Comment.Action>Reply</Comment.Action>
-                    </Comment.Actions>
                 </Comment.Content>
             </Comment>
         ));
@@ -29,7 +26,7 @@ export default function ChatBox({messages} ) {
         // <Layout>
         <Comment.Group>
             <Header as='h3' dividing>
-                Messages
+                {messages.length}
             </Header>
 
             {mapMessagesToItems(messages)}

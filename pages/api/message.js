@@ -25,7 +25,7 @@ export default async(req, res) => {
 
         await room.updateOne(update);
 
-        res.status(200).json({})
+        res.status(200).json(newMessage)
 
 
 
