@@ -6,13 +6,13 @@ export default function ChatBox({messages} ) {
 
     
 
-    async function mapMessagesToItems(messages) {
+    function mapMessagesToItems(messages) {
         
         return messages.map(message => (
             <Comment key={message._id}>
                 <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
                 <Comment.Content>
-                    <Comment.Author as='a'></Comment.Author>
+                    <Comment.Author as='a'>{message.authorID.username}</Comment.Author>
                     <Comment.Metadata>
                         <div>Today at 5:42PM</div>
                     </Comment.Metadata>
