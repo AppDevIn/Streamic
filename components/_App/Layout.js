@@ -20,9 +20,8 @@ function Layout({ children }) {
       </Head>
       {/* <Header /> */}
       {/* {children} */}
-      <Container text style={{ paddingTop: "1em" }}>
+      
         {children}
-      </Container> 
     </>
   );
 }

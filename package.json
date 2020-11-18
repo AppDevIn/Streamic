@@ -2,7 +2,6 @@
     "name": "p2",
     "version": "0.1.0",
     "private": true,
-
     "scripts": {
         "dev": "nodemon server.js",
         "next": "next",
@@ -10,6 +9,8 @@
         "start": "next start"
     },
     "dependencies": {
+        "@material-ui/core": "^4.11.0",
+        "@material-ui/icons": "^4.9.1",
         "axios": "^0.21.0",
         "bcrypt": "^5.0.0",
         "body-parser": "^1.19.0",
@@ -19,10 +20,14 @@
         "js-cookie": "^2.2.1",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.10.14",
-        "next": "10.0.1",
+        "next": "^10.0.1",
+        "nodemon": "^2.0.6",
         "nprogress": "^0.2.0",
-        "react": "17.0.1",
-        "react-dom": "17.0.1",
+        "passport": "^0.4.1",
+        "react": "^16.14.0",
+        "react-dom": "^16.14.0",
+        "react-floating-action-button": "^1.0.5",
+        "semantic-ui-css": "^2.4.1",
         "semantic-ui-react": "^2.0.1",
         "shortid": "^2.2.16",
         "socket.io": "^3.0.1",
