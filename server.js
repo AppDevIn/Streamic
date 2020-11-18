@@ -24,19 +24,24 @@ const nextHandler = nextApp.getRequestHandler()
 
 
 io.on('connection', socket => {
-    socket.on('joinRoom', () => {
-        console.log(`${socket.id} has joined the room`);
+    socket.on('joinRoom', ({ roomId, user }) => {
+        console.log(`${user._id} has joined the room`);
         socket.emit("message", "Welcome to Streamic.");
-        socket.join("room1");
+        socket.join(roomId);
     });
 
-    socket.on('changes', (data) => {
-        io.to("room1").emit('streaming', data);
+    socket.on('changes', ({ roomId, data }) => {
+        io.to(roomId).emit('streaming', data);
     });
 
-    socket.on('router', () => {
-        socket.broadcast.to("room1").emit('existingUser');
+    socket.on('router', (roomId) => {
+        socket.broadcast.to(roomId).emit('existingUser');
     });
+
+    socket.on('sendMessage', (data) => {
+        const { message, roomID } = data
+        io.to(roomID).emit('messageChanges', message);
+    })
 
     // Runs when client disconnects
     socket.on('disconnect', () => {
@@ -44,7 +49,6 @@ io.on('connection', socket => {
     });
 
 });
-
 
 nextApp.prepare().then(() => {
     app.get('*', (req, res) => {

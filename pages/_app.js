@@ -18,7 +18,10 @@ class MyApp extends App {
     if(Component.getInitialProps){
       pageProps = await Component.getInitialProps(ctx)
     }
-
+    
+    if (ctx.pathname === "/room"){
+      pageProps.roomId = ctx.query._id;
+    }
     
     if(!token){
     const isProtectedPath = ctx.pathname !== "/index" || ctx.pathname !== "/" || ctx.pathname !== "/login" || ctx.pathname !== "/register"

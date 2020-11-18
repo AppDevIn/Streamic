@@ -6,7 +6,7 @@ import YoutubeCard from './youtubeCard';
 import { Card, CardGroup, Image } from 'semantic-ui-react';
 import io from "socket.io-client";
 
-function YoutubePlayer() {
+function YoutubePlayer({user, roomId}) {
     const [player, setPlayer] = useState(null);
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
@@ -52,8 +52,8 @@ function YoutubePlayer() {
         if (player != null){
             loopy();
             console.log("initialising socket action....");
-            socket.emit("joinRoom");
-            socket.emit("router");
+            socket.emit("joinRoom", {roomId, user});
+            socket.emit("router", roomId);
     
             socket.on("message", (message) => {
                 console.log(message);
@@ -69,7 +69,7 @@ function YoutubePlayer() {
                 var timeline = player.getCurrentTime();
                 var isVideoChanged = false;
                 const data = {state, timeline, isVideoChanged};
-                socket.emit('changes', data);
+                socket.emit('changes', {roomId, data});
             });
         }
     },[player]);
@@ -142,7 +142,7 @@ function YoutubePlayer() {
         var state = 1;
         var timeline = player.getCurrentTime();
         const data = {state, timeline};
-        socket.emit("changes", data);
+        socket.emit('changes', {roomId, data});
     }
 
     const pause = () => {
@@ -150,7 +150,7 @@ function YoutubePlayer() {
         var state = 2;
         var timeline = player.getCurrentTime();
         const data = {state, timeline};
-        socket.emit("changes", data);
+        socket.emit('changes', {roomId, data});
     }
 
     const seek = (event) => {
@@ -161,12 +161,12 @@ function YoutubePlayer() {
         var state = player.getPlayerState();
         var isVideoChanged = false;
         const data = {state, timeline, isVideoChanged};
-        socket.emit("changes", data);
+        socket.emit('changes', {roomId, data});
     }
 
-    const playVideo = (info) => {
-        info["isVideoChanged"] = true;
-        socket.emit('changes', info);
+    const playVideo = (data) => {
+        data["isVideoChanged"] = true;
+        socket.emit('changes', {roomId, data});
     }
 
     return <div className="left">

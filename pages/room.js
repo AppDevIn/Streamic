@@ -6,7 +6,7 @@ import { Container } from "semantic-ui-react";
 // Create context container in a global scope so it can be visible by every component
 const ContextContainer = React.createContext(null);
 
-function Player() {
+function Room(props) {
 
     const [parent_link, updateLink] = useState("");
 
@@ -17,11 +17,11 @@ function Player() {
     return <ContextContainer.Provider value={{ parent_link, updateLink}}>
         <PlayerHeader />
         <Container fluid className="mt-5 ct">
-            <YoutubePlayer/>
+            <YoutubePlayer  {...props}/>
         </Container>
     </ContextContainer.Provider>
 
 }
 
 export {ContextContainer};
-export default Player;
+export default Room;
