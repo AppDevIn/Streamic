@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useContext} from 'react';
 import Youtube from 'react-youtube';
-import functions from '../../utils/player';
+import functions from '../../utils/room';
 import {ContextContainer} from '../../pages/room';
 import YoutubeCard from './youtubeCard';
 import { Card, CardGroup, Image } from 'semantic-ui-react';
@@ -21,11 +21,17 @@ function YoutubePlayer() {
     const {parent_link} = useContext(ContextContainer);
 
     useEffect(() => {
-        functions.getRecommendations(parent_link)
-        .then(res => {
-            setCardList(res);
-        });
-
+        if (parent_link == ""){
+            functions.getTrendingVideo()
+            .then(res =>{
+                setCardList(res);
+            })
+        }else{
+            functions.getRecommendations(parent_link)
+            .then(res => {
+                setCardList(res);
+            });
+        }
     }, [parent_link])
 
     useEffect(() => {
