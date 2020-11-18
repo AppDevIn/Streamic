@@ -32,8 +32,20 @@ function YoutubePlayer() {
         if (socket == null){
             console.log("initialising socket....");
             initSocket(io());
+        }else{
+            console.log("initialising socket action....");
+            socket.emit("joinRoom");
+    
+            socket.on("message", (message) => {
+                console.log(message);
+            });
+    
+            socket.on("streaming", (data) => {
+                console.log(data);
+                handleActions(data);
+            });
         }
-    }, [])
+    }, [socket])
 
     useEffect(() => {
         if (cardList.length != 0 && dummy != null){
@@ -45,21 +57,6 @@ function YoutubePlayer() {
     useEffect(() => {
         if (player != null){
             loopy();
-            if (socket != null){
-                console.log("initialising socket action....");
-                socket.emit("joinRoom");
-        
-                socket.on("message", (message) => {
-                    console.log(message);
-                });
-        
-                socket.on("streaming", (data) => {
-                    console.log(data);
-                    handleActions(data);
-                });
-
-            }
-       
         }
     },[player]);
 
