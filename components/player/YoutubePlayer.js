@@ -53,6 +53,7 @@ function YoutubePlayer() {
             loopy();
             console.log("initialising socket action....");
             socket.emit("joinRoom");
+            socket.emit("router");
     
             socket.on("message", (message) => {
                 console.log(message);
@@ -61,6 +62,13 @@ function YoutubePlayer() {
             socket.on("streaming", (data) => {
                 console.log(data);
                 handleActions(data);
+            });
+
+            socket.on("existingUser", () => {
+                var state = player.getPlayerState();
+                var timeline = player.getCurrentTime();
+                const data = {state, timeline};
+                socket.emit('changes', data);
             });
         }
     },[player]);

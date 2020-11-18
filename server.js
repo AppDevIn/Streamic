@@ -34,6 +34,10 @@ io.on('connection', socket => {
         io.to("room1").emit('streaming', data);
     })
 
+    socket.on('router', () => {
+        socket.broadcast.to("room1").emit('existingUser');
+    })
+
     // Runs when client disconnects
     socket.on('disconnect', () => {
         console.log(`${socket.id} has left the room`);
