@@ -24,18 +24,18 @@ const nextHandler = nextApp.getRequestHandler()
 
 
 io.on('connection', socket => {
-    socket.on('joinRoom', ({ roomId, user }) => {
+    socket.on('joinRoom', ({ roomID, user }) => {
         console.log(`${user._id} has joined the room`);
         socket.emit("message", "Welcome to Streamic.");
-        socket.join(roomId);
+        socket.join(roomID);
     });
 
-    socket.on('changes', ({ roomId, data }) => {
-        io.to(roomId).emit('streaming', data);
+    socket.on('changes', ({ roomID, data }) => {
+        io.to(roomID).emit('streaming', data);
     });
 
-    socket.on('router', (roomId) => {
-        socket.broadcast.to(roomId).emit('existingUser');
+    socket.on('router', (roomID) => {
+        socket.broadcast.to(roomID).emit('existingUser');
     });
 
     socket.on('sendMessage', (data) => {

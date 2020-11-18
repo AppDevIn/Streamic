@@ -55,6 +55,11 @@ async function handleGetRequest(req, res) {
     const room = await Room.findOne({ roomID });
     const user = await User.findOne({ token: req.cookies.token })
 
+    if (room.Playing != null) {
+        const videoInfo = await Video.findById(room.Playing);
+        room.Playing = videoInfo;
+    }
+
     const update = { $push: { rooms: mongoose.Types.ObjectId(room._id) } };
     await user.updateOne(update);
 

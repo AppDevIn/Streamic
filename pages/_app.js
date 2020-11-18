@@ -20,7 +20,11 @@ class MyApp extends App {
     }
     
     if (ctx.pathname === "/room"){
-      pageProps.roomId = ctx.query._id;
+      const url = `${baseUrl}/api/room`
+      const roomID = ctx.query._id;
+      const payload = { params: { roomID } }
+      const response = await axios.get(url, payload);
+      pageProps.roomInfo = response.data;
     }
     
     if(!token){

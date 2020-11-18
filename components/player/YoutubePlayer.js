@@ -6,7 +6,7 @@ import YoutubeCard from './youtubeCard';
 import { Card, CardGroup, Image } from 'semantic-ui-react';
 import io from "socket.io-client";
 
-function YoutubePlayer({user, roomId}) {
+function YoutubePlayer({user, roomInfo}) {
     const [player, setPlayer] = useState(null);
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
@@ -14,6 +14,8 @@ function YoutubePlayer({user, roomId}) {
     const [timeLine, setTimeLine] = useState("");
     const [cardList, setCardList] = useState([]);
     const [socket, initSocket] = useState(null);
+    const roomID = roomInfo.roomID;
+    const videoID = roomInfo.Playing.videoID;
     
     const dummy = useRef(null);
     const progress = useRef();
@@ -52,8 +54,8 @@ function YoutubePlayer({user, roomId}) {
         if (player != null){
             loopy();
             console.log("initialising socket action....");
-            socket.emit("joinRoom", {roomId, user});
-            socket.emit("router", roomId);
+            socket.emit("joinRoom", {roomID, user});
+            socket.emit("router", roomID);
     
             socket.on("message", (message) => {
                 console.log(message);
@@ -69,7 +71,8 @@ function YoutubePlayer({user, roomId}) {
                 var timeline = player.getCurrentTime();
                 var isVideoChanged = false;
                 const data = {state, timeline, isVideoChanged};
-                socket.emit('changes', {roomId, data});
+                console.log(`pass => ${data}`)
+                socket.emit('changes', {roomID, data});
             });
         }
     },[player]);
@@ -142,7 +145,7 @@ function YoutubePlayer({user, roomId}) {
         var state = 1;
         var timeline = player.getCurrentTime();
         const data = {state, timeline};
-        socket.emit('changes', {roomId, data});
+        socket.emit('changes', {roomID, data});
     }
 
     const pause = () => {
@@ -150,7 +153,7 @@ function YoutubePlayer({user, roomId}) {
         var state = 2;
         var timeline = player.getCurrentTime();
         const data = {state, timeline};
-        socket.emit('changes', {roomId, data});
+        socket.emit('changes', {roomID, data});
     }
 
     const seek = (event) => {
@@ -161,16 +164,16 @@ function YoutubePlayer({user, roomId}) {
         var state = player.getPlayerState();
         var isVideoChanged = false;
         const data = {state, timeline, isVideoChanged};
-        socket.emit('changes', {roomId, data});
+        socket.emit('changes', {roomID, data});
     }
 
     const playVideo = (data) => {
         data["isVideoChanged"] = true;
-        socket.emit('changes', {roomId, data});
+        socket.emit('changes', {roomID, data});
     }
 
     return <div className="left">
-        <Youtube className="ytplayer" id='player' videoId='GTcM3qCeup0' opts={opts} onReady={onPlayerReady} ></Youtube>
+        <Youtube className="ytplayer" id='player' videoId={videoID} opts={opts} onReady={onPlayerReady} ></Youtube>
         <div onClick={loopy} id="title">{title}</div>
         <div id="author">{author}</div>
 
