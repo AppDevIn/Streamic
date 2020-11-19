@@ -4,6 +4,8 @@ import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add';
 import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
+import Router from 'next/router'
+
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dbccwphl1/image/upload"
 const CLOUDINARY_UPLOAD_PRESET = 'midfduhh';
@@ -54,6 +56,7 @@ export default function AddRoom({ user }) {
                 }
                 await axios.post(url, payload)
                 console.log(room)
+                Router.push("/")
             } catch (err) {
                 console.error(err);
             }
