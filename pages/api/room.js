@@ -20,7 +20,6 @@ export default async (req, res) => {
 }
 
 async function handlePostRequest(req, res) {
-
     const { name, file } = req.body
     console.log(name);
     try {
