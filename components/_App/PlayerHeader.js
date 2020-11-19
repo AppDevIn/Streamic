@@ -19,7 +19,7 @@ function playerHeader(){
     }
 
     return <>
-    <Navbar bg="dark" variant="dark">
+    <Navbar className="playerNavbar" variant="dark">
         <Navbar.Brand href="#">
             <img
                 alt=""

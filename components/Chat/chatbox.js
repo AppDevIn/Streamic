@@ -23,13 +23,14 @@ export default function ChatBox({messages} ) {
 
     return (
         // <Layout>
-        <Comment.Group>
-            <Header as='h3' dividing>
-                Messages
-            </Header>
-
-            {mapMessagesToItems(messages)}
-        </Comment.Group>
-        // </Layout>
+        <div class="right">
+            <Comment.Group>
+                <Header as='h3' dividing>
+                    Messages
+                </Header>
+    
+                {mapMessagesToItems(messages)}
+            </Comment.Group>
+        </div>
     );
 }

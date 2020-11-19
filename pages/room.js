@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import YoutubePlayer from "../components/player/YoutubePlayer";
 import PlayerHeader from "../components/_App/PlayerHeader"
 import { Container } from "semantic-ui-react";
+import ChatBox from "../components/Chat/chatbox"
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 
@@ -13,13 +14,14 @@ function Room(props) {
     const [parent_link, updateLink] = useState("");
 
     useEffect(() => {
-        document.body.style.backgroundColor = "#A1A2AB";
+        document.body.style.backgroundColor = "#242A2E";
     }, [])
 
     return <ContextContainer.Provider value={{ parent_link, updateLink}}>
         <PlayerHeader />
         <Container fluid className="mt-5 ct">
             <YoutubePlayer  {...props}/>
+            <ChatBox/>
         </Container>
     </ContextContainer.Provider>
 }
