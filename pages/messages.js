@@ -68,17 +68,10 @@ export default function Messages({ roomID, user, messages }) {
 
 
     return (<>
-<<<<<<< HEAD
         <ChatBox  messages={msgs}/>
         <Form onSubmit={sendMessage}  reply>
             <Form.TextArea value={m.value} onChange={handleChange}/>
             <Button type="submit"  content='Add Reply' labelPosition='left' icon='edit' primary  />
-=======
-        <ChatBox messages={msgs} />
-        <Form onSubmit={sendMessage} reply>
-            <Form.TextArea value={m.value} onChange={handleChange} />
-            <Button type="submit" content='Add Reply' labelPosition='left' icon='edit' primary />
->>>>>>> f33ffa985481ff5512bbc752cc9a566020e78cb6
         </Form>
     </>)
 
