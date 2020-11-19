@@ -7,6 +7,7 @@ import {redirectUser} from '../utils/auth'
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 
+
 class MyApp extends App {
 
   static async getInitialProps({Component, ctx}) {
@@ -15,13 +16,13 @@ class MyApp extends App {
 
     let pageProps = {}
 
-    if(Component.getInitialProps){
-      pageProps = await Component.getInitialProps(ctx)
-    }
+
 
     
     if(!token){
-    const isProtectedPath = ctx.pathname !== "/index" || ctx.pathname !== "/" || ctx.pathname !== "/login" || ctx.pathname !== "/register"
+      const isProtectedPath = ctx.pathname !== "/login" && ctx.pathname !== "/register"
+
+      console.log("Path",isProtectedPath)
       if(isProtectedPath){
         redirectUser(ctx, '/login')
       } 
@@ -36,6 +37,12 @@ class MyApp extends App {
       } catch (error){
         console.log("Error getting the user", error);
       }
+    }
+
+    if(Component.getInitialProps){
+      const u = pageProps.user
+      pageProps = await Component.getInitialProps(ctx, pageProps.user)
+      pageProps.user = u
     }
     return { pageProps }
   }

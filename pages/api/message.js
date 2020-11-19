@@ -13,7 +13,8 @@ export default async(req, res) => {
 
         const newMessage = await new Message({
             messageContent: msg,
-            authorID: mongoose.Types.ObjectId(user._id)
+            authorID: mongoose.Types.ObjectId(user._id),
+            room: roomID
         })
 
 
@@ -25,7 +26,7 @@ export default async(req, res) => {
 
         await room.updateOne(update);
 
-        res.status(200).json({})
+        res.status(200).json(newMessage)
 
 
 

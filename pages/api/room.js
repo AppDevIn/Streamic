@@ -24,12 +24,15 @@ async function handlePostRequest(req, res) {
     const { name, file } = req.body
     console.log(name);
     try {
-        const user = await User.findOne({ token: req.cookies.token })
+        console.log("id", _id);
+        const user = await User.findOne({ _id })
+
         const newRoom = await new Room({
             roomName: name,
             isTemporary: false,
             mediaUrl: file,
             admins: mongoose.Types.ObjectId(user._id)
+            memebers: mongoose.Types.ObjectId(_id)
 
         }).save()
         console.log({ newRoom });
@@ -48,13 +51,21 @@ async function handlePostRequest(req, res) {
 
 
 async function handleGetRequest(req, res) {
-    const { roomID } = req.query;
+    const { roomID, _id } = req.query;
     console.log("room", roomID);
+    console.log("room", _id);
     const room = await Room.findOne({ roomID });
-    const user = await User.findOne({ token: req.cookies.token })
+    const user = await User.findOne({ _id })
 
     const update = { $push: { rooms: mongoose.Types.ObjectId(room._id) } };
     await user.updateOne(update);
+
+    const updateRoom = { $push: { memebers: mongoose.Types.ObjectId(user._id) } };
+    await room.updateOne(updateRoom);
+
+    console.log("user", user);
+
+
 
     res.status(200).json(room)
 }

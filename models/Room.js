@@ -15,6 +15,7 @@ const roomSchema = mongoose.Schema({
         default: "https://react.semantic-ui.com/images/avatar/large/matthew.png"
     },
     admins: [{ type: mongoose.Schema.Types.ObjectID, ref: "User" }],
+    memebers: [{ type: mongoose.Schema.Types.ObjectID, ref: "User" }],
     Messages: [{ type: mongoose.Schema.Types.ObjectID, ref: "Message" }],
     Playing: { type: mongoose.Schema.Types.ObjectID, ref: "Video" },
     Watchers: [{ type: mongoose.Schema.Types.ObjectID, ref: "User" }],

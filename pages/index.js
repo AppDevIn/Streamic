@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React from 'react'
+import React, {useEffect} from 'react'
 import Head from "next/head"
 import RoomList from '../components/Index/RoomList'
 import baseUrl from '../utils/baseUrl'
@@ -23,9 +23,14 @@ const INITIAL_ROOM = {
 //update the room , displays all the rooms
 // add to rooms , creates room objects pushes to mongo. 
 
-export default function Home({ rooms }) {
+export default function Home({ rooms, user }) {
 
   const [room, setRoom] = React.useState(INITIAL_ROOM);
+
+
+  useEffect(() => {
+    
+  },[])
 
   async function handleAddRoom(event) {
     event.preventDefault();
@@ -66,17 +71,18 @@ export default function Home({ rooms }) {
       </Head>
       <Layout>
       <RoomList rooms={rooms} />
-      <JoinRoom></JoinRoom>
-      <AddRoom></AddRoom>
+      <JoinRoom user={user}></JoinRoom>
+      <AddRoom user={user}/>
       </Layout>
     </>
   )
 }
 
-Home.getInitialProps = async () => {
+Home.getInitialProps = async (ctx, user) => {
   //fetch data from server 
   const url = `${baseUrl}/api/rooms`
-  const response = await axios.get(url);
+  
+  const response = await axios.get(url, {params:{...user}});
   // return response as a object 
   return { rooms: response.data };
   //note: thios object will be merged with exisiting props

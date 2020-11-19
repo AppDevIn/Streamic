@@ -8,7 +8,7 @@ import axios from 'axios'
 
 
 
-export default function JoinRoom() {
+export default function JoinRoom({ user }) {
     const [open, setOpen] = React.useState(false)
 
     const [room, setName] = React.useState("");
@@ -23,7 +23,7 @@ export default function JoinRoom() {
         event.preventDefault();
         try {
             const url = `${baseUrl}/api/room`
-            const payload = { params: { roomID: room.name } }
+            const payload = { params: { roomID: room.name, _id: user._id } }
             const response = await axios.get(url, payload)
             setOpen(false)
 

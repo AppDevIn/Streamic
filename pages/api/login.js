@@ -1,6 +1,7 @@
 import connectDb from '../../utils/connectDb.js'
 import User from '../../models/User.js'
 import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken"
 
 
 connectDb()
@@ -20,9 +21,12 @@ export default async(req, res) => {
         if (isMath) {
             console.log(`Logging into ${email}`)
 
+            const token = jwt.sign({ userId: user._id },
+                process.env.JWT_SECRET, { expiresIn: "7d" })
+
             res.statusCode = 200
             res.setHeader('Content-Type', 'application/json')
-            res.json(user)
+            res.json(token)
         } else {
             res.status(422).send("Invaild authentication")
 
