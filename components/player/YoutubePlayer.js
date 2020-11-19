@@ -60,11 +60,7 @@ function YoutubePlayer({user, roomInfo}) {
             console.log("initialising socket action....");
             socket.emit("joinRoom", {roomID, user});
             socket.emit("router", roomID);
-    
-            socket.on("message", (message) => {
-                console.log(message);
-            });
-    
+            
             socket.on("streaming", (data) => {
                 console.log(data);
                 handleActions(data);

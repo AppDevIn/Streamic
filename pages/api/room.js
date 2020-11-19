@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 import Video from '../../models/Video'
 
 connectDb()
-export default async(req, res) => {
+export default async (req, res) => {
 
     switch (req.method) {
         case "GET":
@@ -26,9 +26,9 @@ export default async(req, res) => {
 }
 
 async function handlePostRequest(req, res) {
-
     const { name, file, _id } = req.body
-    console.log(name);
+    // where is this _id
+
     try {
         console.log("id", _id);
         const user = await User.findOne({ _id })

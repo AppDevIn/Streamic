@@ -27,6 +27,7 @@ const nextHandler = nextApp.getRequestHandler()
 
 io.on('connection', socket => {
     socket.on('joinRoom', ({ roomID, user }) => {
+        console.log(user);
         console.log(`${user._id} has joined the room`);
         socket.emit("message", "Welcome to Streamic.");
         socket.join(roomID);
