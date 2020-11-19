@@ -23,7 +23,7 @@ export default function ChatBox({messages} ) {
 
     return (
         // <Layout>
-        <div class="right">
+        <div className="right">
             <Comment.Group>
                 <Header as='h3' dividing>
                     Messages

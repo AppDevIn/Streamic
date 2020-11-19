@@ -5,6 +5,7 @@ import { Container } from "semantic-ui-react";
 import Messages from "../components/Chat/messages"
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
+import ChatBox from '../components/Chat/ChatBox';
 
 // Create context container in a global scope so it can be visible by every component
 const ContextContainer = React.createContext(null);
@@ -21,7 +22,7 @@ function Room(props) {
         <PlayerHeader />
         <Container fluid className="mt-5 ct">
             <YoutubePlayer  {...props}/>
-            <Messages {...props}/>
+            <ChatBox {...props}/>
         </Container>
     </ContextContainer.Provider>
 }
