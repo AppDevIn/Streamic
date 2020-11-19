@@ -180,7 +180,7 @@ function YoutubePlayer({user, roomInfo}) {
 
         <div ref={dummy}></div>
 
-        <CardGroup className='mt-4' itemsPerRow='3'>
+        <CardGroup className='mt-4 cardDeck' itemsPerRow='3'>
             {cardList.map(card => {
                 return <YoutubeCard info={card} key={card.id} onClick={() => playVideo(card)} ></YoutubeCard>
             })}
