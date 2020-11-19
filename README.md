@@ -58,7 +58,7 @@ npm install npm@latest -g
 ### Clone the Repo
 
 ```bash
-git clone https://github.com/kahkoii/New-Overflow-Website.git
+git clone https://github.com/AppDevIn/P2.git
 ```
 
 ### Install all the packages
