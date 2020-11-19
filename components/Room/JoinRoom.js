@@ -4,6 +4,8 @@ import Fab from '@material-ui/core/Fab'
 import AccessibilityIcon from '@material-ui/icons/Accessibility'
 import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
+import Router from 'next/router'
+
 
 
 
@@ -26,6 +28,7 @@ export default function JoinRoom({ user }) {
             const payload = { params: { roomID: room.name, _id: user._id } }
             const response = await axios.get(url, payload)
             setOpen(false)
+            Router.push("/")
 
         } catch (error) {
             // TODO: Catch the error
