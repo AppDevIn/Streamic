@@ -112,9 +112,9 @@
     background-color: #1A1E23;
 }
 
+/* add to chat styles */
 .chat-container {
     max-width: 1100px;
-    background: #fff;
     margin: 30px auto;
     overflow: hidden;
 }

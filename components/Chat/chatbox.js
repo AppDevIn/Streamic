@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Button, Form, Comment, Header } from 'semantic-ui-react'
-import {ContextContainer} from '../../pages/room';
+import { ContextContainer } from '../../pages/room';
 import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
 import Chat from './chat'
 
 
 export default function ChatBox({ roomID, user, messages }) {
-    const {socket} = useContext(ContextContainer);
+    const { socket } = useContext(ContextContainer);
     const [msgs, setMsgs] = useState(messages)
     const [m, setM] = useState("")
 
@@ -33,7 +33,7 @@ export default function ChatBox({ roomID, user, messages }) {
                 console.log("client", message.messageContent)
                 setMsgs(messages => [...messages, message]);
             })
-        } 
+        }
 
     }, [socket])
 
@@ -80,8 +80,8 @@ export default function ChatBox({ roomID, user, messages }) {
 
     return (
         // <Layout>
-        <div className="chat right">
-            <Chat messages={msgs}/>
+        <div className="right chat-containner chat">
+            <Chat messages={msgs} />
             <Form onSubmit={sendMessage} reply>
                 <Form.TextArea value={m.value} onChange={handleChange} />
                 <Button type="submit" content='Add Reply' labelPosition='left' icon='edit' primary />
