@@ -95,11 +95,16 @@ async function handleGetRequest(req, res) {
         room.Playing = videoInfo;
     }
 
-    const update = { $push: { rooms: mongoose.Types.ObjectId(room._id) } };
-    await user.updateOne(update);
 
-    const updateRoom = { $push: { memebers: mongoose.Types.ObjectId(user._id) } };
-    await room.updateOne(updateRoom);
+    if (user.rooms.indexOf(room._id) === -1) {
+        const update = { $push: { rooms: mongoose.Types.ObjectId(room._id) } };
+        await user.updateOne(update);
+    }
+
+    if (room.memebers.indexOf(user._id) === -1) {
+        const updateRoom = { $push: { memebers: mongoose.Types.ObjectId(user._id) } };
+        await room.updateOne(updateRoom);
+    }
 
     console.log("user", user);
 

@@ -64,7 +64,7 @@ export default function ChatBox({ roomID, user, messages }) {
             <Chat messages={msgs}/>
             <div id="chatFormContainer">
                 <Form onSubmit={sendMessage} reply>
-                    <Form.Input placeholder="Enter Message" autoComplete="off" value={m.value} onChange={handleChange} id="chatMsg"/>
+                    <Form.Input required placeholder="Enter Message" autoComplete="off" value={m.value} onChange={handleChange} id="chatMsg"/>
                 </Form>
             </div>
         </div>

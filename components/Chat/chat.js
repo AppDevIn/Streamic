@@ -16,10 +16,12 @@ export default function ChatBox({ messages }) {
             <Comment key={message._id} className="messages_content">
                 <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
                 <Comment.Content >
-                    <Comment.Author as='a'>{message.authorID.username}</Comment.Author>
-                    <Comment.Metadata>
-                        <div>{moment(message.dateTime).format("LT")}</div>
-                    </Comment.Metadata>
+                    <span>
+                        <Comment.Author as='a'>{message.authorID.username}</Comment.Author>
+                        <Comment.Metadata>
+                            <div>{moment(message.dateTime).format("LT")}</div>
+                        </Comment.Metadata>
+                    </span>
                     <Comment.Text>{message.messageContent}</Comment.Text>
                 </Comment.Content>
             </Comment>
