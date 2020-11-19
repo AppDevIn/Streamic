@@ -26,9 +26,8 @@ export default async(req, res) => {
 }
 
 async function handlePostRequest(req, res) {
-
     const { name, file } = req.body
-    console.log(name);
+    console.log(req.query);
     try {
         console.log("id", _id);
         const user = await User.findOne({ _id })
