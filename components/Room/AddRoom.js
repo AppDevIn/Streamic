@@ -13,45 +13,42 @@ const INITIAL_ROOM = {
     file: ""
 }
 
-export default function AddRoom({user}) {
+export default function AddRoom({ user }) {
     const [open, setOpen] = React.useState(false)
 
     const [room, setName] = React.useState(INITIAL_ROOM);
 
     function handleChange(event) {
         const { name, value } = event.target
-        setName((prevState) => ({ ...prevState, [name]: value }))
+        if (name == 'file') {
+            let file = event.target.files[0]
+            setName((prevState) => ({ ...prevState, [name]: file }))
+        } else
+            setName((prevState) => ({ ...prevState, [name]: value }))
         console.log(room)
-    }
-
-    async function uploadfile(event) {
-        const { name, value } = event.target
-        const file = event.target.files[0]
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-        console.log(formData)
-        try {
-            const res = await axios.post(CLOUDINARY_URL, formData);
-            const imageUrl = res.data.secure_url;
-            setName((prevState) => ({ ...prevState, [name]: imageUrl }))
-            console.log(room)
-            console.log(imageUrl)
-        } catch (err) {
-            console.error(err);
-        }
     }
 
     async function handleAddRoom(event) {
         event.preventDefault();
         try {
             console.log(room)
-            const url = `${baseUrl}/api/room`
-            console.log(user);
-            const payload = { ...room, ...user}
-            await axios.post(url, payload)
-            console.log(room)
-
+            const formData = new FormData();
+            formData.append('file', room.file);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+            console.log(formData)
+            try {
+                const res = await axios.post(CLOUDINARY_URL, formData);
+                const imageUrl = res.data.secure_url;
+                console.log(imageUrl)
+                const url = `${baseUrl}/api/room`
+                const payload = {
+                    name: room.name, file: imageUrl
+                }
+                await axios.post(url, payload)
+                console.log(room)
+            } catch (err) {
+                console.error(err);
+            }
         } catch (error) {
             // TODO: Catch the error
             console.log(error);
@@ -85,7 +82,7 @@ export default function AddRoom({user}) {
                         name="name"
                     />
                     <Form.Input
-                        onChange={e => uploadfile(e)}
+                        onChange={handleChange}
                         fluid
                         iconPosition='left'
                         placeholder='Room Name'
