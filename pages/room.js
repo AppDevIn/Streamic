@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import YoutubePlayer from "../components/player/YoutubePlayer";
 import PlayerHeader from "../components/_App/PlayerHeader"
 import { Container } from "semantic-ui-react";
+import Messages from "../components/Chat/messages"
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 import ChatBox from '../components/Chat/ChatBox';
-import io from "socket.io-client";
 
 // Create context container in a global scope so it can be visible by every component
 const ContextContainer = React.createContext(null);
@@ -13,21 +13,16 @@ const ContextContainer = React.createContext(null);
 function Room(props) {
 
     const [parent_link, updateLink] = useState("");
-    const [socket, setSocket] = useState(null);
 
     useEffect(() => {
         document.body.style.backgroundColor = "#242A2E";
-        if (socket == null){
-            setSocket(io());
-
-        }
     }, [])
 
-    return <ContextContainer.Provider value={{ parent_link, updateLink, socket, setSocket }}>
+    return <ContextContainer.Provider value={{ parent_link, updateLink }}>
         <PlayerHeader />
         <Container fluid className="mt-5 ct">
             <YoutubePlayer  {...props} />
-            <Messages {...props} />
+            <ChatBox {...props} />
         </Container>
     </ContextContainer.Provider>
 }

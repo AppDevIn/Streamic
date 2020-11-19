@@ -6,7 +6,7 @@ const { String, Boolean } = mongoose.Schema.Types
 const roomSchema = mongoose.Schema({
     roomID: {
         type: String,
-        default: shortid.generate()
+        default: shortid.generate
     },
     roomName: String,
     isTemporary: Boolean,
