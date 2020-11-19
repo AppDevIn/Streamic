@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 import Video from '../../models/Video'
 
 connectDb()
-export default async(req, res) => {
+export default async (req, res) => {
 
     switch (req.method) {
         case "GET":
@@ -26,7 +26,7 @@ export default async(req, res) => {
 }
 
 async function handlePostRequest(req, res) {
-    const { name, file } = req.body
+    const { name, file, _id } = req.body
     console.log(req.query);
     try {
         console.log("id", _id);
