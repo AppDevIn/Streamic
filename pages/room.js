@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import YoutubePlayer from "../components/player/YoutubePlayer";
 import PlayerHeader from "../components/_App/PlayerHeader"
 import { Container } from "semantic-ui-react";
-import Messages from "../components/Chat/messages"
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 import ChatBox from '../components/Chat/ChatBox';
