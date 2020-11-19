@@ -20,10 +20,10 @@ function playerHeader(){
 
     return <>
     <Navbar className="playerNavbar" variant="dark">
-        <Navbar.Brand href="#">
+        <Navbar.Brand href="/">
             <img
                 alt=""
-                src="/static/media/youtube.png"
+                src="/static/media/streamix_logo.png"
                 width="40"
                 height="40"
                 className="d-inline-block align-top ml-3"

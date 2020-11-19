@@ -9,6 +9,7 @@ function Layout({ children }) {
         {/* Stylesheets */}
         <link rel="stylesheet" type="text/css" href="/static/styles/styles.css" />
         <link rel="stylesheet" type="text/css" href="/static/styles/player.module.css" />
+        <link rel="icon" href="/static/media/streamix_logo.png"></link>
         <link
           rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css"
