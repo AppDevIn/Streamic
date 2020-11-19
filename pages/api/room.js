@@ -21,7 +21,7 @@ export default async (req, res) => {
 
 async function handlePostRequest(req, res) {
     const { name, file } = req.body
-    console.log(name);
+    console.log(req.query);
     try {
         const user = await User.findOne({ token: req.cookies.token })
         const newRoom = await new Room({
