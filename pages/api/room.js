@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 import Video from '../../models/Video'
 
 connectDb()
-export default async (req, res) => {
+export default async(req, res) => {
 
     switch (req.method) {
         case "GET":
@@ -27,7 +27,6 @@ export default async (req, res) => {
 
 async function handlePostRequest(req, res) {
     const { name, file, _id } = req.body
-    // where is this _id
 
     try {
         console.log("id", _id);
@@ -37,7 +36,7 @@ async function handlePostRequest(req, res) {
             roomName: name,
             isTemporary: false,
             admins: mongoose.Types.ObjectId(user._id),
-            Playing: mongoose.Types.ObjectId("5fb49a75acb6446fbc182927"),
+            Playing: mongoose.Types.ObjectId("5fb635571c46816d3fef0654"),
             mediaUrl: file,
             admins: mongoose.Types.ObjectId(user._id),
             memebers: mongoose.Types.ObjectId(_id)

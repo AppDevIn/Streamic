@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import io from "socket.io-client";
+import React, { useEffect, useState, useContext } from 'react'
 import { Button, Form, Comment, Header } from 'semantic-ui-react'
-
+import {ContextContainer} from '../../pages/room';
 import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
+import Chat from './chat'
 
 
 export default function ChatBox({ roomID, user, messages }) {
-    const [socket, setSocket] = useState(null)
+    const {socket} = useContext(ContextContainer);
     const [msgs, setMsgs] = useState(messages)
     const [m, setM] = useState("")
 
@@ -22,7 +22,7 @@ export default function ChatBox({ roomID, user, messages }) {
 
     useEffect(() => {
         if (socket != null) {
-            
+            console.log("initialising socket connection for message")
             //Receive the messages
             socket.on("message", (message) => {
                 console.log(message);
@@ -33,8 +33,7 @@ export default function ChatBox({ roomID, user, messages }) {
                 console.log("client", message.messageContent)
                 setMsgs(messages => [...messages, message]);
             })
-        } else
-            setSocket(io())
+        } 
 
     }, [socket])
 
@@ -81,14 +80,8 @@ export default function ChatBox({ roomID, user, messages }) {
 
     return (
         // <Layout>
-        <div className="chat">
-            <Comment.Group>
-                <Header as='h3' dividing>
-                    Messages
-                </Header>
-                {mapMessagesToItems(messages)}
-            </Comment.Group>
-
+        <div className="chat right">
+            <Chat messages={msgs}/>
             <Form onSubmit={sendMessage} reply>
                 <Form.TextArea value={m.value} onChange={handleChange} />
                 <Button type="submit" content='Add Reply' labelPosition='left' icon='edit' primary />

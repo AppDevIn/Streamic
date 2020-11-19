@@ -37,12 +37,20 @@ export default function AddRoom({ user }) {
             formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
             console.log(formData)
             try {
-                const res = await axios.post(CLOUDINARY_URL, formData);
-                const imageUrl = res.data.secure_url;
-                console.log(imageUrl)
+                var imageUrl = "https://react.semantic-ui.com/images/avatar/large/matthew.png"
+
+                try {
+                    const res = await axios.post(CLOUDINARY_URL, formData);
+                    imageUrl = res.data.secure_url;
+                } catch (error) {
+                    console.log("Cannout upload image")
+
+                }
+
+                console.log("imageUrl", imageUrl)
                 const url = `${baseUrl}/api/room`
                 const payload = {
-                    name: room.name, file: imageUrl
+                    name: room.name, file: imageUrl, _id: user._id
                 }
                 await axios.post(url, payload)
                 console.log(room)
