@@ -15,9 +15,6 @@ class MyApp extends App {
     const {token} = parseCookies(ctx)
 
     let pageProps = {}
-
-
-
     
     if(!token){
       const isProtectedPath = ctx.pathname !== "/login" && ctx.pathname !== "/register"
@@ -43,13 +40,14 @@ class MyApp extends App {
       pageProps = await Component.getInitialProps(ctx, pageProps.user)
       pageProps.user = u
     }
+    
     return { pageProps }
   }
 
   render() {
     const { Component, pageProps, router } = this.props;
     
-    if (!router.pathname.startsWith('/player')) {
+    if (!router.pathname.startsWith('/room')) {
       // container
       return (
         <Layout>

@@ -21,11 +21,6 @@ export default async(req, res) => {
 
 export async function getUser(req, res) {
 
-
-    console.log("header", req.headers)
-
-
-
     if (!("authorization" in req.headers)) {
         res.status(401).send("No authorization token")
     } else {

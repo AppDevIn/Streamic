@@ -1,36 +1,54 @@
 import React, { useEffect, useState, useRef, useContext} from 'react';
 import Youtube from 'react-youtube';
-import functions from '../../utils/player';
-import {ContextContainer} from '../../pages/player';
+import functions from '../../utils/room';
+import {ContextContainer} from '../../pages/room';
 import YoutubeCard from './youtubeCard';
 import { Card, CardGroup, Image } from 'semantic-ui-react';
 import io from "socket.io-client";
 
-function YoutubePlayer() {
+function YoutubePlayer({user, roomInfo}) {
     const [player, setPlayer] = useState(null);
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
     const [barWidth, setBarwidth] = useState("0px");
     const [timeLine, setTimeLine] = useState("");
     const [cardList, setCardList] = useState([]);
+    const [socket, initSocket] = useState(null);
+    const roomID = roomInfo.roomID;
+    const videoID = roomInfo.Playing.videoID;
     
     const dummy = useRef(null);
     const progress = useRef();
 
     const {parent_link} = useContext(ContextContainer);
 
-    const socket = io();
-
     useEffect(() => {
-        functions.getRecommendations(parent_link)
-        .then(res => {
-            setCardList(res);
-        });
-
+        if (parent_link == ""){
+            functions.getTrendingVideo()
+            .then(res =>{
+                setCardList(res);
+            })
+        }else{
+            functions.getRecommendations(parent_link)
+            .then(res => {
+                setCardList(res);
+            });
+        }
     }, [parent_link])
 
     useEffect(() => {
-        if (cardList.length != 0 && dummy != null){
+        if (socket == null){
+            console.log("initialising socket....");
+            initSocket(io());
+        }
+
+        return () => {
+            socket.disconnect();
+        }
+    }, [])
+
+    useEffect(() => {
+        if (parent_link != "" && cardList.length != 0 && dummy != null){
             dummy.current.scrollIntoView({ behavior: "smooth" });
         }
     }, [cardList])
@@ -39,8 +57,9 @@ function YoutubePlayer() {
     useEffect(() => {
         if (player != null){
             loopy();
-            console.log("initialising....");
-            socket.emit("joinRoom");
+            console.log("initialising socket action....");
+            socket.emit("joinRoom", {roomID, user});
+            socket.emit("router", roomID);
     
             socket.on("message", (message) => {
                 console.log(message);
@@ -50,8 +69,14 @@ function YoutubePlayer() {
                 console.log(data);
                 handleActions(data);
             });
-    
-            return () => socket.disconnect();
+
+            socket.on("existingUser", () => {
+                var state = player.getPlayerState();
+                var timeline = player.getCurrentTime();
+                var isVideoChanged = false;
+                const data = {state, timeline, isVideoChanged};
+                socket.emit('changes', {roomID, data});
+            });
         }
     },[player]);
 
@@ -71,15 +96,22 @@ function YoutubePlayer() {
 
     const handleActions = (data) => {
         if (player){
-            switch (data.state){
-                case 1:
-                    player.playVideo();
-                    player.seekTo(data.timeline, true);
-                    break;
-                case 2:
-                    player.pauseVideo();
-                    player.seekTo(data.timeline, true);
-                    break;
+            if (data.isVideoChanged){
+                player.loadVideoById(data.id);
+                setTitle(data.title);
+                setAuthor(data.publisher);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }else{
+                switch (data.state){
+                    case 1:
+                        player.playVideo();
+                        player.seekTo(data.timeline, true);
+                        break;
+                    case 2:
+                        player.pauseVideo();
+                        player.seekTo(data.timeline, true);
+                        break;
+                }
             }
         }
     }
@@ -116,7 +148,7 @@ function YoutubePlayer() {
         var state = 1;
         var timeline = player.getCurrentTime();
         const data = {state, timeline};
-        socket.emit("changes", data);
+        socket.emit('changes', {roomID, data});
     }
 
     const pause = () => {
@@ -124,7 +156,7 @@ function YoutubePlayer() {
         var state = 2;
         var timeline = player.getCurrentTime();
         const data = {state, timeline};
-        socket.emit("changes", data);
+        socket.emit('changes', {roomID, data});
     }
 
     const seek = (event) => {
@@ -133,19 +165,18 @@ function YoutubePlayer() {
         const timeline = x / bw * player.getDuration();
         setBarwidth(x);
         var state = player.getPlayerState();
-        const data = {state, timeline};
-        socket.emit("changes", data);
+        var isVideoChanged = false;
+        const data = {state, timeline, isVideoChanged};
+        socket.emit('changes', {roomID, data});
     }
 
-    const playVideo = (info) => {
-        player.loadVideoById(info.id);
-        setTitle(info.title);
-        setAuthor(info.publisher);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    const playVideo = (data) => {
+        data["isVideoChanged"] = true;
+        socket.emit('changes', {roomID, data});
     }
 
     return <div className="left">
-        <Youtube className="ytplayer" id='player' videoId='GTcM3qCeup0' opts={opts} onReady={onPlayerReady} ></Youtube>
+        <Youtube className="ytplayer" id='player' videoId={videoID} opts={opts} onReady={onPlayerReady} ></Youtube>
         <div onClick={loopy} id="title">{title}</div>
         <div id="author">{author}</div>
 

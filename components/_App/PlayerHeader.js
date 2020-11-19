@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import {Navbar, Form, FormControl, Button, Nav} from 'react-bootstrap';
-import {ContextContainer} from '../../pages/player';
+import {ContextContainer} from '../../pages/room';
 
 function playerHeader(){
 
@@ -8,7 +8,8 @@ function playerHeader(){
 
     const [link, setLink] = useState("");
 
-    const submit = () => {
+    const submit = (event) => {
+        event.preventDefault();
         updateLink(link);
     }
 
@@ -31,7 +32,7 @@ function playerHeader(){
 
         <span id="brandname">Streamic</span>
 
-        <Form inline className="mx-auto" id="searchForm" onSubmit={submit}>
+        <Form inline className="mx-auto" id="searchForm" onSubmit={(e) => submit(e)}>
             <FormControl type="text" placeholder="Search" className="mr-sm-2" id="searchInput" value={link} onChange={(e) => changeLink(e)} />
             <Button id="searchBtn" type="submit"><span className="glyphicon glyphicon-search"></span></Button>
         </Form>

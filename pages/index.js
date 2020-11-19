@@ -80,7 +80,7 @@ export default function Home({ rooms, user }) {
 
 Home.getInitialProps = async (ctx, user) => {
   //fetch data from server 
-  const url = `${baseUrl}/api/rooms`
+  const url = `${baseUrl}/api/rooms?type=1`
   
   const response = await axios.get(url, {params:{...user}});
   // return response as a object 
