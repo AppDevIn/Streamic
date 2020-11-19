@@ -31,7 +31,7 @@ async function handlePostRequest(req, res) {
             roomName: name,
             isTemporary: false,
             mediaUrl: file,
-            admins: mongoose.Types.ObjectId(user._id)
+            admins: mongoose.Types.ObjectId(user._id),
             memebers: mongoose.Types.ObjectId(_id)
 
         }).save()
