@@ -42,7 +42,7 @@ export default function AddRoom({ user }) {
                 console.log(imageUrl)
                 const url = `${baseUrl}/api/room`
                 const payload = {
-                    name: room.name, file: imageUrl
+                    name: room.name, file: imageUrl, _id: user._id
                 }
                 await axios.post(url, payload)
                 console.log(room)

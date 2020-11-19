@@ -27,7 +27,6 @@ export default async (req, res) => {
 
 async function handlePostRequest(req, res) {
     const { name, file, _id } = req.body
-    // where is this _id
 
     try {
         console.log("id", _id);
