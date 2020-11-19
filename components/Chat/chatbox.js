@@ -69,7 +69,7 @@ export default function ChatBox({ roomID, user, messages }) {
 
 
         return messages.map(message => (
-            <Comment key={message._id}>
+            <Comment key={message._id} className="white">
                 <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
                 <Comment.Content>
                     <Comment.Author as='a'>{message.authorID.username}</Comment.Author>
@@ -84,7 +84,7 @@ export default function ChatBox({ roomID, user, messages }) {
 
     return (
         // <Layout>
-        <div class="chat">
+        <div className="chat">
             <Comment.Group>
                 <Header as='h3' dividing>
                     Messages

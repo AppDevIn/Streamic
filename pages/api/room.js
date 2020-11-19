@@ -26,14 +26,9 @@ export default async (req, res) => {
 }
 
 async function handlePostRequest(req, res) {
-<<<<<<< HEAD
-    const { name, file, _id } = req.body
-    console.log(req.query);
-=======
 
     const { name, file, _id } = req.body
     console.log(name);
->>>>>>> c69cc2d2bafe2273b6d8fc206a01389050c852c6
     try {
         console.log("id", _id);
         const user = await User.findOne({ _id })
