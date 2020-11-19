@@ -22,10 +22,7 @@ export default function ChatBox({ roomID, user, messages }) {
 
     useEffect(() => {
         if (socket != null) {
-
-            //Pass the idea to the socket server
-            socket.emit("joinRoom", roomID, user);
-
+            
             //Receive the messages
             socket.on("message", (message) => {
                 console.log(message);
