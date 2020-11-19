@@ -19,7 +19,6 @@ class MyApp extends App {
     if(!token){
       const isProtectedPath = ctx.pathname !== "/login" && ctx.pathname !== "/register"
 
-      console.log("Path",isProtectedPath)
       if(isProtectedPath){
         redirectUser(ctx, '/login')
       } 

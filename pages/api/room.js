@@ -39,6 +39,7 @@ async function handlePostRequest(req, res) {
             admins: mongoose.Types.ObjectId(user._id),
             Playing: mongoose.Types.ObjectId("5fb49a75acb6446fbc182927"),
             mediaUrl: file,
+            admins: mongoose.Types.ObjectId(user._id),
             memebers: mongoose.Types.ObjectId(_id)
 
         }).save()
