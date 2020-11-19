@@ -5,6 +5,8 @@ import Video from '../../models/Video.js'
 connectDb()
 export default async(req, res) => {
 
+    console.log("/api/rooms called");
+
     const { _id } = req.query
 
     const rooms = await Room.find({ memebers: _id })
