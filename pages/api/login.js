@@ -34,7 +34,7 @@ export default async(req, res) => {
 
     } catch (error) {
 
-        res.status(500).send("Please try to login again")
+        res.status(500).json({ message: "Please try to login again" })
     }
 
 

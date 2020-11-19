@@ -46,6 +46,8 @@ export default function Register() {
   async function handleSubmit(event){
     event.preventDefault();
     
+
+    setError(INITIAL_ERROR)
     
     const isVaild = validator.validate(user.email)
     if(isVaild === false){
