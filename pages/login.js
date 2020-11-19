@@ -57,6 +57,8 @@ export default function Login(props) {
       const response = await axios.post(url, payload)
       
       handleLogin(response.data)
+
+      setError(INITIAL_ERROR)
       
 
 

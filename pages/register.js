@@ -5,12 +5,17 @@ import axios from 'axios'
 import {handleLogin, handleRegister} from '../utils/auth'
 import Head from 'next/head'
 import Layout from '../components/Register/Layout'
+import validator from 'email-validator'
 
 const INITIAL_USER = {
   name:"",
-  email:"jeyavishnu22@yahoo.com",
+  email:"",
   password:""
+}
 
+const INITIAL_ERROR = {
+  isError:false,
+  message:"" 
 }
 
 export default function Register() {
@@ -18,11 +23,19 @@ export default function Register() {
   const [user, setUser] = React.useState(INITIAL_USER);
   const [disabled, setDisabled] = React.useState(true)
   const [loading, setLoading] = React.useState(false)
+  const [isVaildEmail, setisVaildEmail] = React.useState(true)
+  const [error, setError] = React.useState(INITIAL_ERROR)
+
 
   React.useEffect(() => {
     const isUser = Object.values(user).every(el => Boolean(el))
     setDisabled(!isUser);
   },[user])
+
+  React.useEffect(() => {
+    console.log(error.isError);
+    console.log(error.message);
+  },[error])
 
   //Put inside the onChange 
   function handleChange(event){
@@ -32,7 +45,21 @@ export default function Register() {
 
   async function handleSubmit(event){
     event.preventDefault();
+    
+    
+    const isVaild = validator.validate(user.email)
+    if(isVaild === false){
+      console.log("Invaild email");
+      setisVaildEmail(isVaild)
+      return
+    }
+
+    
+
     try {
+
+
+
       setLoading(true)
       console.log(user)
 
@@ -44,7 +71,14 @@ export default function Register() {
     } catch (error){
       setLoading(false)
       // TODO: Catch the error
-      console.log(error);
+      setError({
+        isError:true,
+        message:error.response.data.message
+      }
+      )
+      
+
+      console.log(error, error.response.data.message);
 
     } finally {
       setLoading(false)
@@ -63,6 +97,14 @@ export default function Register() {
         <Header as='h3' color='blue' textAlign='left'>
           <a href='/'>Back to Home</a>
         </Header>
+            {error.isError}
+        <Message hidden={isVaildEmail && (!error.isError)} warning>
+          <Message.Header>
+            {isVaildEmail ? (<></>) : (<p>The email is not formatted correctly</p>)}
+            {error.isError ? (<p>{error.message}</p>) : (<></>) } 
+          </Message.Header>
+        
+        </Message>
         <Form size='large'>
             <Form.Input
             onChange={handleChange}
@@ -85,7 +127,7 @@ export default function Register() {
               type='password'
             />
         
-        <Button fluid onClick={handleSubmit} active={disabled || loading} type='submit'>Submit</Button>
+        <Button fluid onClick={handleSubmit} disabled={disabled} type='submit'>Submit</Button>
         
         </Form>
         </Grid.Column>
