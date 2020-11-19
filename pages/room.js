@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import YoutubePlayer from "../components/player/YoutubePlayer";
 import PlayerHeader from "../components/_App/PlayerHeader"
 import { Container } from "semantic-ui-react";
-import ChatBox from "../components/Chat/chatbox"
+import Messages from "../components/Chat/messages"
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
+import ChatBox from '../components/Chat/ChatBox';
 
 // Create context container in a global scope so it can be visible by every component
 const ContextContainer = React.createContext(null);
@@ -27,10 +28,15 @@ function Room(props) {
 }
 
 Room.getInitialProps = async (ctx, user) => {
-    const url = `${baseUrl}/api/room`
+    var url = `${baseUrl}/api/room`
     const payload = { params: { roomID: ctx.query._id, _id: user._id } };
-    const response = await axios.get(url, payload);
-    return { roomInfo: response.data };
+    const responseRoom = await axios.get(url, payload);
+
+
+    url = `${baseUrl}/api/messages`
+    const responseMessage = await axios.get(url, { params: { roomID: ctx.query._id } });
+
+    return { roomInfo: responseRoom.data, roomID: ctx.query._id, messages: responseMessage.data };
 }
 
 export { ContextContainer };

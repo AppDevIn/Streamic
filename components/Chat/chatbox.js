@@ -84,7 +84,11 @@ export default function ChatBox({ roomID, user, messages }) {
 
     return (
         // <Layout>
+<<<<<<< HEAD
         <div class="chat">
+=======
+        <div className="right">
+>>>>>>> 0a14bf71cf530c9b9622444e2b70317d1f204c5b
             <Comment.Group>
                 <Header as='h3' dividing>
                     Messages

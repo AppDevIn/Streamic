@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import io from "socket.io-client";
 import { Button, Form } from 'semantic-ui-react'
-import ChatBox from '../components/Chat/ChatBox'
+import ChatBox from './ChatBox'
 
-import baseUrl from '../utils/baseUrl'
+import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
 
 export default function Messages({ roomID, user, messages }) {
@@ -25,7 +25,7 @@ export default function Messages({ roomID, user, messages }) {
         if (socket != null) {
 
             //Pass the idea to the socket server
-            socket.emit("joinRoom", roomID, user);
+            socket.emit("joinRoom", {roomID, user});
 
             //Receive the messages
             socket.on("message", (message) => {
@@ -81,14 +81,5 @@ export default function Messages({ roomID, user, messages }) {
 
 
 
-Messages.getInitialProps = async ({ query: { _id }, req: { cookies: { token } } }) => {
-
-    // const user = await getUser(token)
-    console.log("id", _id)
-
-    const url = `${baseUrl}/api/messages`
-    const response = await axios.get(url, { params: { roomID: _id } });
-    return { roomID: _id, messages: response.data }
-};
 
 
