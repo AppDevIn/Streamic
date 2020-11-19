@@ -8,7 +8,7 @@ import axios from 'axios'
 
 
 
-export default function JoinRoom() {
+export default function JoinRoom({ user }) {
     const [open, setOpen] = React.useState(false)
 
     const [room, setName] = React.useState("");
@@ -23,7 +23,7 @@ export default function JoinRoom() {
         event.preventDefault();
         try {
             const url = `${baseUrl}/api/room`
-            const payload = { params:{roomID:room.name} }
+            const payload = { params: { roomID: room.name, _id: user._id } }
             const response = await axios.get(url, payload)
             setOpen(false)
 
@@ -46,9 +46,10 @@ export default function JoinRoom() {
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             open={open}
+            size={'tiny'}
             trigger={<Fab color="primary" aria-label="add" variant="extended" className="float-right"> <AccessibilityIcon />Join Room </Fab>}
         >
-            <Modal.Header>Create a room</Modal.Header>
+            <Modal.Header>Join a room</Modal.Header>
             <Modal.Content>
                 <Form.Field>
                     <Form.Input
@@ -66,7 +67,7 @@ export default function JoinRoom() {
                     Cancel
                 </Button>
                 <Button
-                    content="Create"
+                    content="Join"
                     labelPosition='right'
                     icon='checkmark'
                     onClick={handleJoinRoom}

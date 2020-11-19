@@ -25,7 +25,7 @@ export default function ChatBox({messages} ) {
         // <Layout>
         <Comment.Group>
             <Header as='h3' dividing>
-                Messages
+                {messages.length}
             </Header>
 
             {mapMessagesToItems(messages)}

@@ -5,11 +5,15 @@ import AddIcon from '@material-ui/icons/Add';
 import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
 
+const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dbccwphl1/image/upload"
+const CLOUDINARY_UPLOAD_PRESET = 'midfduhh';
+
 const INITIAL_ROOM = {
-    name: ""
+    name: "",
+    file: ""
 }
 
-export default function AddRoom() {
+export default function AddRoom({user}) {
     const [open, setOpen] = React.useState(false)
 
     const [room, setName] = React.useState(INITIAL_ROOM);
@@ -20,19 +24,37 @@ export default function AddRoom() {
         console.log(room)
     }
 
+    async function uploadfile(event) {
+        const { name, value } = event.target
+        const file = event.target.files[0]
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        console.log(formData)
+        try {
+            const res = await axios.post(CLOUDINARY_URL, formData);
+            const imageUrl = res.data.secure_url;
+            setName((prevState) => ({ ...prevState, [name]: imageUrl }))
+            console.log(room)
+            console.log(imageUrl)
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     async function handleAddRoom(event) {
-        
         event.preventDefault();
         try {
             console.log(room)
             const url = `${baseUrl}/api/room`
-            const payload = { ...room }
+            console.log(user);
+            const payload = { ...room, ...user}
             await axios.post(url, payload)
+            console.log(room)
 
         } catch (error) {
             // TODO: Catch the error
             console.log(error);
-
         } finally {
             setOpen(false)
         }
@@ -48,6 +70,7 @@ export default function AddRoom() {
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             open={open}
+            size={'tiny'}
             trigger={<Fab color="primary" aria-label="add" variant="extended" className="float-right"> <AddIcon /> Add Room </Fab>}
         >
             <Modal.Header>Create a room</Modal.Header>
@@ -61,6 +84,15 @@ export default function AddRoom() {
                         type="Email"
                         name="name"
                     />
+                    <Form.Input
+                        onChange={e => uploadfile(e)}
+                        fluid
+                        iconPosition='left'
+                        placeholder='Room Name'
+                        type="file"
+                        name="file"
+                    />
+
                 </Form.Field>
             </Modal.Content>
             <Modal.Actions>

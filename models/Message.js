@@ -15,6 +15,7 @@ const messageSchema = mongoose.Schema({
         default: moment().utc()
     },
     authorID: { type: mongoose.Schema.Types.ObjectID, ref: "User" },
+    room: { type: String }
 })
 
 
