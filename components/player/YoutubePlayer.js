@@ -4,7 +4,6 @@ import functions from '../../utils/room';
 import {ContextContainer} from '../../pages/room';
 import YoutubeCard from './youtubeCard';
 import { Card, CardGroup, Image } from 'semantic-ui-react';
-import io from "socket.io-client";
 
 function YoutubePlayer({user, roomInfo}) {
     const [player, setPlayer] = useState(null);
@@ -13,14 +12,13 @@ function YoutubePlayer({user, roomInfo}) {
     const [barWidth, setBarwidth] = useState("0px");
     const [timeLine, setTimeLine] = useState("");
     const [cardList, setCardList] = useState([]);
-    const [socket, initSocket] = useState(null);
     const roomID = roomInfo.roomID;
     const videoID = roomInfo.Playing.videoID;
     
     const dummy = useRef(null);
     const progress = useRef();
 
-    const {parent_link} = useContext(ContextContainer);
+    const {parent_link, socket} = useContext(ContextContainer);
 
     useEffect(() => {
         if (parent_link == ""){
@@ -37,17 +35,6 @@ function YoutubePlayer({user, roomInfo}) {
     }, [parent_link])
 
     useEffect(() => {
-        if (socket == null){
-            console.log("initialising socket....");
-            initSocket(io());
-        }
-
-        return () => {
-            socket.disconnect();
-        }
-    }, [])
-
-    useEffect(() => {
         if (parent_link != "" && cardList.length != 0 && dummy != null){
             dummy.current.scrollIntoView({ behavior: "smooth" });
         }
@@ -60,7 +47,7 @@ function YoutubePlayer({user, roomInfo}) {
             console.log("initialising socket action....");
             socket.emit("joinRoom", {roomID, user});
             socket.emit("router", roomID);
-            
+
             socket.on("streaming", (data) => {
                 console.log(data);
                 handleActions(data);
