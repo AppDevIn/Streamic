@@ -28,7 +28,7 @@ const nextHandler = nextApp.getRequestHandler()
 io.on('connection', socket => {
     socket.on('joinRoom', ({ roomID, user }) => {
         console.log(user);
-        console.log(`${user._id} has joined the room`);
+        console.log(`${user._id} has joined the ${roomID}`);
         socket.emit("message", "Welcome to Streamic.");
         socket.join(roomID);
     });
@@ -53,6 +53,7 @@ io.on('connection', socket => {
 
     socket.on('sendMessage', (data) => {
         const { message, roomID } = data
+        console.log("Message reveived from " + roomID);
         io.to(roomID).emit('messageChanges', message);
     })
 

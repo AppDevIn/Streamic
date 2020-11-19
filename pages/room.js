@@ -22,7 +22,7 @@ function Room(props) {
         <PlayerHeader />
         <Container fluid className="mt-5 ct">
             <YoutubePlayer  {...props} />
-            <ChatBox {...props} />
+            <Messages {...props} />
         </Container>
     </ContextContainer.Provider>
 }
