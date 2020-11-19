@@ -159,3 +159,28 @@ body {
     min-height: 30px;
     font-size: 15px;
 }
+
+#chatFormContainer {
+    padding: 20px 30px;
+    background-color: #696969;
+}
+
+#chatMsg {
+    background: transparent;
+    font-size: 16px;
+    padding: 5px;
+    height: 40px;
+    width: 100%;
+    margin: 0 auto;
+    color: whitesmoke;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: groove;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline-style: none;
+}
