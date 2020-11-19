@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+body {
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.iframe-container {
+    position: relative;
+    width: 90%;
+    padding-bottom: 50%;
+    height: 1000px;
+}
+
+.iframe-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.ytplayer {
+    /* pointer-events: none; */
+}
+
+.left {
+    width: 70%;
+}
+
+.right {
+    width: 30%;
+}
+
+.left {
+    float: left;
+}
+
+.chat {
+    width: 22%;
+    float: right;
+    border: 2px solid #262626;
+    color: white;
+    background-color: lightgrey;
+}
+
+#progress {
+    width: 90%;
+    margin-top: 10px;
+    height: 12px;
+    border: 1px solid black;
+}
+
+#bar {
+    height: 10px;
+    background: #f00;
+}
+
+#title {
+    font-size: 20px;
+    color: rgb(214, 216, 218);
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+#author {
+    font-size: 16px;
+    color: rgb(214, 216, 218);
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+#play,
+#pause {
+    background-color: grey;
+    border: none;
+    color: rgb(214, 216, 218);
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+#timeline {
+    margin-left: 10px;
+    font-size: 16px;
+    color: rgb(214, 216, 218);
+}
+
+#brandname {
+    vertical-align: center;
+    color: rgb(214, 216, 218);
+    font-size: 16px;
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    user-select: none;
+}
+
+#searchForm {
+    width: 700px;
+}
+
+#searchForm input[type='text'] {
+    width: 67%;
+    background-color: black;
+    height: 35px;
+    border: 2px solid #202020;
+    font-size: 16px;
+    color: rgb(214, 216, 218);
+    opacity: 80%;
+    padding: 10px;
+}
+
+#searchBtn {
+    width: 65px;
+    height: 33px;
+    background-color: rgb(214, 216, 218);
+    color: black;
+}
+
+.playerNavbar {
+    background-color: #1A1E23;
+}
+
+
+/* add to chat styles */
+
+.chat-container {
+    max-width: 1100px;
+    margin: 30px auto;
+    overflow: hidden;
+}
+
+.chat-main {
+    background-color: lightgrey;
+}
+
+.chat-messages {
+    padding: 30px;
+    height: 500px;
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+@media screen and (max-width: 1330px) {
+    .chat-main {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1331px) {
+    .chat-main {
+        display: block;
+    }
+}
+
+.cardDeck {
+    width: 90%;
+}
+
+.messages_content {
+    width: 150px;
+    min-height: 30px;
+    font-size: 14px;
+}
+
+#chatFormContainer {
+    padding: 20px 30px;
+    background-color: #696969;
+}
+
+#chatMsg {
+    background: transparent;
+    font-size: 16px;
+    padding: 5px;
+    height: 40px;
+    width: 100%;
+    margin: 0 auto;
+    color: whitesmoke;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: groove;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline-style: none;
+}

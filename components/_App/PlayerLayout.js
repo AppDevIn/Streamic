@@ -1,30 +1,26 @@
 import Head from "next/head";
-import { Container, Icon } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
 
-import Header from "./Header";
-import HeadContent from "./HeadContent";
-
-function PlayerLayout({ children }) {
+function Layout({ children }) {
   return (
     <>
       <Head>
         {/* <HeadContent /> */}
         {/* Stylesheets */}
         <link rel="stylesheet" type="text/css" href="/static/styles/styles.css" />
-        <link rel="stylesheet" type="text/css" href="/static/styles/nprogress.css" />
+        <link rel="stylesheet" type="text/css" href="/static/styles/player.module.css" />
         <link rel="icon" href="/static/media/streamix_logo.png"></link>
         <link
           rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css"
         />
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet" />
         <title>Streamic</title>
       </Head>
-      {/* <Header /> */}
-      {/* {children} */}
-      
-        {children}
+      {children}
+
     </>
   );
 }
 
-export default PlayerLayout;
+export default Layout;

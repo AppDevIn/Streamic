@@ -4,12 +4,14 @@ const connection = {}
 
 async function connectDb() {
 
-    if (connection.isConnected) {
 
+
+    //To chcek if is already connected
+    if (connection.isConnected) {
         console.log("Using existing connection")
         return;
-
     }
+
 
     //Use new database connection
     const db = await mongoose.connect(process.env.MONGO_SRV, {
@@ -18,8 +20,6 @@ async function connectDb() {
         useNewUrlParser: true,
         useUnifiedTopology: true
     });
-
-    console.log("DB connected");
 
     connection.isConnected = db.connections[0].readyState;
 
