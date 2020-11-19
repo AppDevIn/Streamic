@@ -13,7 +13,7 @@ export default function ChatBox({ messages }) {
                 <Comment.Content >
                     <Comment.Author as='a'>{message.authorID.username}</Comment.Author>
                     <Comment.Metadata>
-                        <div>{moment(message.dateTime).format("lll")}</div>
+                        <div>{moment(message.dateTime).format("LT")}</div>
                     </Comment.Metadata>
                     <Comment.Text>{message.messageContent}</Comment.Text>
                 </Comment.Content>
