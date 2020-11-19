@@ -28,13 +28,13 @@ export default async(req, res) => {
             res.setHeader('Content-Type', 'application/json')
             res.json(token)
         } else {
-            res.status(422).send("Invaild authentication")
+            res.status(422).json({ message: "Email or password is invaild" })
 
         }
 
     } catch (error) {
-        console.log(error);
-        res.status(500).send("User try again later")
+
+        res.status(500).json({ message: "Please try to login again" })
     }
 
 

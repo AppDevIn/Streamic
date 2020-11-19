@@ -17,35 +17,42 @@ export default async(req, res) => {
 
         if (user) {
             console.log(`User already exist with ${email}`)
-            res.status(422).send(`User already exist with ${email}`)
+            res.status(422).json({ message: `User already exist with ${email}` })
             return
         }
         //2) --if not has their password
         const hash = await bcrypt.hash(password, 10)
+
+        try {
             //3) Create user 
-        const newUser = await new User({
-            username: name,
-            email,
-            password: hash,
-            token: "token"
-        })
+            const newUser = await new User({
+                username: name,
+                email,
+                password: hash,
+                token: "token"
+            })
 
-        //4) Create a token for the new user 
-        const token = jwt.sign({ userId: newUser._id },
-            process.env.JWT_SECRET, { expiresIn: "7d" })
-
-
-        //Update the token into the database
-        newUser.token = token
-
-        newUser.save()
-        console.log({ newUser });
+            //4) Create a token for the new user 
+            const token = jwt.sign({ userId: newUser._id },
+                process.env.JWT_SECRET, { expiresIn: "7d" })
 
 
-        //5) Send back the token
-        res.statusCode = 200
-        res.setHeader('Content-Type', 'application/json')
-        res.end(token)
+            //Update the token into the database
+            newUser.token = token
+
+            newUser.save()
+            console.log({ newUser });
+
+            //5) Send back the token
+            res.statusCode = 200
+            res.setHeader('Content-Type', 'application/json')
+            res.end(token)
+        } catch (error) {
+            res.status(422).json({ message: "User not created" })
+        }
+
+
+
 
 
 
