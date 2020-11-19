@@ -8,9 +8,9 @@ export default function ChatBox({ messages }) {
 
 
         return messages.map(message => (
-            <Comment key={message._id}>
+            <Comment key={message._id} className="messages_content">
                 <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
-                <Comment.Content>
+                <Comment.Content >
                     <Comment.Author as='a'>{message.authorID.username}</Comment.Author>
                     <Comment.Metadata>
                         <div>{moment(message.dateTime).format("lll")}</div>
