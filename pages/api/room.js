@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 
 
 connectDb()
-export default async(req, res) => {
+export default async (req, res) => {
     switch (req.method) {
         case "GET":
             await handleGetRequest(req, res);
@@ -19,12 +19,10 @@ export default async(req, res) => {
     }
 }
 
-
-
 async function handlePostRequest(req, res) {
 
-    const { name, _id } = req.body
-
+    const { name, file } = req.body
+    console.log(name);
     try {
         console.log("id", _id);
         const user = await User.findOne({ _id })
@@ -32,12 +30,12 @@ async function handlePostRequest(req, res) {
         const newRoom = await new Room({
             roomName: name,
             isTemporary: false,
-            admins: mongoose.Types.ObjectId(_id),
+            mediaUrl: file,
+            admins: mongoose.Types.ObjectId(user._id),
             memebers: mongoose.Types.ObjectId(_id)
 
         }).save()
         console.log({ newRoom });
-
 
         const update = { $push: { rooms: mongoose.Types.ObjectId(newRoom._id) } };
         await user.updateOne(update);
