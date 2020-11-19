@@ -13,7 +13,7 @@ const INITIAL_ROOM = {
     file: ""
 }
 
-export default function AddRoom({user}) {
+export default function AddRoom({ user }) {
     const [open, setOpen] = React.useState(false)
 
     const [room, setName] = React.useState(INITIAL_ROOM);
@@ -32,14 +32,6 @@ export default function AddRoom({user}) {
         event.preventDefault();
         try {
             console.log(room)
-<<<<<<< HEAD
-            const url = `${baseUrl}/api/room`
-            console.log(user);
-            const payload = { ...room, ...user}
-            await axios.post(url, payload)
-            console.log(room)
-
-=======
             const formData = new FormData();
             formData.append('file', room.file);
             formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
@@ -57,7 +49,6 @@ export default function AddRoom({user}) {
             } catch (err) {
                 console.error(err);
             }
->>>>>>> feature-cloudinary-v1
         } catch (error) {
             // TODO: Catch the error
             console.log(error);
