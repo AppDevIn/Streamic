@@ -17,7 +17,7 @@ function Room(props) {
 
     useEffect(() => {
         document.body.style.backgroundColor = "#242A2E";
-        if (socket == null){
+        if (socket == null) {
             setSocket(io());
         }
     }, [])
@@ -28,7 +28,7 @@ function Room(props) {
             <YoutubePlayer  {...props} />
             <ChatBox {...props} />
         </Container>
-    </ContextContainer.Provider>
+    </ContextContainer.Provider >
 }
 
 Room.getInitialProps = async (ctx, user) => {

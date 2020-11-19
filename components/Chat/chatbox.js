@@ -61,26 +61,9 @@ export default function ChatBox({ roomID, user, messages }) {
         setM((prevState) => ({ ...prevState, value }))
     }
 
-    function mapMessagesToItems(messages) {
-
-
-        return messages.map(message => (
-            <Comment key={message._id} className="white">
-                <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
-                <Comment.Content>
-                    <Comment.Author as='a'>{message.authorID.username}</Comment.Author>
-                    <Comment.Metadata>
-                        <div>{message.dateTime}</div>
-                    </Comment.Metadata>
-                    <Comment.Text>{message.messageContent}</Comment.Text>
-                </Comment.Content>
-            </Comment>
-        ));
-    }
-
     return (
         // <Layout>
-        <div className="right chat-containner chat">
+        <div className="chat chat-main chat-sidebar right">
             <Chat messages={msgs} />
             <Form onSubmit={sendMessage} reply>
                 <Form.TextArea value={m.value} onChange={handleChange} />

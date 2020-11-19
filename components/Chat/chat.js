@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Form, Comment, Header } from 'semantic-ui-react'
+import moment from 'moment'
 
 export default function ChatBox({ messages }) {
 
@@ -12,7 +13,7 @@ export default function ChatBox({ messages }) {
                 <Comment.Content>
                     <Comment.Author as='a'>{message.authorID.username}</Comment.Author>
                     <Comment.Metadata>
-                        <div>{message.dateTime}</div>
+                        <div>{moment(message.dateTime).format("lll")}</div>
                     </Comment.Metadata>
                     <Comment.Text>{message.messageContent}</Comment.Text>
                 </Comment.Content>

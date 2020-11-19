@@ -120,7 +120,7 @@
 }
 
 .chat-main {
-    background-color: #181818;
+    background-color: lightgrey;
 }
 
 .chat-messages {
@@ -128,4 +128,13 @@
     height: 500px;
     max-height: 500px;
     overflow-y: scroll;
+}
+
+@media  (max-width: 700px) {
+    .chat-main {
+        display: block;
+    }
+    .chat-sidebar {
+        display: none;
+    }
 }
