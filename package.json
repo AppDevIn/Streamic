@@ -6,7 +6,7 @@
         "dev": "nodemon server.js",
         "dev2": "next",
         "build": "next build",
-        "start": "next start"
+        "start": "node server.js"
     },
     "dependencies": {
         "@material-ui/core": "^4.11.0",
@@ -38,5 +38,8 @@
         "shortid": "^2.2.16",
         "socket.io": "^3.0.1",
         "socket.io-client": "^3.0.1"
+    },
+    "engines": {
+        "node": "14.15.0"
     }
 }
