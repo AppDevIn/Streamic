@@ -4,7 +4,7 @@ import PlayerHeader from "../components/_App/PlayerHeader"
 import { Container } from "semantic-ui-react";
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
-import ChatBox from '../components/Chat/ChatBox';
+import ChatBox from '../components/Chat/Chatbox';
 import io from 'socket.io-client';
 
 // Create context container in a global scope so it can be visible by every component
