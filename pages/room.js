@@ -25,7 +25,7 @@ function Room(props) {
     return <ContextContainer.Provider value={{ parent_link, updateLink, socket, setSocket }}>
         <PlayerHeader />
         <Container fluid className="mt-5 ct">
-            <YoutubePlayer  {...props} />
+            <YoutubePlayer {...props} />
             <ChatBox {...props} />
         </Container>
     </ContextContainer.Provider >
