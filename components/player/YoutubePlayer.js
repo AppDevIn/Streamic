@@ -66,15 +66,14 @@ function YoutubePlayer({user, roomInfo}) {
 
     const opts = {
         height: '600',
-        width: '1000'
-        // ,
-        // playerVars: {
-        //     'controls': 0,
-        //     'disablekb': 1,
-        //     'modestbranding': 1,
-        //     'rel': 0,
-        //     'showinfo': 0
-        // }
+        width: '1000',  
+        playerVars: {
+            'controls': 0,
+            'disablekb': 1,
+            'modestbranding': 1,
+            'rel': 0,
+            'showinfo': 0
+        }
     };
 
     const handleActions = (data) => {

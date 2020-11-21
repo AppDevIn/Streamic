@@ -19,7 +19,9 @@ body {
 }
 
 .ytplayer {
-    /* pointer-events: none; */
+    pointer-events: none;
+    max-width: 1000px;
+    position: relative;
 }
 
 .left {
@@ -183,4 +185,22 @@ input:focus,
 textarea:focus,
 select:focus {
     outline-style: none;
+}
+
+@media screen and (max-width: 1050px) {
+    .ytplayer {
+        width: 99%;
+    }
+    .left {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 1051px) {
+    .ytplayer {
+        width: 100%;
+    }
+    .left {
+        width: 70%;
+    }
 }
