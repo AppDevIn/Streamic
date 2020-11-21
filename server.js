@@ -2,7 +2,9 @@ const app = require('express')();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const next = require('next');
-const baseUrl = 'http://localhost:3000';
+const baseUrl = process.env.NODE_ENV === "production" ?
+    'https://p2streamic.herokuapp.com' :
+    'http://localhost:3000';
 const axios = require('axios').default;
 require('dotenv').config();
 
