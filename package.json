@@ -24,8 +24,8 @@
         "jsonwebtoken": "^8.5.1",
         "moment": "^2.29.1",
         "mocha": "^8.2.1",
-        "mongoose": "^5.10.14",
-        "next": "^10.0.1",
+        "mongoose": "^5.10.15",
+        "next": "^10.0.2",
         "nodemon": "^2.0.6",
         "nookies": "^2.5.0",
         "nprogress": "^0.2.0",
@@ -39,8 +39,8 @@
         "semantic-ui-css": "^2.4.1",
         "semantic-ui-react": "^2.0.1",
         "shortid": "^2.2.16",
-        "socket.io": "^3.0.1",
-        "socket.io-client": "^3.0.3"
+        "socket.io": "^3.0.3",
+        "socket.io-client": "^3.0.1"
     },
     "engines": {
         "node": "14.15.0"
