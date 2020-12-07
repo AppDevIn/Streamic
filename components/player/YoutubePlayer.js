@@ -66,15 +66,14 @@ function YoutubePlayer({user, roomInfo}) {
 
     const opts = {
         height: '600',
-        width: '1000'
-        // ,
-        // playerVars: {
-        //     'controls': 0,
-        //     'disablekb': 1,
-        //     'modestbranding': 1,
-        //     'rel': 0,
-        //     'showinfo': 0
-        // }
+        width: '1000',  
+        playerVars: {
+            'controls': 0,
+            'disablekb': 1,
+            'modestbranding': 1,
+            'rel': 0,
+            'showinfo': 0
+        }
     };
 
     const handleActions = (data) => {
@@ -180,7 +179,7 @@ function YoutubePlayer({user, roomInfo}) {
 
         <div ref={dummy}></div>
 
-        <CardGroup className='mt-4' itemsPerRow='3'>
+        <CardGroup className='mt-4 cardDeck' itemsPerRow='3'>
             {cardList.map(card => {
                 return <YoutubeCard info={card} key={card.id} onClick={() => playVideo(card)} ></YoutubeCard>
             })}

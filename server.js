@@ -2,7 +2,9 @@ const app = require('express')();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const next = require('next');
-const baseUrl = 'http://localhost:3000';
+const baseUrl = process.env.NODE_ENV === "production" ?
+    'https://p2streamic.herokuapp.com' :
+    'http://localhost:3000';
 const axios = require('axios').default;
 require('dotenv').config();
 
@@ -28,7 +30,7 @@ const nextHandler = nextApp.getRequestHandler()
 io.on('connection', socket => {
     socket.on('joinRoom', ({ roomID, user }) => {
         console.log(user);
-        console.log(`${user._id} has joined the room`);
+        console.log(`${user._id} has joined the ${roomID}`);
         socket.emit("message", "Welcome to Streamic.");
         socket.join(roomID);
     });
@@ -53,6 +55,7 @@ io.on('connection', socket => {
 
     socket.on('sendMessage', (data) => {
         const { message, roomID } = data
+        console.log("Message reveived from " + roomID);
         io.to(roomID).emit('messageChanges', message);
     })
 

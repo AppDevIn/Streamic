@@ -1,16 +1,15 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useRef} from 'react'
 import { Button, Form, Comment, Header } from 'semantic-ui-react'
-import {ContextContainer} from '../../pages/room';
+import { ContextContainer } from '../../pages/room';
 import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
 import Chat from './chat'
 
 
 export default function ChatBox({ roomID, user, messages }) {
-    const {socket} = useContext(ContextContainer);
+    const { socket } = useContext(ContextContainer);
     const [msgs, setMsgs] = useState(messages)
     const [m, setM] = useState("")
-
 
     async function postMessage(message) {
         const url = `${baseUrl}/api/message`
@@ -33,10 +32,9 @@ export default function ChatBox({ roomID, user, messages }) {
                 console.log("client", message.messageContent)
                 setMsgs(messages => [...messages, message]);
             })
-        } 
+        }
 
     }, [socket])
-
 
     async function sendMessage(event, data) {
         const { value } = event.target[0]
@@ -52,7 +50,6 @@ export default function ChatBox({ roomID, user, messages }) {
         socket.emit("sendMessage", { roomID, message: M })
 
         setM((prevState) => ({ value: "" }))
-
     }
 
     //Put inside the onChange 
@@ -61,31 +58,15 @@ export default function ChatBox({ roomID, user, messages }) {
         setM((prevState) => ({ ...prevState, value }))
     }
 
-    function mapMessagesToItems(messages) {
-
-
-        return messages.map(message => (
-            <Comment key={message._id} className="white">
-                <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
-                <Comment.Content>
-                    <Comment.Author as='a'>{message.authorID.username}</Comment.Author>
-                    <Comment.Metadata>
-                        <div>{message.dateTime}</div>
-                    </Comment.Metadata>
-                    <Comment.Text>{message.messageContent}</Comment.Text>
-                </Comment.Content>
-            </Comment>
-        ));
-    }
-
     return (
         // <Layout>
-        <div className="chat right">
+        <div className="chat chat-main chat-sidebar right">
             <Chat messages={msgs}/>
-            <Form onSubmit={sendMessage} reply>
-                <Form.TextArea value={m.value} onChange={handleChange} />
-                <Button type="submit" content='Add Reply' labelPosition='left' icon='edit' primary />
-            </Form>
+            <div id="chatFormContainer">
+                <Form onSubmit={sendMessage} reply>
+                    <Form.Input required placeholder="Enter Message" autoComplete="off" value={m.value} onChange={handleChange} id="chatMsg"/>
+                </Form>
+            </div>
         </div>
     );
 }
