@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import pytest
 
-PATH = "C:\Program Files (x86)\chromedriver.exe"  # set up path for driver
+PATH = "/Users/jeyavishnu/Downloads/chromedriver"  # set up path for driver
 driver = webdriver.Chrome(PATH)  # set up driver
 
 driver.get("http://localhost:3000/login")  # access webpage
@@ -36,3 +36,6 @@ def test_register():
     main.send_keys("SandraTEST123")
 
     main.send_keys(Keys.RETURN)
+
+
+test_register()
