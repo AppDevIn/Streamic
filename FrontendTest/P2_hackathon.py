@@ -6,18 +6,14 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import pytest
 
-PATH = "/Users/jeyavishnu/Downloads/chromedriver"  # set up path for driver
+PATH = "C:\Program Files (x86)\chromedriver.exe"  # set up path for driver
 driver = webdriver.Chrome(PATH)  # set up driver
 
 driver.get("http://localhost:3000/login")  # access webpage
 
-email = driver.find_element_by_name("email")
-password = driver.find_element_by_name("password")
-
-register = driver.find_element_by_link_text("Sign Up")
-
-
 def test_register():
+    register = driver.find_element_by_link_text("Sign Up")
+
     register.click()
 
     main = WebDriverWait(driver, 10).until(  # driver waits max 10 seconds until
@@ -36,6 +32,3 @@ def test_register():
     main.send_keys("SandraTEST123")
 
     main.send_keys(Keys.RETURN)
-
-
-test_register()

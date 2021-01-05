@@ -16,8 +16,6 @@ password = driver.find_element_by_name("password")
 
 login = driver.find_element_by_link_text("Log In")
 
-room = driver.find_element_by_name("name")
-
 
 def test_login():
     main = WebDriverWait(driver, 10).until(  # driver waits max 10 seconds until
@@ -42,30 +40,34 @@ def test_createroom():
 
     driver.implicitly_wait(7)
 
+    room = driver.find_element_by_name("name")
+
     room.clear()
     room.send_keys("TEST ROOM")
 
     driver.implicitly_wait(7)
 
-    cancel = driver.find_element_by_css_selector(".ui.black.button")
-    cancel.click()
+    # cancel = driver.find_element_by_css_selector(".ui.black.button")
+    # cancel.click()
 
     create = driver.find_element_by_xpath(
         "//*[contains(@class,'ui icon positive right labeled button') and text() = 'Create']")
     create.click()
 
 
-def test_joinroom():
-    main = WebDriverWait(driver, 10).until(  # driver waits max 10 seconds until
-        EC.presence_of_element_located((By.XPATH, "//*[contains(@class,'MuiFab-label') and text() = 'Join Room ']"))
-    )
-    main.click()
-
-    room.send_keys("2")
-    join = driver.find_element_by_xpath(
-        "//*[contains(@class,'ui icon positive right labeled button') and text() = 'Join']")
-
-    join.click()
+# def test_joinroom():
+#     main = WebDriverWait(driver, 10).until(  # driver waits max 10 seconds until
+#         EC.presence_of_element_located((By.XPATH, "//*[contains(@class,'MuiFab-label') and text() = 'Join Room ']"))
+#     )
+#     main.click()
+#
+#     room = driver.find_element_by_name("name")
+#
+#     room.send_keys("2")
+#     join = driver.find_element_by_xpath(
+#         "//*[contains(@class,'ui icon positive right labeled button') and text() = 'Join']")
+#
+#     join.click()
 
 
 def test_testroom():
@@ -74,13 +76,13 @@ def test_testroom():
     )
     main.click()
 
-    main = WebDriverWait(driver, 10).until(  # driver waits max 10 seconds until
-        EC.presence_of_element_located((By.XPATH, "//textarea[@rows='3']"))
-    )
-    main.click()
-
-    main.send_keys("Test message 2")
-
-    reply = main.find_element_by_xpath(
-        "//*[contains(@class,'ui icon primary left labeled button') and text() = 'Add Reply']")
-    reply.click()
+    # main = WebDriverWait(driver, 10).until(  # driver waits max 10 seconds until
+    #     EC.presence_of_element_located((By.XPATH, "//textarea[@rows='3']"))
+    # )
+    # main.click()
+    #
+    # main.send_keys("Test message 2")
+    #
+    # reply = main.find_element_by_xpath(
+    #     "//*[contains(@class,'ui icon primary left labeled button') and text() = 'Add Reply']")
+    # reply.click()
