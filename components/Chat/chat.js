@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Button, Form, Comment, Header } from 'semantic-ui-react'
 import moment from 'moment'
 
@@ -10,7 +10,6 @@ export default function ChatBox({ messages }) {
     })
 
     function mapMessagesToItems(messages) {
-
 
         return messages.map(message => (
             <Comment key={message._id} className="messages_content">

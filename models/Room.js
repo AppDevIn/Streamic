@@ -18,6 +18,8 @@ const roomSchema = mongoose.Schema({
     memebers: [{ type: mongoose.Schema.Types.ObjectID, ref: "User" }],
     Messages: [{ type: mongoose.Schema.Types.ObjectID, ref: "Message" }],
     Playing: { type: mongoose.Schema.Types.ObjectID, ref: "Video" },
+    // queue will immediately play after the video is played
+    Playlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
     Watchers: [{ type: mongoose.Schema.Types.ObjectID, ref: "User" }],
 })
 
