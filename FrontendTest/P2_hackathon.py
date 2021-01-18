@@ -11,13 +11,9 @@ driver = webdriver.Chrome(PATH)  # set up driver
 
 driver.get("http://localhost:3000/login")  # access webpage
 
-email = driver.find_element_by_name("email")
-password = driver.find_element_by_name("password")
-
-register = driver.find_element_by_link_text("Sign Up")
-
-
 def test_register():
+    register = driver.find_element_by_link_text("Sign Up")
+
     register.click()
 
     main = WebDriverWait(driver, 10).until(  # driver waits max 10 seconds until
