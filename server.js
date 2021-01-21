@@ -59,6 +59,18 @@ io.on('connection', socket => {
         io.to(roomID).emit('messageChanges', message);
     })
 
+    //Join the call after connecting to the room
+    socket.on("callUser", (data) => {
+        console.log("Calling user " + data.roomID);
+        io.to(data.roomID).emit('hey', { signal: data.signalData });
+    })
+
+    socket.on("acceptCall", (data) => {
+        console.log("Calling accpeted " + data.roomID);
+        io.to(data.roomID).emit('callAccepted', data.signal);
+    })
+
+
     // Runs when client disconnects
     socket.on('disconnect', () => {
         console.log(`${socket.id} has left the room`);
