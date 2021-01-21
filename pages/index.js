@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import Head from "next/head"
 import RoomList from '../components/Index/RoomList'
 import baseUrl from '../utils/baseUrl'
@@ -29,8 +29,8 @@ export default function Home({ rooms, user }) {
 
 
   useEffect(() => {
-    
-  },[])
+
+  }, [])
 
   async function handleAddRoom(event) {
     event.preventDefault();
@@ -70,9 +70,9 @@ export default function Home({ rooms, user }) {
         <link rel="stylesheet" type="text/css" href="../static/room.css" />
       </Head>
       <Layout>
-      <RoomList rooms={rooms} />
-      <JoinRoom user={user}></JoinRoom>
-      <AddRoom user={user}/>
+        <RoomList rooms={rooms} />
+        <JoinRoom user={user}></JoinRoom>
+        <AddRoom user={user} />
       </Layout>
     </>
   )
@@ -81,10 +81,10 @@ export default function Home({ rooms, user }) {
 Home.getInitialProps = async (ctx, user) => {
   //fetch data from server 
   const url = `${baseUrl}/api/rooms?type=1`
-  
-  const response = await axios.get(url, {params:{...user}});
+
+  const response = await axios.get(url, { params: { ...user } });
   // return response as a object 
   return { rooms: response.data };
-  //note: thios object will be merged with exisiting props
+  //note: this object will be merged with exisiting props
 
 }
