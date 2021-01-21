@@ -1,4 +1,4 @@
-# Project Name: P2Streamic
+# Project Name: Streamic
 
 
 
