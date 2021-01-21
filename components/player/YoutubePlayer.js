@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useRef, useContext} from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import Youtube from 'react-youtube';
 import functions from '../../utils/room';
-import {ContextContainer} from '../../pages/room';
+import { ContextContainer } from '../../pages/room';
 import YoutubeCard from './youtubeCard';
 import { Card, CardGroup, Image } from 'semantic-ui-react';
 
-function YoutubePlayer({user, roomInfo}) {
+function YoutubePlayer({ user, roomInfo }) {
     const [player, setPlayer] = useState(null);
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
@@ -14,38 +14,38 @@ function YoutubePlayer({user, roomInfo}) {
     const [cardList, setCardList] = useState([]);
     const roomID = roomInfo.roomID;
     const videoID = roomInfo.Playing.videoID;
-    
+
     const dummy = useRef(null);
     const progress = useRef();
 
-    const {parent_link, socket} = useContext(ContextContainer);
+    const { parent_link, socket } = useContext(ContextContainer);
 
     useEffect(() => {
-        if (parent_link == ""){
+        if (parent_link == "") {
             functions.getTrendingVideo()
-            .then(res =>{
-                setCardList(res);
-            })
-        }else{
+                .then(res => {
+                    setCardList(res);
+                })
+        } else {
             functions.getRecommendations(parent_link)
-            .then(res => {
-                setCardList(res);
-            });
+                .then(res => {
+                    setCardList(res);
+                });
         }
     }, [parent_link])
 
     useEffect(() => {
-        if (parent_link != "" && cardList.length != 0 && dummy != null){
+        if (parent_link != "" && cardList.length != 0 && dummy != null) {
             dummy.current.scrollIntoView({ behavior: "smooth" });
         }
     }, [cardList])
 
     // call loopy once player is initialised
     useEffect(() => {
-        if (player != null){
+        if (player != null) {
             loopy();
             console.log("initialising socket action....");
-            socket.emit("joinRoom", {roomID, user});
+            socket.emit("joinRoom", { roomID, user });
             socket.emit("router", roomID);
 
             socket.on("streaming", (data) => {
@@ -57,16 +57,16 @@ function YoutubePlayer({user, roomInfo}) {
                 var state = player.getPlayerState();
                 var timeline = player.getCurrentTime();
                 var isVideoChanged = false;
-                const data = {state, timeline, isVideoChanged};
-                socket.emit('changes', {roomID, data});
+                const data = { state, timeline, isVideoChanged };
+                socket.emit('changes', { roomID, data });
             });
         }
-    },[player]);
+    }, [player]);
 
 
     const opts = {
         height: '600',
-        width: '1000',  
+        width: '1000',
         playerVars: {
             'controls': 0,
             'disablekb': 1,
@@ -77,14 +77,14 @@ function YoutubePlayer({user, roomInfo}) {
     };
 
     const handleActions = (data) => {
-        if (player){
-            if (data.isVideoChanged){
+        if (player) {
+            if (data.isVideoChanged) {
                 player.loadVideoById(data.id);
                 setTitle(data.title);
                 setAuthor(data.publisher);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-            }else{
-                switch (data.state){
+            } else {
+                switch (data.state) {
                     case 1:
                         player.playVideo();
                         player.seekTo(data.timeline, true);
@@ -104,9 +104,9 @@ function YoutubePlayer({user, roomInfo}) {
         setPlayer(event.target);
         setTitle(event.target.getVideoData().title);
         functions.getVideoTitle(event.target.getVideoData().video_id)
-        .then(result => {
-            setAuthor(result);
-        });
+            .then(result => {
+                setAuthor(result);
+            });
     }
 
 
@@ -129,16 +129,16 @@ function YoutubePlayer({user, roomInfo}) {
         // player.playVideo();
         var state = 1;
         var timeline = player.getCurrentTime();
-        const data = {state, timeline};
-        socket.emit('changes', {roomID, data});
+        const data = { state, timeline };
+        socket.emit('changes', { roomID, data });
     }
 
     const pause = () => {
         // player.pauseVideo();
         var state = 2;
         var timeline = player.getCurrentTime();
-        const data = {state, timeline};
-        socket.emit('changes', {roomID, data});
+        const data = { state, timeline };
+        socket.emit('changes', { roomID, data });
     }
 
     const seek = (event) => {
@@ -148,44 +148,75 @@ function YoutubePlayer({user, roomInfo}) {
         setBarwidth(x);
         var state = player.getPlayerState();
         var isVideoChanged = false;
-        const data = {state, timeline, isVideoChanged};
-        socket.emit('changes', {roomID, data});
+        const data = { state, timeline, isVideoChanged };
+        socket.emit('changes', { roomID, data });
     }
 
     const playVideo = (data) => {
         data["isVideoChanged"] = true;
-        socket.emit('changes', {roomID, data});
+        socket.emit('changes', { roomID, data });
     }
 
-    return <div className="left">
-        <Youtube className="ytplayer" id='player' videoId={videoID} opts={opts} onReady={onPlayerReady} ></Youtube>
-        <div onClick={loopy} id="title">{title}</div>
-        <div id="author">{author}</div>
+    return <div className = "left" >
+        <
+        Youtube className = "ytplayer"
+    id = 'player'
+    videoId = { videoID }
+    opts = { opts }
+    onReady = { onPlayerReady } > < /Youtube> <
+        div onClick = { loopy }
+    id = "title" > { title } < /div> <
+        div id = "author" > { author } < /div>
 
-        <div ref={progress} onClick={seek} id="progress">
-            <div id="bar" style={{width : barWidth}}></div>
-        </div>
+    <
+    div ref = { progress }
+    onClick = { seek }
+    id = "progress" >
+        <
+        div id = "bar"
+    style = {
+            { width: barWidth } } > < /div> <
+        /div>
 
-        <div className='mt-2'>
-            <button onClick={play} id="play" type="button" className="btn btn-default">
-                <span className="glyphicon glyphicon-play"></span>
-            </button>
-            <button onClick={pause} id="pause" type="button" className="ml-2 btn btn-default">
-                <span className="glyphicon glyphicon-pause"></span>
-            </button>
+    <
+    div className = 'mt-2' >
+        <
+        button onClick = { play }
+    id = "play"
+    type = "button"
+    className = "btn btn-default" >
+        <
+        span className = "glyphicon glyphicon-play" > < /span> <
+        /button> <
+        button onClick = { pause }
+    id = "pause"
+    type = "button"
+    className = "ml-2 btn btn-default" >
+        <
+        span className = "glyphicon glyphicon-pause" > < /span> <
+        /button>
 
-            <span id="timeline">{timeLine}</span>
-        </div>
+    <
+    span id = "timeline" > { timeLine } < /span> <
+        /div>
 
-        <div ref={dummy}></div>
+    <
+    div ref = { dummy } > < /div>
 
-        <CardGroup className='mt-4 cardDeck' itemsPerRow='3'>
-            {cardList.map(card => {
-                return <YoutubeCard info={card} key={card.id} onClick={() => playVideo(card)} ></YoutubeCard>
-            })}
-        </CardGroup>
-        
-    </div>
+    <
+    CardGroup className = 'mt-4 cardDeck'
+    itemsPerRow = '3' > {
+            cardList.map(card => {
+                return <YoutubeCard info = { card }
+                key = { card.id }
+                onClick = {
+                    () => playVideo(card) } > < /YoutubeCard>
+            })
+        } <
+        /CardGroup>
+
+    <
+    /div>
 }
 
 export default YoutubePlayer;
