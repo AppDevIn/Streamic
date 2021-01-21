@@ -1,6 +1,13 @@
 import React from 'react'
 import { Card, Image } from 'semantic-ui-react'
 
+
+function addVideoToPlaylist(video) {
+
+
+
+}
+
 const youtubeCard = (props) => (
   <Card onClick={props.onClick}>
     <div class="blurring dimmable image">
