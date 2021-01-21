@@ -27,12 +27,21 @@ const nextApp = next({ dev })
 const nextHandler = nextApp.getRequestHandler()
 
 
+//Keep track of the users in each room
+const users = {}
+
+const socketToRoom = {};
+
+
 io.on('connection', socket => {
     socket.on('joinRoom', ({ roomID, user }) => {
         console.log(user);
         console.log(`${user._id} has joined the ${roomID}`);
         socket.emit("message", "Welcome to Streamic.");
         socket.join(roomID);
+
+
+
     });
 
     socket.on('changes', ({ roomID, data }) => {
@@ -59,21 +68,56 @@ io.on('connection', socket => {
         io.to(roomID).emit('messageChanges', message);
     })
 
-    //Join the call after connecting to the room
-    socket.on("callUser", (data) => {
-        console.log("Calling user " + data.roomID);
-        io.to(data.roomID).emit('hey', { signal: data.signalData });
-    })
+    socket.on("sending signal", payload => {
+        io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
+    });
 
-    socket.on("acceptCall", (data) => {
-        console.log("Calling accpeted " + data.roomID);
-        io.to(data.roomID).emit('callAccepted', data.signal);
-    })
+    socket.on("returning signal", payload => {
+        io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
+    });
+
+    socket.on("join room", roomID => {
+        //Check if the room exist
+        if (users[roomID]) {
+
+            // const length = users[roomID].length;
+            // if (length === 4) {
+            //     socket.emit("room full");
+            //     return;
+            // }
+
+            //Add the room
+            users[roomID].push(socket.id);
+        } else {
+            //Create a new room object
+            users[roomID] = [socket.id];
+        }
+
+        socketToRoom[socket.id] = roomID;
+
+        //Get the users in the room
+        const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
+
+        //Send all the exisitng to user details to clients
+        console.log("Users");
+        console.log(usersInThisRoom);
+        socket.emit("all users", usersInThisRoom);
+
+    });
+
 
 
     // Runs when client disconnects
     socket.on('disconnect', () => {
         console.log(`${socket.id} has left the room`);
+
+        //For voice 
+        const roomID = socketToRoom[socket.id];
+        let room = users[roomID];
+        if (room) {
+            room = room.filter(id => id !== socket.id);
+            users[roomID] = room;
+        }
     });
 
 });
