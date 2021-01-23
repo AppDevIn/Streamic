@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react'
-import { Button, Form, Comment, Header } from '../Player/node_modules/semantic-ui-react'
+import { Button, Form, Comment, Header } from 'semantic-ui-react'
 import moment from 'moment'
 
 export default function ChatBox({ messages }) {

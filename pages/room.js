@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PlayerHeader from "../components/_App/PlayerHeader"
-import { Container } from "../components/Player/node_modules/semantic-ui-react";
+import { Container } from "semantic-ui-react";
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
 import ChatBox from '../components/Chat/Chatbox';

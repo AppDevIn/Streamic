@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef} from 'react'
-import { Button, Form, Comment, Header } from '../Player/node_modules/semantic-ui-react'
+import { Button, Form, Comment, Header } from 'semantic-ui-react'
 import { ContextContainer } from '../../pages/room';
 import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
