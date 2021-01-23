@@ -77,12 +77,14 @@ export default function Home({ rooms, user }) {
         <link rel="stylesheet" type="text/css" href="../static/room.css" />
       </Head>
       <Layout>
-      <RoomList rooms={rooms} />
-      <JoinRoom user={user}></JoinRoom>
-      <AddRoom user={user}/>
       <Button color='red' onClick={() => logout()} >
                     Logout
         </Button>
+      <RoomList rooms={rooms} />
+      <JoinRoom user={user}></JoinRoom>
+      <AddRoom user={user}/>
+      <AddRoom user={user}/>
+
       </Layout>
     </>
   )
