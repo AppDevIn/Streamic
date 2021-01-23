@@ -17,6 +17,15 @@ export function handleLogin(token) {
 }
 
 
+export function removeCookie(token) {
+    cookie.remove(token)
+
+    //Regirect to another route
+    Router.push('/index')
+}
+
+
+
 export function redirectUser(ctx, location) {
     console.log("Redirecting");
     if (ctx.req) {

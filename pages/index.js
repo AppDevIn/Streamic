@@ -11,6 +11,7 @@ import { Button } from 'semantic-ui-react'
 import mongoose from 'mongoose'
 import AddRoom from '../components/Room/AddRoom'
 import Layout from '../components/Index/Layout'
+import { removeCookie } from '../utils/auth'
 
 import JoinRoom from '../components/Room/JoinRoom'
 
@@ -52,6 +53,12 @@ export default function Home({ rooms, user }) {
     }
   }
 
+  function logout(){
+    console.log("Logging out");
+
+    removeCookie("token")
+  }
+
 
   async function handleJoinRoom(event) {
     event.preventDefault();
@@ -73,6 +80,9 @@ export default function Home({ rooms, user }) {
       <RoomList rooms={rooms} />
       <JoinRoom user={user}></JoinRoom>
       <AddRoom user={user}/>
+      <Button color='red' onClick={() => logout()} >
+                    Logout
+        </Button>
       </Layout>
     </>
   )
