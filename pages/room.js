@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import YoutubePlayer from "../components/player/YoutubePlayer";
 import PlayerHeader from "../components/_App/PlayerHeader"
 import { Container } from "semantic-ui-react";
 import baseUrl from '../utils/baseUrl';
@@ -26,7 +25,6 @@ function Room(props) {
     return <ContextContainer.Provider value={{ parent_link, updateLink, socket, setSocket }}>
         <PlayerHeader />
         <Container fluid className="mt-5 ct">
-            <YoutubePlayer {...props} />
             <ChatBox {...props} />
             <VoiceChat {...props} />
         </Container>
