@@ -14,14 +14,11 @@ const INITIAL_USER = {
 }
 
 const INITIAL_ERROR = {
-  isError:false,
-  message:"" 
+  isError: false,
+  message: ""
 }
 
 export default function Login(props) {
-
-
-
 
   const [user, setUser] = React.useState(INITIAL_USER);
 
@@ -36,7 +33,7 @@ export default function Login(props) {
     setDisabled(!isUser);
   }, [user])
 
-  
+
 
   //Put inside the onChange 
   function handleChange(event) {
@@ -55,25 +52,25 @@ export default function Login(props) {
       const url = `${baseUrl}/api/login`
       const payload = { ...user }
       const response = await axios.post(url, payload)
-      
+
       handleLogin(response.data)
 
       setError(INITIAL_ERROR)
-      
+
 
 
     } catch (error) {
       setLoading(false)
       // TODO: Catch the error
       //set the Error Message 
-      
+
       setError({
-        isError:true,
-        message:error.response.data.message
+        isError: true,
+        message: error.response.data.message
       })
 
-      console.log("Error for login",error);
-      
+      console.log("Error for login", error);
+
 
     } finally {
       setLoading(false)
@@ -95,7 +92,7 @@ export default function Login(props) {
             </Header>
             <Message hidden={!error.isError} negative>
               <Message.Header >{error.message}</Message.Header>
-              
+
             </Message>
             <Form size='large'>
 
