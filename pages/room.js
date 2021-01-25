@@ -22,25 +22,38 @@ function Room(props) {
         }
     }, [])
 
-    return <ContextContainer.Provider value={{ parent_link, updateLink, socket, setSocket }}>
-        <PlayerHeader />
-        <Container fluid className="mt-5 ct">
-            <ChatBox {...props} />
-            <VoiceChat {...props} />
-        </Container>
-    </ContextContainer.Provider >
+    return <ContextContainer.Provider value={ { parent_link, updateLink, socket, setSocket } }>
+             <PlayerHeader />
+             <Container fluid className="mt-5 ct">
+               <ChatBox {...props} />
+               <VoiceChat {...props} />
+             </Container>
+           </ContextContainer.Provider>
 }
 
 Room.getInitialProps = async (ctx, user) => {
     var url = `${baseUrl}/api/room`
-    const payload = { params: { roomID: ctx.query._id, _id: user._id } };
+    const payload = {
+        params: {
+            roomID: ctx.query._id,
+            _id: user._id
+        }
+    };
     const responseRoom = await axios.get(url, payload);
 
 
     url = `${baseUrl}/api/messages`
-    const responseMessage = await axios.get(url, { params: { roomID: ctx.query._id } });
+    const responseMessage = await axios.get(url, {
+        params: {
+            roomID: ctx.query._id
+        }
+    });
 
-    return { roomInfo: responseRoom.data, roomID: ctx.query._id, messages: responseMessage.data };
+    return {
+        roomInfo: responseRoom.data,
+        roomID: ctx.query._id,
+        messages: responseMessage.data
+    };
 }
 
 export { ContextContainer };

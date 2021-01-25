@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import {Navbar, Form, FormControl, Button, Nav} from 'react-bootstrap';
-import {ContextContainer} from '../../pages/room';
+import {ContextContainer} from '../../pages/player';
 
 function playerHeader(){
 
