@@ -10,11 +10,10 @@ function Player() {
     const [author, setAuthor] = useState("Hi2")
     const [url, setUrl] = useState("https://www.youtube.com/watch?v=xcgUm7VNIXE&list=RDxcgUm7VNIXE")
     const [playing, setPlaying] = useState(false)
-    const [isFullScreen, setFullScreen] = useState(false)
     const [played, setPlayed] = useState(0)
-    const [playedText, setPlayedText] = useState("")
+    const [playedText, setPlayedText] = useState("0:00")
     const [duration, setDuration] = useState(0)
-    const [durationText, setDurationText] = useState("")
+    const [durationText, setDurationText] = useState("0:00")
     const [muted, setMuted] = useState(false)
     const [barWidth, setBarwidth] = useState("0%")
 
@@ -34,7 +33,7 @@ function Player() {
     }, [parent_link])
 
     const onPlayerReady = () => {
-        setPlaying(true)
+        setPlaying(false)
         setMuted(true)
     }
 
@@ -68,8 +67,10 @@ function Player() {
 
     return (
         <div className="left">
-          <ReactPlayer onProgress={ (callback) => updateProgress(callback) } onDuration={ (duration) => updateDuration(duration) } onReady={ () => onPlayerReady() } muted={ muted } playing={ playing }
-            ref={ player } url={ url } config={ { youtube: { playerVars: { showinfo: 0, controls: 1, disablekb: 0, modestbranding: 0, rel: 0 } } } } />
+          <div className='player-wrapper'>
+            <ReactPlayer className='react-player' width='100%' height='100%' onProgress={ (callback) => updateProgress(callback) } onDuration={ (duration) => updateDuration(duration) } onReady={ () => onPlayerReady() } muted={ muted }
+              playing={ playing } ref={ player } url={ url } config={ { youtube: { playerVars: { showinfo: 0, controls: 0, disablekb: 0, modestbranding: 0, rel: 0 } } } } />
+          </div>
           <div id="title">
             { title }
           </div>
