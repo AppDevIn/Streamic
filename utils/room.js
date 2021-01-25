@@ -1,14 +1,32 @@
 import axios from 'axios';
 const YT_API_KEY = process.env.YOUTUBE_API_KEY;
 
-export async function getVideoTitle(videoID) {
-    var author;
+export async function getVideoInfo(url) {
+    if (url.includes("youtube")) {
+        return getYoutube(url)
+    }
+}
+
+export async function getYoutube(url) {
+    var videoID = url.split('v=')[1];
+    var ampersandPosition = videoID.indexOf('&');
+    if (ampersandPosition != -1) {
+        videoID = videoID.substring(0, ampersandPosition);
+    }
+
+    console.log(videoID)
+    var title,
+        author;
     await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoID}&key=${YT_API_KEY}`)
         .then(result => {
+            title = result.data.items[0].snippet.title
             author = result.data.items[0].snippet.channelTitle;
         })
 
-    return author;
+    return {
+        title,
+        author
+    };
 }
 
 export async function getRecommendations(val) {
@@ -64,4 +82,8 @@ function decodeHtml(html) {
     return txt.value;
 }
 
-export default { getVideoTitle, getRecommendations, getTrendingVideo }
+export default {
+    getVideoInfo,
+    getRecommendations,
+    getTrendingVideo
+}

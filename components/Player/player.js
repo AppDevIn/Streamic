@@ -3,6 +3,8 @@ import ReactPlayer from 'react-player/lazy'
 import { findDOMNode } from 'react-dom'
 import { ContextContainer } from '../../pages/room';
 import screenfull from 'screenfull'
+import functions from '../../utils/room';
+
 
 function Player({user, roomInfo}) {
     const roomID = roomInfo.roomID
@@ -24,6 +26,14 @@ function Player({user, roomInfo}) {
 
     const player = useRef()
     const bar = useRef(null)
+
+    useEffect(() => {
+        functions.getVideoInfo(url).then(({title, author}) => {
+            setTitle(title)
+            setAuthor(author)
+        })
+
+    }, [url])
 
     useEffect(() => {
         if (parent_link !== "") {
@@ -154,7 +164,7 @@ function Player({user, roomInfo}) {
         const x = event.pageX - bar.current.getBoundingClientRect().left;
         const bw = bar.current.scrollWidth;
         const timeline = x / bw * duration;
-        // TODO: update barwidth
+
         // player.current.seekTo(timeline, "seconds")
 
         var isPlaying = playing;
