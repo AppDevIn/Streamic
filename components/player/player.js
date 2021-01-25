@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import ReactPlayer from 'react-player/lazy'
+import { findDOMNode } from 'react-dom'
 import { ContextContainer } from '../../pages/player';
+import screenfull from 'screenfull'
 
 
 function Player() {
@@ -34,6 +36,10 @@ function Player() {
     const onPlayerReady = () => {
         setPlaying(true)
         setMuted(true)
+    }
+
+    const handleClickFullscreen = () => {
+        screenfull.request(findDOMNode(player.current))
     }
 
     const updateProgress = ({played, playedSeconds}) => {
@@ -79,6 +85,9 @@ function Player() {
             </button>
             <button onClick={ () => setPlaying(false) } id="pause" type="button" className="ml-2 btn btn-default">
               <span className="glyphicon glyphicon-pause"></span>
+            </button>
+            <button onClick={ () => handleClickFullscreen() } id="fullScreen" type="button" className="ml-2 btn btn-default">
+              <span className="glyphicon glyphicon-fullscreen"></span>
             </button>
             <span id="timeline">{ playedText } / { durationText }</span>
           </div>

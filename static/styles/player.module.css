@@ -69,7 +69,8 @@ body {
 }
 
 #play,
-#pause {
+#pause,
+#fullScreen {
     background-color: grey;
     border: none;
     color: rgb(214, 216, 218);
