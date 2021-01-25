@@ -1,9 +1,12 @@
 import axios from 'axios';
 const YT_API_KEY = process.env.YOUTUBE_API_KEY;
+const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID
 
 export async function getVideoInfo(url) {
     if (url.includes("youtube")) {
         return getYoutube(url)
+    } else if (url.includes("twitch")) {
+        return getTwitch(url)
     }
 }
 
@@ -14,13 +17,32 @@ export async function getYoutube(url) {
         videoID = videoID.substring(0, ampersandPosition);
     }
 
-    console.log(videoID)
     var title,
         author;
     await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoID}&key=${YT_API_KEY}`)
         .then(result => {
             title = result.data.items[0].snippet.title
             author = result.data.items[0].snippet.channelTitle;
+        })
+
+    return {
+        title,
+        author
+    };
+}
+
+export async function getTwitch(url) {
+    var videoID = url.split('/').pop()
+    console.log(TWITCH_CLIENT_ID, videoID)
+    var title,
+        author;
+
+    axios.defaults.headers.common["Client-ID"] = TWITCH_CLIENT_ID
+    axios.defaults.headers.common["Accept"] = 'application/vnd.twitchtv.v5+json'
+    await axios.get(`https://api.twitch.tv/kraken/videos/${videoID}`)
+        .then(result => {
+            title = result.data.channel.status
+            author = result.data.channel.display_name
         })
 
     return {
