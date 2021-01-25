@@ -53,7 +53,7 @@ class MyApp extends App {
   render() {
     const {Component, pageProps, router} = this.props;
 
-    if (!router.pathname.startsWith('/player')) {
+    if (!router.pathname.startsWith('/room')) {
       // container
       return (
         <Layout>

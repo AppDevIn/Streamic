@@ -26,25 +26,33 @@ export default async(req, res) => {
 }
 
 async function handlePostRequest(req, res) {
-    const { name, file, _id } = req.body
+    const {name, file, _id} = req.body
 
     try {
         console.log("id", _id);
-        const user = await User.findOne({ _id })
+        const user = await User.findOne({
+            _id
+        })
 
         const newRoom = await new Room({
             roomName: name,
             isTemporary: false,
             admins: mongoose.Types.ObjectId(user._id),
-            Playing: mongoose.Types.ObjectId("5fb635571c46816d3fef0654"),
+            Playing: mongoose.Types.ObjectId("600ed2b319b48e677f1d5afe"),
             mediaUrl: file,
             admins: mongoose.Types.ObjectId(user._id),
             memebers: mongoose.Types.ObjectId(_id)
 
         }).save()
-        console.log({ newRoom });
+        console.log({
+            newRoom
+        });
 
-        const update = { $push: { rooms: mongoose.Types.ObjectId(newRoom._id) } };
+        const update = {
+            $push: {
+                rooms: mongoose.Types.ObjectId(newRoom._id)
+            }
+        };
         await user.updateOne(update);
 
         res.statusCode = 200
@@ -57,23 +65,35 @@ async function handlePostRequest(req, res) {
 }
 
 async function updateRoomWatching(req, res) {
-    const { roomID, data } = req.body;
-    const videoID = data.id;
+    const {roomID, data} = req.body;
+    const videoURL = data.url;
 
-    const room = await Room.findOne({ roomID: roomID });
-    const video = await Video.findOne({ videoID: videoID });
+    const room = await Room.findOne({
+        roomID: roomID
+    });
+    const video = await Video.findOne({
+        videoURL: videoURL
+    });
 
     if (video == null) {
         const newVideo = await new Video({
-            videoID: data.id,
+            videoURL: data.url,
             videoName: data.title,
             thumbnail: data.thumbnail
         }).save()
 
-        const update = { $set: { Playing: mongoose.Types.ObjectId(newVideo._id) } };
+        const update = {
+            $set: {
+                Playing: mongoose.Types.ObjectId(newVideo._id)
+            }
+        };
         await room.updateOne(update);
     } else {
-        const update = { $set: { Playing: mongoose.Types.ObjectId(video._id) } };
+        const update = {
+            $set: {
+                Playing: mongoose.Types.ObjectId(video._id)
+            }
+        };
         await room.updateOne(update);
     }
 
@@ -84,11 +104,15 @@ async function updateRoomWatching(req, res) {
 
 
 async function handleGetRequest(req, res) {
-    const { roomID, _id } = req.query;
+    const {roomID, _id} = req.query;
     console.log("room", roomID);
     console.log("room", _id);
-    const room = await Room.findOne({ roomID });
-    const user = await User.findOne({ _id })
+    const room = await Room.findOne({
+        roomID
+    });
+    const user = await User.findOne({
+        _id
+    })
 
     if (room.Playing != null) {
         const videoInfo = await Video.findById(room.Playing);
@@ -97,12 +121,20 @@ async function handleGetRequest(req, res) {
 
 
     if (user.rooms.indexOf(room._id) === -1) {
-        const update = { $push: { rooms: mongoose.Types.ObjectId(room._id) } };
+        const update = {
+            $push: {
+                rooms: mongoose.Types.ObjectId(room._id)
+            }
+        };
         await user.updateOne(update);
     }
 
     if (room.memebers.indexOf(user._id) === -1) {
-        const updateRoom = { $push: { memebers: mongoose.Types.ObjectId(user._id) } };
+        const updateRoom = {
+            $push: {
+                memebers: mongoose.Types.ObjectId(user._id)
+            }
+        };
         await room.updateOne(updateRoom);
     }
 

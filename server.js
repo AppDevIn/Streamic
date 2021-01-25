@@ -23,7 +23,9 @@ require('dotenv').config();
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
-const nextApp = next({ dev })
+const nextApp = next({
+    dev
+})
 const nextHandler = nextApp.getRequestHandler()
 
 
@@ -34,7 +36,7 @@ const socketToRoom = {};
 
 
 io.on('connection', socket => {
-    socket.on('joinRoom', ({ roomID, user }) => {
+    socket.on('joinRoom', ({roomID, user}) => {
         console.log(user);
         console.log(`${user._id} has joined the ${roomID}`);
         socket.emit("message", "Welcome to Streamic.");
@@ -44,13 +46,20 @@ io.on('connection', socket => {
 
     });
 
-    socket.on('changes', ({ roomID, data }) => {
+    socket.on('changes', ({roomID, data}) => {
         io.to(roomID).emit('streaming', data);
         if (data.isVideoChanged) {
             // update the video playing for the room
+
+            // TODO: pass in the thumbnail here
+            // data["thumbnail"] = (FUNCTIONS API)
+            // data["title"] = (FUNCTIONS API)
             async function updateRoomWatching() {
                 const url = `${baseUrl}/api/room?type=1`
-                const payload = { roomID, data }
+                const payload = {
+                    roomID,
+                    data
+                }
                 const response = await axios.post(url, payload)
             }
 
@@ -63,17 +72,23 @@ io.on('connection', socket => {
     });
 
     socket.on('sendMessage', (data) => {
-        const { message, roomID } = data
+        const {message, roomID} = data
         console.log("Message reveived from " + roomID);
         io.to(roomID).emit('messageChanges', message);
     })
 
     socket.on("sending signal", payload => {
-        io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
+        io.to(payload.userToSignal).emit('user joined', {
+            signal: payload.signal,
+            callerID: payload.callerID
+        });
     });
 
     socket.on("returning signal", payload => {
-        io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
+        io.to(payload.callerID).emit('receiving returned signal', {
+            signal: payload.signal,
+            id: socket.id
+        });
     });
 
     socket.on("join room", roomID => {
@@ -128,15 +143,16 @@ nextApp.prepare().then(() => {
     })
 
     app.post('*', async(req, res) => {
-            return await nextHandler(req, res)
-        })
-        // app.post("/api/register", (req, res) => {
-        //     register(req, res)
-        // })
+        return await nextHandler(req, res)
+    })
+    // app.post("/api/register", (req, res) => {
+    //     register(req, res)
+    // })
 
 
     server.listen(port, (err) => {
-        if (err) throw err
+        if (err)
+            throw err
         console.log(`> Ready on http://localhost:${port}`)
     })
 })

@@ -14,16 +14,16 @@ function PlayerBase(props) {
 
     useEffect(() => {
         document.body.style.backgroundColor = "#242A2E";
-    // if (socket == null) {
-    //     setSocket(io());
-    // }
+        if (socket == null) {
+            setSocket(io());
+        }
     }, [])
 
     return (
         <ContextContainer.Provider value={ { parent_link, updateLink, socket, setSocket } }>
           <PlayerHeader />
           <Container fluid className="mt-5 ct">
-            <Player/>
+            <Player {...props}/>
           </Container>
         </ContextContainer.Provider>
 

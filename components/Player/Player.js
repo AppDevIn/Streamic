@@ -1,14 +1,17 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import ReactPlayer from 'react-player/lazy'
 import { findDOMNode } from 'react-dom'
-import { ContextContainer } from '../../pages/player';
+import { ContextContainer } from '../../pages/room';
 import screenfull from 'screenfull'
 
+function Player({user, roomInfo}) {
+    const roomID = roomInfo.roomID
+    const videoURL = roomInfo.Playing.videoURL
 
-function Player() {
-    const [title, setTitle] = useState("Hi")
-    const [author, setAuthor] = useState("Hi2")
-    const [url, setUrl] = useState("https://www.youtube.com/watch?v=xcgUm7VNIXE&list=RDxcgUm7VNIXE")
+    const [playerReady, setPlayerReady] = useState(false)
+    const [title, setTitle] = useState("Title")
+    const [author, setAuthor] = useState("Author")
+    const [url, setUrl] = useState(videoURL)
     const [playing, setPlaying] = useState(false)
     const [played, setPlayed] = useState(0)
     const [playedText, setPlayedText] = useState("0:00")
@@ -26,15 +29,84 @@ function Player() {
         if (parent_link !== "") {
             if (ReactPlayer.canPlay(parent_link)) {
                 console.log(parent_link)
-                setUrl(parent_link)
-                setPlayed(0)
+                // setUrl(parent_link)
+                // player.current.seekTo(0)
+
+                const data = {}
+                data["isVideoChanged"] = true
+                data["url"] = parent_link
+
+                socket.emit('changes', {
+                    roomID,
+                    data
+                });
+
             }
         }
     }, [parent_link])
 
+    useEffect(() => {
+        if (playerReady) {
+            console.log("initialising socket action....");
+            socket.emit("joinRoom", {
+                roomID,
+                user
+            });
+            socket.emit("router", roomID);
+
+            socket.on("streaming", (data) => {
+                console.log(data);
+                handleActions(data);
+            });
+
+            socket.on("existingUser", () => {
+                console.log("existingUser")
+                console.log(playing, played, playedText, barWidth)
+                var isPlaying = player.current.player.isPlaying;
+                var timeline = player.current.getCurrentTime();
+                var isVideoChanged = false;
+                const data = {
+                    isPlaying,
+                    timeline,
+                    isVideoChanged
+                };
+                socket.emit('changes', {
+                    roomID,
+                    data
+                });
+
+            });
+        }
+    }, [playerReady]);
+
     const onPlayerReady = () => {
-        setPlaying(false)
+        console.log(player.current)
+        setPlayerReady(true)
+        setPlaying(true)
         setMuted(true)
+    }
+
+    const handleActions = (data) => {
+        if (playerReady) {
+            if (data.isVideoChanged) {
+                setUrl(data.url);
+                // player.current.seekTo(0, "seconds")
+                // setTitle(data.title);
+                // setAuthor(data.publisher);
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            } else {
+                if (data.isPlaying) {
+                    setPlaying(true)
+                    player.current.seekTo(data.timeline, "seconds")
+                } else {
+                    setPlaying(false)
+                    player.current.seekTo(data.timeline, "seconds")
+                }
+            }
+        }
     }
 
     const handleClickFullscreen = () => {
@@ -42,7 +114,7 @@ function Player() {
     }
 
     const updateProgress = ({played, playedSeconds}) => {
-        setPlayed(played)
+        setPlayed(playedSeconds)
         setBarwidth(played * 100 + "%")
         setPlayedText(convertTime(playedSeconds))
     }
@@ -52,11 +124,48 @@ function Player() {
         setDurationText(convertTime(duration))
     }
 
+    const play = () => {
+        var isPlaying = true;
+        var timeline = played;
+        const data = {
+            isPlaying,
+            timeline
+        };
+        socket.emit('changes', {
+            roomID,
+            data
+        });
+    }
+
+    const pause = () => {
+        var isPlaying = false;
+        var timeline = played;
+        const data = {
+            isPlaying,
+            timeline
+        };
+        socket.emit('changes', {
+            roomID,
+            data
+        });
+    }
+
     const seek = (event) => {
         const x = event.pageX - bar.current.getBoundingClientRect().left;
         const bw = bar.current.scrollWidth;
         const timeline = x / bw * duration;
-        player.current.seekTo(timeline, "seconds")
+        // TODO: update barwidth
+        // player.current.seekTo(timeline, "seconds")
+
+        var isPlaying = playing;
+        const data = {
+            isPlaying,
+            timeline
+        };
+        socket.emit('changes', {
+            roomID,
+            data
+        });
     }
 
     const convertTime = (value) => {
@@ -81,10 +190,10 @@ function Player() {
             <div id="bar" style={ { width: barWidth } }></div>
           </div>
           <div className='mt-2'>
-            <button onClick={ () => setPlaying(true) } id="play" type="button" className="btn btn-default">
+            <button onClick={ play } id="play" type="button" className="btn btn-default">
               <span className="glyphicon glyphicon-play"></span>
             </button>
-            <button onClick={ () => setPlaying(false) } id="pause" type="button" className="ml-2 btn btn-default">
+            <button onClick={ pause } id="pause" type="button" className="ml-2 btn btn-default">
               <span className="glyphicon glyphicon-pause"></span>
             </button>
             <button onClick={ () => handleClickFullscreen() } id="fullScreen" type="button" className="ml-2 btn btn-default">
