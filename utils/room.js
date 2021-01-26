@@ -5,17 +5,17 @@ const TWITCH_OAUTH_TOKEN = process.env.TWITCH_OAUTH_TOKEN
 
 export async function getVideoInfo(url) {
     if (url.includes("youtube")) {
-        return getYoutube(url)
+        return getYoutubeVideoInfo(url)
     } else if (url.includes("twitch")) {
-        return getTwitch(url)
+        return getTwitchVideoInfo(url)
     } else if (url.includes("fb.watch")) {
-        return getFacebook(url)
+        return getFacebookVideoInfo(url)
     } else if (url.includes("dailymotion")) {
-        return getDailyMotion(url)
+        return getDailyMotionVideoInfo(url)
     }
 }
 
-export async function getYoutube(url) {
+async function getYoutubeVideoInfo(url) {
 
     delete axios.defaults.headers.common["Authorization"];
     delete axios.defaults.headers.common["Client-Id"];
@@ -31,7 +31,6 @@ export async function getYoutube(url) {
 
     await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoID}&key=${YT_API_KEY}`)
         .then(result => {
-            console.log(result)
             title = result.data.items[0].snippet.title
             author = result.data.items[0].snippet.channelTitle;
         })
@@ -45,7 +44,7 @@ export async function getYoutube(url) {
     };
 }
 
-export async function getTwitch(url) {
+async function getTwitchVideoInfo(url) {
     var videoID = url.split('/').pop()
 
     var title,
@@ -68,7 +67,7 @@ export async function getTwitch(url) {
     };
 }
 
-export async function getFacebook(url) {
+async function getFacebookVideoInfo(url) {
     var s = url.split('/')
     var videoID = s.pop()
     if (videoID == "") {
@@ -85,7 +84,7 @@ export async function getFacebook(url) {
     }
 }
 
-export async function getDailyMotion(url) {
+async function getDailyMotionVideoInfo(url) {
     var s = url.split('/')
     var videoID = s.pop()
     if (videoID == "") {
@@ -96,22 +95,12 @@ export async function getDailyMotion(url) {
     delete axios.defaults.headers.common["Client-Id"];
 
     var title,
-        author,
-        authorID;
+        author
 
-    await axios.get(`https://api.dailymotion.com/video/${videoID}`)
-        .then(result => {
-            title = result.data.title
-            authorID = result.data.owner
-
-        })
-        .catch(error => {
-            console.log(error)
-        })
-
-    await axios.get(`https://api.dailymotion.com/user/${authorID}`)
-        .then(result => {
-            author = result.data.screenname
+    await axios.get(`https://api.dailymotion.com/video/${videoID}&fields=title,owner.screenname`)
+        .then(res => {
+            title = res.data.title
+            author = res.data["owner.screenname"]
         })
         .catch(error => {
             console.log(error)
@@ -132,16 +121,21 @@ export function filterVideoURL(url) {
     return url
 }
 
-export async function getRecommendations(val) {
+export async function getRecommendations(keyword) {
+    var resultList = []
+    getYoutubeRecommendations(resultList, keyword, 10)
+    getDailyMotionRecommendations(resultList, keyword, 10)
+    return resultList
+}
 
+async function getYoutubeRecommendations(resultList, keyword, maxResults) {
     delete axios.defaults.headers.common["Authorization"];
     delete axios.defaults.headers.common["Client-Id"];
 
-    var resultList = [];
-    await axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${val}&type=video&key=${YT_API_KEY}`)
+    await axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=${maxResults}&q=${keyword}&type=video&key=${YT_API_KEY}`)
         .then(res => {
             const apiList = res.data.items;
-            for (var i = 0; i < apiList.length; i++) {
+            for (var i = 0; i < apiList.length && i < maxResults; i++) {
                 var info = {};
                 var id = apiList[i]["id"]["videoId"];
                 var title = apiList[i]["snippet"]["title"];
@@ -152,11 +146,38 @@ export async function getRecommendations(val) {
                 info["title"] = decodeHtml(title);
                 info["thumbnail"] = thumbnail;
                 info["publisher"] = publisher;
+                info["platform"] = "youtube"
                 resultList.push(info);
             }
         })
 
-    return resultList;
+}
+
+async function getDailyMotionRecommendations(resultList, keyword, maxResults) {
+    delete axios.defaults.headers.common["Authorization"];
+    delete axios.defaults.headers.common["Client-Id"];
+
+    await axios.get(`https://api.dailymotion.com/videos&search=${keyword}&sort=visited&limit=${maxResults}&fields=url,title,owner.screenname,thumbnail_360_url`)
+        .then(res => {
+            const apiList = res.data.list
+            for (var i = 0; i < apiList.length && i < maxResults; i++) {
+                var info = {}
+                var url = apiList[i].url
+                var title = apiList[i].title
+                var thumbnail = apiList[i]["thumbnail_360_url"]
+                var publisher = apiList[i]["owner.screenname"]
+                info["url"] = url
+                info["title"] = decodeHtml(title)
+                info["thumbnail"] = thumbnail
+                info["publisher"] = publisher
+                info["platform"] = "dailymotion"
+                resultList.push(info)
+            }
+
+        })
+        .catch(error => {
+            console.log(error)
+        })
 }
 
 export async function getTrendingVideo() {

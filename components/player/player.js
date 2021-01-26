@@ -112,7 +112,7 @@ function Player({user, roomInfo}) {
 
     const onPlayerReady = () => {
         setPlayerReady(true)
-        setPlaying(false)
+        setPlaying(true)
         setMuted(true)
     }
 
