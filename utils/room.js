@@ -1,13 +1,18 @@
 import axios from 'axios';
+// import { FB } from 'fb';
 const YT_API_KEY = process.env.YOUTUBE_API_KEY;
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID
 const TWITCH_OAUTH_TOKEN = process.env.TWITCH_OAUTH_TOKEN
+
+// var fb = new FB.Facebook(options)
 
 export async function getVideoInfo(url) {
     if (url.includes("youtube")) {
         return getYoutube(url)
     } else if (url.includes("twitch")) {
         return getTwitch(url)
+    } else if (url.includes("fb.watch")) {
+        return getFacebook(url)
     }
 }
 
@@ -58,6 +63,23 @@ export async function getTwitch(url) {
         title,
         author
     };
+}
+
+export async function getFacebook(url) {
+    var s = url.split('/')
+    var videoID = s.pop()
+    if (videoID == "") {
+        videoID = s.pop()
+    }
+    console.log(videoID)
+// FB.api(
+//     `/${videoID}`,
+//     function(response) {
+//         if (response && !response.error) {
+//             console.log(response)
+//         }
+//     }
+// );
 }
 
 export async function getRecommendations(val) {
