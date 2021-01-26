@@ -17,6 +17,11 @@ export async function getVideoInfo(url) {
 }
 
 export async function getYoutube(url) {
+
+
+    delete axios.defaults.headers.common["Authorization"];
+    delete axios.defaults.headers.common["Client-Id"];
+
     var videoID = url.split('v=')[1];
     var ampersandPosition = videoID.indexOf('&');
     if (ampersandPosition != -1) {
