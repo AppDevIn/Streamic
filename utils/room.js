@@ -86,7 +86,11 @@ export async function getFacebook(url) {
 }
 
 export async function getDailyMotion(url) {
-    var videoID = url.split('/').pop()
+    var s = url.split('/')
+    var videoID = s.pop()
+    if (videoID == "") {
+        videoID = s.pop()
+    }
 
     delete axios.defaults.headers.common["Authorization"];
     delete axios.defaults.headers.common["Client-Id"];
@@ -97,9 +101,8 @@ export async function getDailyMotion(url) {
 
     await axios.get(`https://api.dailymotion.com/video/${videoID}`)
         .then(result => {
-            console.log(result)
-            title = result.title
-            authorID = result.owner
+            title = result.data.title
+            authorID = result.data.owner
 
         })
         .catch(error => {
@@ -108,8 +111,7 @@ export async function getDailyMotion(url) {
 
     await axios.get(`https://api.dailymotion.com/user/${authorID}`)
         .then(result => {
-            console.log(result)
-            author = result.screenname
+            author = result.data.screenname
         })
         .catch(error => {
             console.log(error)
@@ -120,6 +122,14 @@ export async function getDailyMotion(url) {
         author
     };
 
+}
+
+export function filterVideoURL(url) {
+    if (url.includes("dailymotion") && url.includes("playlist")) {
+        url = url.split("?")[0]
+    }
+
+    return url
 }
 
 export async function getRecommendations(val) {
@@ -177,6 +187,7 @@ function decodeHtml(html) {
 
 export default {
     getVideoInfo,
+    filterVideoURL,
     getRecommendations,
     getTrendingVideo
 }

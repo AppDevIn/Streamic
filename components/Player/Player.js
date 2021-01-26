@@ -37,12 +37,13 @@ function Player({user, roomInfo}) {
 
     useEffect(() => {
         if (parent_link !== "") {
-            if (ReactPlayer.canPlay(parent_link)) {
-                console.log(parent_link)
+            var newURL = functions.filterVideoURL(parent_link)
+            if (ReactPlayer.canPlay(newURL)) {
+                console.log(newURL)
 
                 const data = {}
                 data["isVideoChanged"] = true
-                data["url"] = parent_link
+                data["url"] = newURL
 
                 socket.emit('changes', {
                     roomID,
