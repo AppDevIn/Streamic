@@ -214,7 +214,7 @@ function Player({user, roomInfo}) {
         <div className="left">
           <div className='player-wrapper'>
             <ReactPlayer className='react-player' width='100%' height='100%' onProgress={ (callback) => updateProgress(callback) } onDuration={ (duration) => updateDuration(duration) } onReady={ () => onPlayerReady() } muted={ muted }
-              playing={ playing } ref={ player } url={ url } config={ { youtube: { playerVars: { showinfo: 0, controls: 0, disablekb: 0, modestbranding: 0, rel: 0 } } } } />
+              playing={ playing } ref={ player } url={ url } config={ { youtube: { playerVars: { showinfo: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 } } } } />
           </div>
           <div id="title">
             { title }
