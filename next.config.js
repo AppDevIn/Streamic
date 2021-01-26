@@ -7,6 +7,7 @@ module.exports = {
         PORT: 8080,
         YOUTUBE_API_KEY: "AIzaSyDDSIyhGmCzlKWLKgb8Zw6A93oxq2sx8yc",
         TWITCH_CLIENT_ID: "tdilhl4potv3m095q4m72052fsyaq1",
-        TWITCH_OAUTH_TOKEN: "11fg38x002088q2od19bsna7j2c5ws"
+        TWITCH_OAUTH_TOKEN: "11fg38x002088q2od19bsna7j2c5ws",
+        FB_ACCESS_TOKEN: "320778149320698|aSqDq4mq8rKBMrLOlY-DT4r7jvA"
     }
 };

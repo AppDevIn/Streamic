@@ -1,10 +1,7 @@
 import axios from 'axios';
-// import { FB } from 'fb';
 const YT_API_KEY = process.env.YOUTUBE_API_KEY;
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID
 const TWITCH_OAUTH_TOKEN = process.env.TWITCH_OAUTH_TOKEN
-
-// var fb = new FB.Facebook(options)
 
 export async function getVideoInfo(url) {
     if (url.includes("youtube")) {
@@ -13,11 +10,12 @@ export async function getVideoInfo(url) {
         return getTwitch(url)
     } else if (url.includes("fb.watch")) {
         return getFacebook(url)
+    } else if (url.includes("dailymotion")) {
+        return getDailyMotion(url)
     }
 }
 
 export async function getYoutube(url) {
-
 
     delete axios.defaults.headers.common["Authorization"];
     delete axios.defaults.headers.common["Client-Id"];
@@ -77,14 +75,51 @@ export async function getFacebook(url) {
         videoID = s.pop()
     }
     console.log(videoID)
-// FB.api(
-//     `/${videoID}`,
-//     function(response) {
-//         if (response && !response.error) {
-//             console.log(response)
-//         }
-//     }
-// );
+
+    var title,
+        author;
+
+    return {
+        title,
+        author
+    }
+}
+
+export async function getDailyMotion(url) {
+    var videoID = url.split('/').pop()
+
+    delete axios.defaults.headers.common["Authorization"];
+    delete axios.defaults.headers.common["Client-Id"];
+
+    var title,
+        author,
+        authorID;
+
+    await axios.get(`https://api.dailymotion.com/video/${videoID}`)
+        .then(result => {
+            console.log(result)
+            title = result.title
+            authorID = result.owner
+
+        })
+        .catch(error => {
+            console.log(error)
+        })
+
+    await axios.get(`https://api.dailymotion.com/user/${authorID}`)
+        .then(result => {
+            console.log(result)
+            author = result.screenname
+        })
+        .catch(error => {
+            console.log(error)
+        })
+
+    return {
+        title,
+        author
+    };
+
 }
 
 export async function getRecommendations(val) {

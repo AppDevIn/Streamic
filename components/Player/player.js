@@ -39,8 +39,6 @@ function Player({user, roomInfo}) {
         if (parent_link !== "") {
             if (ReactPlayer.canPlay(parent_link)) {
                 console.log(parent_link)
-                // setUrl(parent_link)
-                // player.current.seekTo(0)
 
                 const data = {}
                 data["isVideoChanged"] = true
