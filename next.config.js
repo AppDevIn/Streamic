@@ -6,6 +6,7 @@ module.exports = {
         STRIPE_SECRET_KEY: "<insert-stripe-secret-key>",
         PORT: 8080,
         YOUTUBE_API_KEY: "AIzaSyDDSIyhGmCzlKWLKgb8Zw6A93oxq2sx8yc",
-        TWITCH_CLIENT_ID: "tdilhl4potv3m095q4m72052fsyaq1"
+        TWITCH_CLIENT_ID: "tdilhl4potv3m095q4m72052fsyaq1",
+        TWITCH_OAUTH_TOKEN: "11fg38x002088q2od19bsna7j2c5ws"
     }
 };

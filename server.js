@@ -9,17 +9,27 @@ const axios = require('axios').default;
 require('dotenv').config();
 
 
-// const bodyParser = require('body-parser');
-// const cors = require('cors');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
-// app.use(cors());
+app.use(cors());
+app.options('*', cors())
 
-// // Configuring body parser middleware
-// app.use(bodyParser.urlencoded({ extended: false }));
+// Add Access Control Allow Origin headers
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+});
+
+// Configuring body parser middleware
+// app.use(bodyParser.urlencoded({
+//     extended: false
+// }));
 // app.use(bodyParser.json());
-
-// import register from './pages/api/register'
-
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'

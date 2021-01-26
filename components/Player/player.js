@@ -90,7 +90,7 @@ function Player({user, roomInfo}) {
     }, [playerReady]);
 
     const onPlayerReady = () => {
-        console.log(player.current)
+        console.log(player.curent)
         setPlayerReady(true)
         setPlaying(true)
         setMuted(true)

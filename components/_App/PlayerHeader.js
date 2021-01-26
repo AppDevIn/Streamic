@@ -11,6 +11,7 @@ function playerHeader(){
     const submit = (event) => {
         event.preventDefault();
         updateLink(link);
+        setLink("")
     }
 
     const changeLink = (event) => {
