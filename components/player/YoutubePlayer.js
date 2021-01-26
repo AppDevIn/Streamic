@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useContext } from 'react';
 // import Youtube from 'react-youtube';
 import functions from '../../utils/room';
 import { ContextContainer } from '../../pages/room';
-import YoutubeCard from './youtubeCard';
+import VideoCard from './videoCard';
 import { Card, CardGroup, Image } from 'semantic-ui-react';
 
 function YoutubePlayer({user, roomInfo}) {

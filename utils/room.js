@@ -133,6 +133,10 @@ export function filterVideoURL(url) {
 }
 
 export async function getRecommendations(val) {
+
+    delete axios.defaults.headers.common["Authorization"];
+    delete axios.defaults.headers.common["Client-Id"];
+
     var resultList = [];
     await axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${val}&type=video&key=${YT_API_KEY}`)
         .then(res => {
@@ -144,7 +148,7 @@ export async function getRecommendations(val) {
                 var thumbnail = apiList[i]["snippet"]["thumbnails"]["medium"]["url"];
                 var publisher = apiList[i]["snippet"]["channelTitle"];
 
-                info["id"] = id;
+                info["url"] = `https://www.youtube.com/watch?v=${id}`;
                 info["title"] = decodeHtml(title);
                 info["thumbnail"] = thumbnail;
                 info["publisher"] = publisher;
@@ -156,6 +160,10 @@ export async function getRecommendations(val) {
 }
 
 export async function getTrendingVideo() {
+
+    delete axios.defaults.headers.common["Authorization"];
+    delete axios.defaults.headers.common["Client-Id"];
+
     var resultList = [];
     await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=20&regionCode=SG&key=${YT_API_KEY}`)
         .then(res => {
@@ -167,7 +175,7 @@ export async function getTrendingVideo() {
                 var thumbnail = apiList[i]["snippet"]["thumbnails"]["medium"]["url"];
                 var publisher = apiList[i]["snippet"]["channelTitle"];
 
-                info["id"] = id;
+                info["url"] = `https://www.youtube.com/watch?v=${id}`;
                 info["title"] = decodeHtml(title);
                 info["thumbnail"] = thumbnail;
                 info["publisher"] = publisher;

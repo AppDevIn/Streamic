@@ -4,6 +4,8 @@ import { findDOMNode } from 'react-dom'
 import { ContextContainer } from '../../pages/room';
 import screenfull from 'screenfull'
 import functions from '../../utils/room';
+import VideoCard from './videoCard';
+import { Card, CardGroup, Image } from 'semantic-ui-react';
 
 
 function Player({user, roomInfo}) {
@@ -21,9 +23,11 @@ function Player({user, roomInfo}) {
     const [durationText, setDurationText] = useState("0:00")
     const [muted, setMuted] = useState(false)
     const [barWidth, setBarwidth] = useState("0%")
+    const [cardList, setCardList] = useState([]);
 
     const {parent_link, socket} = useContext(ContextContainer);
 
+    const dummy = useRef(null);
     const player = useRef()
     const bar = useRef(null)
 
@@ -49,10 +53,28 @@ function Player({user, roomInfo}) {
                     roomID,
                     data
                 });
-
+            } else {
+                functions.getRecommendations(parent_link)
+                    .then(res => {
+                        setCardList(res);
+                    });
             }
+        } else {
+            functions.getTrendingVideo()
+                .then(res => {
+                    setCardList(res);
+                })
         }
+
     }, [parent_link])
+
+    useEffect(() => {
+        if (parent_link != "" && cardList.length != 0 && dummy != null) {
+            dummy.current.scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+    }, [cardList])
 
     useEffect(() => {
         if (playerReady) {
@@ -89,9 +111,8 @@ function Player({user, roomInfo}) {
     }, [playerReady]);
 
     const onPlayerReady = () => {
-        console.log(player.curent)
         setPlayerReady(true)
-        setPlaying(true)
+        setPlaying(false)
         setMuted(true)
     }
 
@@ -99,9 +120,7 @@ function Player({user, roomInfo}) {
         if (playerReady) {
             if (data.isVideoChanged) {
                 setUrl(data.url);
-                // player.current.seekTo(0, "seconds")
-                // setTitle(data.title);
-                // setAuthor(data.publisher);
+
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
@@ -135,7 +154,7 @@ function Player({user, roomInfo}) {
 
     const play = () => {
         var isPlaying = true;
-        var timeline = played;
+        var timeline = player.current.getCurrentTime();
         const data = {
             isPlaying,
             timeline
@@ -148,7 +167,7 @@ function Player({user, roomInfo}) {
 
     const pause = () => {
         var isPlaying = false;
-        var timeline = played;
+        var timeline = player.current.getCurrentTime();
         const data = {
             isPlaying,
             timeline
@@ -171,6 +190,14 @@ function Player({user, roomInfo}) {
             isPlaying,
             timeline
         };
+        socket.emit('changes', {
+            roomID,
+            data
+        });
+    }
+
+    const playVideo = (data) => {
+        data["isVideoChanged"] = true
         socket.emit('changes', {
             roomID,
             data
@@ -210,6 +237,12 @@ function Player({user, roomInfo}) {
             </button>
             <span id="timeline">{ playedText } / { durationText }</span>
           </div>
+          <div ref={ dummy }></div>
+          <CardGroup className='mt-4 cardDeck' itemsPerRow='3'>
+            { cardList.map(card => {
+                  return <VideoCard info={ card } key={ card.url } onClick={ () => playVideo(card) } />
+              }) }
+          </CardGroup>
         </div>
     )
 

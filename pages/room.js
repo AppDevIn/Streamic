@@ -27,7 +27,7 @@ function Room(props) {
              <PlayerHeader />
              <Container fluid className="mt-5 ct">
                <Player {...props}/>
-               { /* <ChatBox {...props} /> */ }
+               <ChatBox {...props} />
                { /* <VoiceChat {...props} /> */ }
              </Container>
            </ContextContainer.Provider>
