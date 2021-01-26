@@ -181,15 +181,20 @@ async function getDailyMotionRecommendations(resultList, keyword, maxResults) {
 }
 
 export async function getTrendingVideo() {
+    var resultList = []
+    getYoutubeTrendingVideo(resultList, 10)
+    getDailyMotionTrendingVideo(resultList, 10)
+    return resultList
+}
 
+async function getYoutubeTrendingVideo(resultList, maxResults) {
     delete axios.defaults.headers.common["Authorization"];
     delete axios.defaults.headers.common["Client-Id"];
 
-    var resultList = [];
-    await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=20&regionCode=SG&key=${YT_API_KEY}`)
+    await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=${maxResults}&regionCode=SG&key=${YT_API_KEY}`)
         .then(res => {
             const apiList = res.data.items;
-            for (var i = 0; i < apiList.length; i++) {
+            for (var i = 0; i < apiList.length && i < maxResults; i++) {
                 var info = {};
                 var id = apiList[i]["id"];
                 var title = apiList[i]["snippet"]["title"];
@@ -200,12 +205,38 @@ export async function getTrendingVideo() {
                 info["title"] = decodeHtml(title);
                 info["thumbnail"] = thumbnail;
                 info["publisher"] = publisher;
+                info["platform"] = "youtube"
                 resultList.push(info);
             }
         })
 
-    return resultList;
+}
 
+async function getDailyMotionTrendingVideo(resultList, maxResults) {
+    delete axios.defaults.headers.common["Authorization"];
+    delete axios.defaults.headers.common["Client-Id"];
+
+    await axios.get(`https://api.dailymotion.com/videos&sort=trending&limit=${maxResults}&fields=url,title,owner.screenname,thumbnail_360_url`)
+        .then(res => {
+            const apiList = res.data.list
+            for (var i = 0; i < apiList.length && i < maxResults; i++) {
+                var info = {}
+                var url = apiList[i].url
+                var title = apiList[i].title
+                var thumbnail = apiList[i]["thumbnail_360_url"]
+                var publisher = apiList[i]["owner.screenname"]
+                info["url"] = url
+                info["title"] = decodeHtml(title)
+                info["thumbnail"] = thumbnail
+                info["publisher"] = publisher
+                info["platform"] = "dailymotion"
+                resultList.push(info)
+            }
+
+        })
+        .catch(error => {
+            console.log(error)
+        })
 }
 
 function decodeHtml(html) {
