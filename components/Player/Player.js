@@ -92,7 +92,6 @@ function Player({user, roomInfo}) {
 
             socket.on("existingUser", () => {
                 console.log("existingUser")
-                console.log(playing, played, playedText, barWidth)
                 var isPlaying = player.current.player.isPlaying;
                 var timeline = player.current.getCurrentTime();
                 var isVideoChanged = false;
