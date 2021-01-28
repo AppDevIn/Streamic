@@ -80,7 +80,7 @@ export default function Home({ rooms, user }) {
           <Icon name='sign-out' />
           Logout
         </Button>
-        <Button color='blue' as='a' href="../pages/profile" >
+        <Button color='blue' as='a' href="/profile" >
           <Icon name='address card' />
           Profile Page
         </Button>
