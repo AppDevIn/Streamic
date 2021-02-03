@@ -5,41 +5,40 @@ import {
     Button,
     Divider,
     Dimmer,
-    Segment,
     Modal,
-    Form,
-    Grid
+    Form
 } from 'semantic-ui-react'
 import React, {useState} from 'react'
 import baseUrl from '../utils/baseUrl'
 import axios from 'axios'
 import Router from 'next/router'
 
-const INITIAL_User = {
-    _id : "",
-    password: "",
-    confirmPassword: "",
-    newPassword: "",
-    profilePic: ""
-}
+
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dbccwphl1/image/upload"
 const CLOUDINARY_UPLOAD_PRESET = 'midfduhh';
 
-export default function Profile() {
+export default function Profile({user}) {
+    const INITIAL_User = {
+        user : user,
+        confirmPassword: "",
+        newPassword: "",
+        photo: ""
+    }
     const [active,
         setActive] = useState(false)
     const [open,
         setOpen] = useState(false)
     const [profileOpen,
         setProfileOpen] = useState(false)
-    const [user,
+    const [User,
         setUser] = useState(INITIAL_User)
 
     function handleChange(event) {
         const {name, value} = event.target
         if (name == 'confirmPassword') {
-            if (user[password] == value) {
+            if (user.password == value) {
+                console.log("can change password")
                 setUser((prevState) => ({
                     ...prevState,
                     [name]: value
@@ -50,7 +49,7 @@ export default function Profile() {
                 ...prevState,
                 [name]: value
             }))
-        } else if (name == 'profilePic') {
+        } else if (name == 'photo') {
             let file = event.target.files[0]
             setUser((prevState) => ({
                 ...prevState,
@@ -62,6 +61,7 @@ export default function Profile() {
     async function changePassword(event) {
         event.preventDefault();
         try {
+            print(User.confirmPassword,user.password)
             const url = `${baseUrl}/api/user`
             const payload = { params: { password: user.password , _id: user._id } }
             const response = await axios.get(url, payload)
@@ -69,7 +69,7 @@ export default function Profile() {
             Router.push("/")
         } catch (error) {
             console.log(error);
-        } finally {
+        } finally { 
             setOpen(false)
         }
     }
@@ -77,9 +77,9 @@ export default function Profile() {
     async function changeProfile(event) {
         event.preventDefault();
         try {
-            console.log(user)
+            console.log(User.photo)
             const formData = new FormData();
-            formData.append('file', user.profilePic);
+            formData.append('file', User.photo);
             formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
             console.log(formData)
             try {
@@ -118,9 +118,9 @@ export default function Profile() {
             <Divider hidden/>
             <Divider hidden/>
             <Container fluid textAlign='center'>
-                        <Dimmer.Dimmable dimmed={active} circular>
+                        <Dimmer.Dimmable dimmed={active} >
                             <Image
-                                src='https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.chilloutpoint.com%2Fimages%2F2010%2F07%2Fhorses-in-the-clouds%2Fhorses-in-the-clouds-17.jpg&f=1&nofb=1'
+                                src={user.photo}
                                 centered
                                 circular
                                 width="300px"
@@ -147,11 +147,11 @@ export default function Profile() {
                                             iconPosition='left'
                                             placeholder='profile picture'
                                             type="file"
-                                            name="profilePic"/>
+                                            name="photo"/>
                                     </Form.Field>
                                 </Modal.Content>
                                 <Modal.Actions>
-                                    <Button color='black' onClick={() => setOpen(false)}>
+                                    <Button color='black' onClick={() => setProfileOpen(false)}>
                                         Nope
                                     </Button>
                                     <Button
@@ -166,8 +166,11 @@ export default function Profile() {
                         </Dimmer>
                         </Dimmer.Dimmable>
 
-                <Header as='h1'>Jack Ma</Header>
-
+                <Header as='h1'>{user.username}</Header>
+                <Header as='h1'>{user.email}</Header>
+                <Divider hidden/>
+                <Divider hidden/> 
+                
                 <Modal
                     onClose={() => setOpen(false)}
                     onOpen={() => setOpen(true)}
