@@ -12,7 +12,7 @@ import React, {useState} from 'react'
 import baseUrl from '../utils/baseUrl'
 import axios from 'axios'
 import Router from 'next/router'
-import bcrypt from 'bcrypt'
+// import bcrypt from 'bcrypt'
 
 
 
@@ -60,13 +60,12 @@ export default function Profile({user}) {
         event.preventDefault();
         try {
             console.log(User.confirmPassword,User.newPassword)
-            const hash = await bcrypt.hash(password, 10)
-            if (hash == User.password){ 
-                const url = `${baseUrl}/api/user?type=1`
-                const payload = { params: { _id: user._id  , password: hash} }
-                const response = await axios.get(url, payload)
-                Router.push("/")
-            }
+            // const hash = await bcrypt.hash(password, 10)
+           
+            const url = `${baseUrl}/api/user?type=1`
+            const payload = { params: { userID : user.UID , password: User.password} }
+            const response = await axios.get(url, payload)
+            Router.push("/")
             setOpen(false)
         } catch (error) {
             console.log(error);
@@ -96,11 +95,12 @@ export default function Profile({user}) {
                 console.log("imageUrl", imageUrl)
                 const url = `${baseUrl}/api/user?type=2`
                 const payload = {
-                    _id: user._id,
+                    userID: user.UID,
                     photo: imageUrl
                 }
                 await axios.post(url, payload)
                 Router.push("/")
+                setOpen(false)
             } catch (err) {
                 console.error(err);
             }

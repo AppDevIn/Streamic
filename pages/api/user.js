@@ -53,14 +53,13 @@ export async function getUser(req, res) {
 
 async function updatePassword(req, res) {
     const {userID,password } = req.body
-
     const user = await User.findOne({
         UID: userID
     });
 
     const update = {
         $set: {
-            password : password
+            "password" : password
         }
     }
 
@@ -68,15 +67,17 @@ async function updatePassword(req, res) {
 }
 
 async function updateProfilePic(req, res) {
-    const {userID , portfolioPic} = req.body
+    const {userID , photo} = req.body
+    console.log(userID, photo)
 
     const user = await User.findOne({
-        userID: userID
+        UID: userID
     });
+    console.log(user)
 
     const update = {
         $set: {
-            photo : portfolioPic
+            "photo" : photo
         }
     }
 
