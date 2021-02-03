@@ -1,15 +1,22 @@
 import React, { useEffect, useState, useContext, useRef} from 'react'
-import { Button, Form, Comment, Header } from 'semantic-ui-react'
+import { Button, Form, Comment, Header, Tab } from 'semantic-ui-react'
 import { ContextContainer } from '../../pages/room';
 import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
 import Chat from './chat'
-
+import classnames from 'classnames'
 
 export default function ChatBox({ roomID, user, messages }) {
+
+
+    
+
     const { socket } = useContext(ContextContainer);
     const [msgs, setMsgs] = useState(messages)
     const [m, setM] = useState("")
+    const [tabItemVoice, setTabItemVoice] = useState("item")
+    const [tabItemChat, setTabItemChat] = useState("active item")
+    const [currentTab, setCurrentTab] = useState(1)
 
     async function postMessage(message) {
         const url = `${baseUrl}/api/message`
@@ -49,7 +56,7 @@ export default function ChatBox({ roomID, user, messages }) {
 
         socket.emit("sendMessage", { roomID, message: M })
 
-        setM((prevState) => ({ value: "" }))
+        setM((prevState) => ({ value: ""}))
     }
 
     //Put inside the onChange 
@@ -59,13 +66,40 @@ export default function ChatBox({ roomID, user, messages }) {
     }
 
     return (
-        // <Layout>
         <div className="chat chat-main chat-sidebar right">
-            <Chat messages={msgs}/>
-            <div id="chatFormContainer">
-                <Form onSubmit={sendMessage} reply>
-                    <Form.Input required placeholder="Enter Message" autoComplete="off" value={m.value} onChange={handleChange} id="chatMsg"/>
-                </Form>
+            <div class="ui top attached tabular menu">
+                
+                <div onClick={() => {
+                    setTabItemChat("active item")
+                    setTabItemVoice("item")
+                    setCurrentTab(1)
+                    
+
+                }} className={tabItemChat}>Chat</div>
+
+                <div onClick={() => {
+                    setTabItemChat("item")
+                    setTabItemVoice("active item")
+                    setCurrentTab(2)
+                }} className={tabItemVoice}>Voice</div>
+
+            </div>
+            <div className={"ui bottom attached tab " + classnames({ active: currentTab == 1})}>
+                <div >
+                    <Chat messages={msgs}/>
+                    <div id="chatFormContainer">
+                        <Form onSubmit={sendMessage} reply>
+                            <Form.Input required placeholder="Enter Message" autoComplete="off" value={m.value} onChange={handleChange} id="chatMsg"/>
+                        </Form>
+                    </div>
+                </div>
+            </div>
+            <div className={"ui bottom attached tab " + classnames({ active: currentTab == 2})}>
+                <div class="ui list">
+                    <div class="item">Apples</div>
+                    <div class="item">Pears</div>
+                    <div class="item">Oranges</div>
+                </div>
             </div>
         </div>
     );
@@ -80,3 +114,5 @@ ChatBox.getInitialProps = async ({ query: { _id }, req: { cookies: { token } } }
     const response = await axios.get(url, { params: { roomID: _id } });
     return { roomID: _id, messages: response.data }
 };
+
+
