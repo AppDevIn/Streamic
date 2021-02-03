@@ -104,14 +104,13 @@ function Memebers({ memeberList }) {
         // <Layout>
         <div class="ui list">
             <Header as='h3' dividing>
-                Messages
+                Memebers
             </Header>
             {mapMessagesToItems(memeberList)}
             <div ref={dummy} ></div>
          </div>
     );
 }
-
 
     return (
         <div className="chat chat-main chat-sidebar right">
@@ -167,6 +166,7 @@ function Memebers({ memeberList }) {
         </div>
     );
 }
+
 
 ChatBox.getInitialProps = async ({ query: { _id }, req: { cookies: { token } } }) => {
 

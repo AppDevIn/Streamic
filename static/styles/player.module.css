@@ -152,6 +152,10 @@ body {
     }
 }
 
+.ui.label {
+    font-size: 1.5rem !important;
+}
+
 .cardDeck {
     width: 90%;
 }
