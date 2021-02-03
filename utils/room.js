@@ -4,6 +4,20 @@ const YT_API_KEY = process.env.YOUTUBE_API_KEY;
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID
 const TWITCH_OAUTH_TOKEN = process.env.TWITCH_OAUTH_TOKEN
 
+export async function getVideosInfo(urlList) {
+    var res = []
+
+    for (const url of urlList) {
+        await getVideoInfo(url).then(result => {
+            console.log(result)
+            res.push(result)
+        })
+    }
+
+    console.log(res)
+    return res
+}
+
 export async function getVideoInfo(url) {
     if (url.includes("youtube")) {
         return getYoutubeVideoInfo(url)
@@ -28,12 +42,14 @@ async function getYoutubeVideoInfo(url) {
     }
 
     var title,
-        author;
+        author,
+        thumbnail;
 
     await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoID}&key=${YT_API_KEY}`)
         .then(result => {
             title = result.data.items[0].snippet.title
             author = result.data.items[0].snippet.channelTitle;
+            thumbnail = result.data.items[0].snippet.thumbnails.medium.url;
         })
         .catch(error => {
             console.log(error)
@@ -41,7 +57,9 @@ async function getYoutubeVideoInfo(url) {
 
     return {
         title,
-        author
+        author,
+        url,
+        thumbnail
     };
 }
 
@@ -49,7 +67,9 @@ async function getTwitchVideoInfo(url) {
     var videoID = url.split('/').pop()
 
     var title,
-        author;
+        author,
+        thumbnail;
+
     axios.defaults.headers.common["Client-Id"] = TWITCH_CLIENT_ID
     axios.defaults.headers.common["Authorization"] = `Bearer ${TWITCH_OAUTH_TOKEN}`
     await axios.get(`https://api.twitch.tv/helix/videos?id=${videoID}`)
@@ -57,6 +77,7 @@ async function getTwitchVideoInfo(url) {
             console.log(result)
             title = result.data.data[0].title
             author = result.data.data[0].user_name
+            thumbnail = result.data.data[0]["thumbnail_url"]
         })
         .catch(error => {
             console.log(error)
@@ -64,7 +85,9 @@ async function getTwitchVideoInfo(url) {
 
     return {
         title,
-        author
+        author,
+        url,
+        thumbnail
     };
 }
 
@@ -96,12 +119,14 @@ async function getDailyMotionVideoInfo(url) {
     delete axios.defaults.headers.common["Client-Id"];
 
     var title,
-        author
+        author,
+        thumbnail
 
-    await axios.get(`https://api.dailymotion.com/video/${videoID}&fields=title,owner.screenname`)
+    await axios.get(`https://api.dailymotion.com/video/${videoID}&fields=title,owner.screenname,thumbnail_360_url`)
         .then(res => {
             title = res.data.title
             author = res.data["owner.screenname"]
+            thumbnail = res.data["thumbnail_360_url"]
         })
         .catch(error => {
             console.log(error)
@@ -109,7 +134,9 @@ async function getDailyMotionVideoInfo(url) {
 
     return {
         title,
-        author
+        author,
+        url,
+        thumbnail
     };
 
 }
@@ -257,6 +284,7 @@ async function updatePlayingIndex(roomID, playingIndex) {
 }
 
 export default {
+    getVideosInfo,
     getVideoInfo,
     filterVideoURL,
     getRecommendations,

@@ -8,16 +8,12 @@ import VideoCard from './videoCard';
 import { Card, CardGroup, Image } from 'semantic-ui-react';
 
 
-function Player({user, roomInfo, fetchedURL}) {
+function Player({user, roomInfo}) {
     const roomID = roomInfo.roomID
-    const playing_index = roomInfo.playingIndex
-    // to be changed by fetching from db
 
     const [playerReady, setPlayerReady] = useState(false)
     const [title, setTitle] = useState("Title")
     const [author, setAuthor] = useState("Author")
-    const [urls, setUrls] = useState(fetchedURL)
-    const [playingIndex, setPlayingIndex] = useState(playing_index)
     const [playing, setPlaying] = useState(false)
     const [played, setPlayed] = useState(0)
     const [playedText, setPlayedText] = useState("0:00")
@@ -27,18 +23,11 @@ function Player({user, roomInfo, fetchedURL}) {
     const [barWidth, setBarwidth] = useState("0%")
     const [cardList, setCardList] = useState([]);
 
-    const {parent_link, socket} = useContext(ContextContainer);
+    const {parent_link, socket, urls, setUrls, playingIndex, setPlayingIndex} = useContext(ContextContainer);
 
     const dummy = useRef(null);
     const player = useRef()
     const bar = useRef(null)
-
-    useEffect(() => {
-        if (urls != null) {
-            // update video queue cards here
-
-        }
-    }, [urls])
 
     useEffect(() => {
         functions.updatePlayingIndex(roomID, playingIndex)
@@ -130,6 +119,8 @@ function Player({user, roomInfo, fetchedURL}) {
         if (playerReady) {
             if (data.addToQueue) {
                 setUrls(data.updatedURLs)
+            } else if (data.playVideoAt) {
+                setPlayingIndex(data.index)
             } else if (data.resetQueue) {
                 setUrls([data.url])
                 setPlayingIndex(0)
