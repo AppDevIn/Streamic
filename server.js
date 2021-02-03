@@ -93,7 +93,7 @@ io.on('connection', socket => {
 
             try {
                 //Add the room
-                inRoom[roomID].push(user);
+                inRoom[roomID].push({...user, sid: socket.id });
                 console.log(`User ${user.username}`);
 
             } catch (error) {
@@ -199,6 +199,22 @@ io.on('connection', socket => {
             room = room.filter(id => id !== socket.id);
             users[roomID] = room;
         }
+
+        let rooms = inRoom[roomID];
+        if (rooms) {
+            rooms = rooms.filter(user => user.sid !== socket.id);
+            inRoom[roomID] = rooms;
+        }
+
+        let mute = muted[roomID];
+        if (mute) {
+            mute = mute.filter(m => m !== socket.id);
+            inRoom[roomID] = mute;
+        }
+
+
+
+
     });
 
 });
