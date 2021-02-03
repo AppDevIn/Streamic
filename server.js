@@ -126,6 +126,7 @@ io.on('connection', socket => {
 
 
     socket.on("mute user", ({ roomID }) => {
+
         //Check if the room exist
         if (muted[roomID]) {
 
@@ -136,6 +137,16 @@ io.on('connection', socket => {
             muted[roomID] = [socket.id];
         }
 
+        io.to(roomID).emit("muted user", muted[roomID])
+
+    });
+
+
+    socket.on("unmute user", ({ roomID }) => {
+        console.log("Unmuting the " + socket.id);
+
+        console.log(muted[roomID]);
+        muted[roomID] = (muted[roomID]).filter(m => m !== socket.id)
         io.to(roomID).emit("muted user", muted[roomID])
 
     });

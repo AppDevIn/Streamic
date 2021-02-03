@@ -20,6 +20,7 @@ export default function ChatBox({ roomID, user, messages }) {
     const [tabItemChat, setTabItemChat] = useState("active item")
     const [currentTab, setCurrentTab] = useState(1)
     const [users, setUsers] = useState([])
+    const [isMute, setMute] = useState(false)
 
     async function postMessage(message) {
         const url = `${baseUrl}/api/message`
@@ -82,6 +83,8 @@ export default function ChatBox({ roomID, user, messages }) {
 function Memebers({ memeberList }) {
     const dummy = useRef();
 
+    
+
     useEffect(() => {
         console.log(memeberList);
         dummy.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
@@ -130,10 +133,16 @@ function Memebers({ memeberList }) {
                     socket.emit("get member", (roomID))
 
                 }} className={tabItemVoice}>Voice</div>
-
+                
                 <div onClick={() => {
-                    socket.emit("mute user", ({roomID:roomID}))
-                }} className={tabItemVoice}>Mute</div>
+
+                    if (!isMute) {
+                        socket.emit("mute user", ({roomID:roomID}))
+                    } else {
+                        socket.emit("unmute user", ({roomID:roomID}))
+                    }
+                    setMute(!isMute)
+                }} className={tabItemVoice} >{isMute ? "Unmute" : "Mute"}</div>
 
             </div>
             <div className={"ui bottom attached tab " + classnames({ active: currentTab == 1})}>
