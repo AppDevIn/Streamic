@@ -65,6 +65,37 @@ export default function ChatBox({ roomID, user, messages }) {
         setM((prevState) => ({ ...prevState, value }))
     }
 
+
+function Memebers({ memeberList }) {
+    const dummy = useRef();
+
+    useEffect(() => {
+        dummy.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    })
+
+    function mapMessagesToItems(list) {
+
+
+        return messages.map(list => (
+            <div class="ui item label">
+                {list.authorID.username}
+            </div>
+        ));
+    }
+
+    return (
+        // <Layout>
+        <div class="ui list">
+            <Header as='h3' dividing>
+                Messages
+            </Header>
+            {mapMessagesToItems(memeberList)}
+            <div ref={dummy} ></div>
+         </div>
+    );
+}
+
+
     return (
         <div className="chat chat-main chat-sidebar right">
             <div class="ui top attached tabular menu">
@@ -95,11 +126,7 @@ export default function ChatBox({ roomID, user, messages }) {
                 </div>
             </div>
             <div className={"ui bottom attached tab " + classnames({ active: currentTab == 2})}>
-                <div class="ui list">
-                    <div class="item">Apples</div>
-                    <div class="item">Pears</div>
-                    <div class="item">Oranges</div>
-                </div>
+                <Memebers memeberList={msgs}/>
             </div>
         </div>
     );
@@ -114,5 +141,6 @@ ChatBox.getInitialProps = async ({ query: { _id }, req: { cookies: { token } } }
     const response = await axios.get(url, { params: { roomID: _id } });
     return { roomID: _id, messages: response.data }
 };
+
 
 
