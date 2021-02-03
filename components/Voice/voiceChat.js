@@ -7,6 +7,7 @@ import room from '../../utils/room';
 
 
 
+
 const Container = styled.div`
     padding: 20px;
     display: flex;
@@ -24,11 +25,14 @@ const StyledVideo = styled.video`
 const Video = (props) => {
     const ref = useRef();
 
+    
+
     useEffect(() => {
+      console.log("Video " + props.id)
         props.peer.on("stream", stream => {
-            ref.current.srcObject = stream;
+            ref.current.srcObject = stream
         })
-    }, []);
+    }, [props]);
 
     return (
         <StyledVideo playsInline autoPlay ref={ref} />
@@ -46,9 +50,12 @@ export default function VoiceChat({roomID, user}) {
   const { socket } = useContext(ContextContainer);
 
   const [peers, setPeers] = useState([]);
+  const [mute, setMuted] = useState([]);
+  const [id, setID] = useState("");
+  
   const socketRef = useRef();
   const userVideo = useRef()
-  const peersRef = useRef([])
+  const [peersRef, setRef] = useState([]);
 
     
 
@@ -56,16 +63,29 @@ export default function VoiceChat({roomID, user}) {
     
     if (socket != null) {
       socketRef.current = socket
-      navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
-        
+      
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+        userVideo.current.srcObject = stream;
 
-        
         
         socketRef.current.emit("joinRoom", ({roomID:roomID, user:user}));
         socketRef.current.emit("join room", ({roomID:roomID, user:user}));
 
+        
+   
+
         //Get back the array peers in this room
-        socketRef.current.on("all users", users => {
+        socketRef.current.on("muted user", muted => {     
+          console.log("Muted user: " + muted);      
+
+          setMuted(muted)
+        })
+
+        
+   
+
+        //Get back the array peers in this room
+        socketRef.current.on("all users", (users) => {
           const peers = []
 
           console.log(users);
@@ -76,14 +96,16 @@ export default function VoiceChat({roomID, user}) {
             const peer = createPeer(userID, socketRef.current.id, stream);
 
             //To keep track of the peers
-            peersRef.current.push({
+            peersRef.push({
               peerID: userID,
               peer,
             })
+            setRef(peersRef)
 
             //For rendering the video
             peers.push(peer)
             setPeers(peers)
+            
 
           });
         })
@@ -95,17 +117,18 @@ export default function VoiceChat({roomID, user}) {
 
           console.log("User joined");
 
-          peersRef.current.push({
-            peerID: payload.callerID,
-            peer,
-          })
-
+            setRef(peersRef => [...peersRef, {
+              peerID: payload.callerID,
+              peer,
+            }])
           //Update to be render the video again
           setPeers(users => [...users, peer])
+          
         })
             
         socketRef.current.on("receiving returned signal", payload => {
-          const item = peersRef.current.find(p => p.peerID === payload.id);
+          console.log("reciveing signal");
+          const item = peersRef.find(p => p.peerID === payload.id);
           item.peer.signal(payload.signal)
         });
         
@@ -119,6 +142,14 @@ export default function VoiceChat({roomID, user}) {
   }, [socket])
 
 
+  useEffect(() => {
+
+    // console.log(mute);
+    console.log("Peer ref" + peersRef);
+
+  }, [peersRef])
+
+
   //Create peer 
   function createPeer(userToSignal, callerID, stream) {
     const peer = new Peer({
@@ -127,8 +158,10 @@ export default function VoiceChat({roomID, user}) {
       stream,
     });
 
+
     // This is called instantly upon craetion of the peer
     peer.on("signal", signal => {
+      console.log("Sending signal");
       socketRef.current.emit("sending signal", {userToSignal, callerID, signal})
     });
 
@@ -146,6 +179,8 @@ export default function VoiceChat({roomID, user}) {
       stream,
     });
 
+    console.log("Peer id: " + peer.id);
+
     //This will be triggered when someone want to make contact when accepted than it will be send 
     peer.on("signal", signal => {
       console.log("Getting signal from connection");
@@ -155,6 +190,7 @@ export default function VoiceChat({roomID, user}) {
     //This will triggert the signal ☝️
     peer.signal(incomingSignal)
 
+
     return peer;
 
   }
@@ -162,17 +198,26 @@ export default function VoiceChat({roomID, user}) {
   
 
 
-  return <> </>
-//   return (
-//     <Container>
-//         <StyledVideo muted ref={userVideo} autoPlay playsInline />
-//         {peers.map((peer, index) => {
-//             return (
-//                 <Video key={index} peer={peer} />
-//             );
-//         })}
-//     </Container>
-// );
+  // return <> </>
+  return (
+    
+  
+      <Container>
+
+        
+          
+          <StyledVideo muted ref={userVideo} autoPlay playsInline />
+          <div mute={mute}>
+          {peersRef.map((payload, index) => {
+              return mute.includes(payload.peerID) ? <div key={index}></div> : <Video key={payload.peerID} peer={payload.peer} id={payload.peerID}/> 
+              
+          
+        })}
+        </div>
+      </Container>
+    
+    
+);
     
 }
 

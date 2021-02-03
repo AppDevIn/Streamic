@@ -31,7 +31,11 @@ const nextHandler = nextApp.getRequestHandler()
 const users = {}
 const inRoom = {}
 
+const muted = {}
+
 const socketToRoom = {};
+
+
 
 
 io.on('connection', socket => {
@@ -74,6 +78,7 @@ io.on('connection', socket => {
     });
 
     socket.on("returning signal", payload => {
+
         io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
     });
 
@@ -120,15 +125,31 @@ io.on('connection', socket => {
 
 
 
+    socket.on("mute user", ({ roomID }) => {
+        //Check if the room exist
+        if (muted[roomID]) {
+
+            //Add the room
+            muted[roomID].push(socket.id);
+        } else {
+            //Create a new room object
+            muted[roomID] = [socket.id];
+        }
+
+        io.to(roomID).emit("muted user", muted[roomID])
+
+    });
+
+
+    // socket.on("get mute user", ({ roomID }) => {
+    //     io.to(roomID).emit("muted user", muted[roomID])
+    // });
+
+
+
     socket.on("join room", ({ roomID, user }) => {
         //Check if the room exist
         if (users[roomID]) {
-
-            // const length = users[roomID].length;
-            // if (length === 4) {
-            //     socket.emit("room full");
-            //     return;
-            // }
 
             //Add the room
             users[roomID].push(socket.id);
@@ -149,6 +170,7 @@ io.on('connection', socket => {
         console.log("Users");
         console.log(usersInThisRoom);
         socket.emit("all users", usersInThisRoom);
+
 
 
     });

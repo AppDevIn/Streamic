@@ -5,10 +5,12 @@ import baseUrl from '../../utils/baseUrl'
 import axios from 'axios'
 import Chat from './chat'
 import classnames from 'classnames'
+import VoiceChat from '../../components/Voice/voiceChat';
 
 export default function ChatBox({ roomID, user, messages }) {
 
 
+    let props = {roomID, user}
     
 
     const { socket } = useContext(ContextContainer);
@@ -142,6 +144,7 @@ function Memebers({ memeberList }) {
             </div>
             <div className={"ui bottom attached tab " + classnames({ active: currentTab == 2})}>
                 <Memebers memeberList={users}/>
+                {/* <VoiceChat {...props} mute={true} /> */}
             </div>
         </div>
     );
