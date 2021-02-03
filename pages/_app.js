@@ -28,6 +28,8 @@ class MyApp extends App {
         const url = `${baseUrl}/api/user`
         const payload = { headers: { Authorization: token  } }
         const response = await axios.get(url, payload)
+
+        // console.log("Check user: " + response.data);
         
         pageProps.user = response.data
       } catch (error){

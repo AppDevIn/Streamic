@@ -34,9 +34,7 @@ const inRoom = {}
 const muted = {}
 
 const socketToRoom = {};
-
-
-
+const userToRoom = {};
 
 io.on('connection', socket => {
     socket.on('joinRoom', ({ roomID, user }) => {
@@ -45,9 +43,20 @@ io.on('connection', socket => {
         socket.emit("message", "Welcome to Streamic.");
         socket.join(roomID);
 
+        userToRoom[user.UID] = roomID
+
+
 
 
     });
+
+
+    socket.on("usersToRoom", (user) => {
+
+        console.log(user);
+
+        io.to(socket.id).emit("retrieve usersToRoom", userToRoom[user])
+    })
 
     socket.on('changes', ({ roomID, data }) => {
         io.to(roomID).emit('streaming', data);
