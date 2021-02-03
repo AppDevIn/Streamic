@@ -51,3 +51,34 @@ export async function getUser(req, res) {
 
 }
 
+async function updatePassword(req, res) {
+    const {userID,password } = req.body
+
+    const user = await User.findOne({
+        UID: userID
+    });
+
+    const update = {
+        $set: {
+            password : password
+        }
+    }
+
+    await user.updateOne(update)
+}
+
+async function updateProfilePic(req, res) {
+    const {userID , portfolioPic} = req.body
+
+    const user = await User.findOne({
+        userID: userID
+    });
+
+    const update = {
+        $set: {
+            photo : portfolioPic
+        }
+    }
+
+    await user.updateOne(update)
+}

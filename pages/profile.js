@@ -12,6 +12,7 @@ import React, {useState} from 'react'
 import baseUrl from '../utils/baseUrl'
 import axios from 'axios'
 import Router from 'next/router'
+import bcrypt from 'bcrypt'
 
 
 
@@ -37,13 +38,10 @@ export default function Profile({user}) {
     function handleChange(event) {
         const {name, value} = event.target
         if (name == 'confirmPassword') {
-            if (user.password == value) {
-                console.log("can change password")
-                setUser((prevState) => ({
-                    ...prevState,
-                    [name]: value
-                }))
-            } 
+            setUser((prevState) => ({
+                ...prevState,
+                [name]: value
+            }))
         } else if (name == 'newPassword') {
             setUser((prevState) => ({
                 ...prevState,
@@ -61,12 +59,15 @@ export default function Profile({user}) {
     async function changePassword(event) {
         event.preventDefault();
         try {
-            print(User.confirmPassword,user.password)
-            const url = `${baseUrl}/api/user`
-            const payload = { params: { password: user.password , _id: user._id } }
-            const response = await axios.get(url, payload)
+            print(User.confirmPassword,User.newPassword)
+            const hash = await bcrypt.hash(User.newPassword, 10)
+            if (hash == User.password){ 
+                const url = `${baseUrl}/api/user?type=1`
+                const payload = { params: { _id: user._id  , password: hash} }
+                const response = await axios.get(url, payload)
+                Router.push("/")
+            }
             setOpen(false)
-            Router.push("/")
         } catch (error) {
             console.log(error);
         } finally { 
@@ -93,10 +94,10 @@ export default function Profile({user}) {
                 }
 
                 console.log("imageUrl", imageUrl)
-                const url = `${baseUrl}/api/user`
+                const url = `${baseUrl}/api/user?type=2`
                 const payload = {
-                    photo: imageUrl,
-                    _id: user._id
+                    _id: user._id,
+                    photo: imageUrl
                 }
                 await axios.post(url, payload)
                 Router.push("/")
