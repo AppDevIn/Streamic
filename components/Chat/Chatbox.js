@@ -123,16 +123,18 @@ function Memebers({ memeberList }) {
                     setCurrentTab(1)
                     
 
-                }} className={tabItemChat}>Chat</div>
+                }} className={ "item " + classnames({ active: currentTab == 1})}>Chat</div>
 
                 <div onClick={() => {
-                    setTabItemChat("item")
-                    setTabItemVoice("active item")
                     setCurrentTab(2)
 
+                }} className={ "item " + classnames({ active: currentTab == 2})}>Video</div>
+
+                <div onClick={() => {
+                    setCurrentTab(3)
                     socket.emit("get member", (roomID))
 
-                }} className={tabItemVoice}>Voice</div>
+                }} className={ "item " + classnames({ active: currentTab == 3})}>Members</div>
                 
                 <div onClick={() => {
 
@@ -142,7 +144,7 @@ function Memebers({ memeberList }) {
                         socket.emit("unmute user", ({roomID:roomID}))
                     }
                     setMute(!isMute)
-                }} className={tabItemVoice} >{isMute ? "Unmute" : "Mute"}</div>
+                }} className={"item"} >{isMute ? "Unmute" : "Mute"}</div>
 
             </div>
             <div className={"ui bottom attached tab " + classnames({ active: currentTab == 1})}>
@@ -156,8 +158,11 @@ function Memebers({ memeberList }) {
                 </div>
             </div>
             <div className={"ui bottom attached tab " + classnames({ active: currentTab == 2})}>
-                {/* <Memebers memeberList={users}/> */}
                 <VoiceChat {...props} />
+            </div>
+            <div className={"ui bottom attached tab " + classnames({ active: currentTab == 3})}>
+                <Memebers memeberList={users}/>
+                
             </div>
         </div>
     );
