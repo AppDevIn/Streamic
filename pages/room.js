@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PlayerHeader from "../components/_App/PlayerHeader"
 import Player from '../components/Player/Player'
+import VideoQueue from '../components/Player/VideoQueue'
 import { Container } from "semantic-ui-react";
 import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
@@ -15,6 +16,8 @@ function Room(props) {
 
     const [parent_link, updateLink] = useState("");
     const [socket, setSocket] = useState(null);
+    const [urls, setUrls] = useState(props.fetchedURL)
+    const [playingIndex, setPlayingIndex] = useState(props.roomInfo.playingIndex)
 
     useEffect(() => {
         document.body.style.backgroundColor = "#242A2E";
@@ -23,11 +26,12 @@ function Room(props) {
         }
     }, [])
 
-    return <ContextContainer.Provider value={ { parent_link, updateLink, socket, setSocket } }>
+    return <ContextContainer.Provider value={ { parent_link, updateLink, socket, setSocket, urls, setUrls, playingIndex, setPlayingIndex } }>
              <PlayerHeader />
              <Container fluid className="mt-5 ct">
                <Player {...props}/>
-               <ChatBox {...props} />
+               <VideoQueue {...props} />
+               { /* <ChatBox {...props} /> */ }
                { /* <VoiceChat {...props} /> */ }
              </Container>
            </ContextContainer.Provider>

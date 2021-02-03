@@ -109,8 +109,7 @@ async function updateRoomWatching(req, res) {
 
 async function handleGetRequest(req, res) {
     const {roomID, _id} = req.query;
-    console.log("room", roomID);
-    console.log("room", _id);
+
     const room = await Room.findOne({
         roomID
     });
@@ -119,7 +118,15 @@ async function handleGetRequest(req, res) {
     })
 
     if (room.Playing != null) {
-        const videoInfos = await Video.find().where('_id').in(room.Playing).exec();
+        var videoInfos = []
+
+        for (const url of room.Playing) {
+            await Video.findOne({
+                _id: url
+            }).then(result => {
+                videoInfos.push(result)
+            })
+        }
 
         room.Playing = videoInfos;
     }
@@ -188,4 +195,6 @@ async function updatePlayingIndex(req, res) {
     }
 
     await room.updateOne(update)
+
+    res.status(200).json(room)
 }
