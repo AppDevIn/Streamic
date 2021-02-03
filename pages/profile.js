@@ -118,9 +118,7 @@ export default function Profile() {
             <Divider hidden/>
             <Divider hidden/>
             <Container fluid textAlign='center'>
-                 <Grid centered verticalAlign='middle' columns={1}>
-                    <Grid.Column>
-                        <Dimmer.Dimmable as={Segment} dimmed={active} circular >
+                        <Dimmer.Dimmable dimmed={active} circular>
                             <Image
                                 src='https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.chilloutpoint.com%2Fimages%2F2010%2F07%2Fhorses-in-the-clouds%2Fhorses-in-the-clouds-17.jpg&f=1&nofb=1'
                                 centered
@@ -167,8 +165,6 @@ export default function Profile() {
 
                         </Dimmer>
                         </Dimmer.Dimmable>
-                    </Grid.Column>
-                </Grid>
 
                 <Header as='h1'>Jack Ma</Header>
 
