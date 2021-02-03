@@ -59,8 +59,8 @@ export default function Profile({user}) {
     async function changePassword(event) {
         event.preventDefault();
         try {
-            print(User.confirmPassword,User.newPassword)
-            const hash = await bcrypt.hash(User.newPassword, 10)
+            console.log(User.confirmPassword,User.newPassword)
+            const hash = await bcrypt.hash(password, 10)
             if (hash == User.password){ 
                 const url = `${baseUrl}/api/user?type=1`
                 const payload = { params: { _id: user._id  , password: hash} }
