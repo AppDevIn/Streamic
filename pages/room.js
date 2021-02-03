@@ -43,6 +43,11 @@ Room.getInitialProps = async (ctx, user) => {
     };
     const responseRoom = await axios.get(url, payload);
 
+    const videoInfos = responseRoom.data.Playing
+    var fetchedURL = []
+    videoInfos.forEach(video => {
+        fetchedURL.push(video.videoURL)
+    });
 
     url = `${baseUrl}/api/messages`
     const responseMessage = await axios.get(url, {
@@ -54,7 +59,8 @@ Room.getInitialProps = async (ctx, user) => {
     return {
         roomInfo: responseRoom.data,
         roomID: ctx.query._id,
-        messages: responseMessage.data
+        messages: responseMessage.data,
+        fetchedURL: fetchedURL
     };
 }
 

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import baseUrl from './baseUrl'
 const YT_API_KEY = process.env.YOUTUBE_API_KEY;
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID
 const TWITCH_OAUTH_TOKEN = process.env.TWITCH_OAUTH_TOKEN
@@ -245,9 +246,20 @@ function decodeHtml(html) {
     return txt.value;
 }
 
+async function updatePlayingIndex(roomID, playingIndex) {
+    const url = `${baseUrl}/api/room?type=3`
+    const payload = {
+        roomID,
+        playingIndex
+    }
+
+    const response = await axios.post(url, payload)
+}
+
 export default {
     getVideoInfo,
     filterVideoURL,
     getRecommendations,
-    getTrendingVideo
+    getTrendingVideo,
+    updatePlayingIndex
 }

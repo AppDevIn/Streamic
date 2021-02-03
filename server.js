@@ -81,6 +81,25 @@ io.on('connection', socket => {
         socket.broadcast.to(roomID).emit('existingUser');
     });
 
+    socket.on('resetURLs', ({roomID, url}) => {
+        async function resetURL() {
+            const request_url = `${baseUrl}/api/room?type=2`
+            const payload = {
+                roomID,
+                url
+            }
+            const response = await axios.post(request_url, payload)
+        }
+
+        resetURL()
+
+        const data = {}
+        data["resetQueue"] = true
+        data["url"] = url
+
+        io.to(roomID).emit('streaming', data)
+    })
+
     socket.on('sendMessage', (data) => {
         const {message, roomID} = data
         console.log("Message reveived from " + roomID);

@@ -15,6 +15,10 @@ export default async(req, res) => {
             const type = req.query.type;
             if (type == '1') {
                 await updateRoomWatching(req, res);
+            } else if (type == '2') {
+                await resetURL(req, res)
+            } else if (type == '3') {
+                await updatePlayingIndex(req, res)
             } else {
                 await handlePostRequest(req, res);
             }
@@ -83,14 +87,14 @@ async function updateRoomWatching(req, res) {
         }).save()
 
         const update = {
-            $set: {
+            $push: {
                 Playing: mongoose.Types.ObjectId(newVideo._id)
             }
         };
         await room.updateOne(update);
     } else {
         const update = {
-            $set: {
+            $push: {
                 Playing: mongoose.Types.ObjectId(video._id)
             }
         };
@@ -115,10 +119,10 @@ async function handleGetRequest(req, res) {
     })
 
     if (room.Playing != null) {
-        const videoInfo = await Video.findById(room.Playing);
-        room.Playing = videoInfo;
-    }
+        const videoInfos = await Video.find().where('_id').in(room.Playing).exec();
 
+        room.Playing = videoInfos;
+    }
 
     if (user.rooms.indexOf(room._id) === -1) {
         const update = {
@@ -143,4 +147,45 @@ async function handleGetRequest(req, res) {
 
 
     res.status(200).json(room)
+}
+
+async function resetURL(req, res) {
+    const {roomID, url} = req.body
+
+    const room = await Room.findOne({
+        roomID: roomID
+    });
+
+    const video = await Video.findOne({
+        videoURL: url
+    })
+
+    if (room.Playing != null) {
+
+        const update = {
+            $set: {
+                Playing: mongoose.Types.ObjectId(video._id)
+            }
+        };
+
+        await room.updateOne(update);
+    }
+
+    res.status(200).json(room)
+}
+
+async function updatePlayingIndex(req, res) {
+    const {roomID, playingIndex} = req.body
+
+    const room = await Room.findOne({
+        roomID: roomID
+    });
+
+    const update = {
+        $set: {
+            playingIndex: playingIndex
+        }
+    }
+
+    await room.updateOne(update)
 }

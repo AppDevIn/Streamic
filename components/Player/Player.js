@@ -8,14 +8,16 @@ import VideoCard from './videoCard';
 import { Card, CardGroup, Image } from 'semantic-ui-react';
 
 
-function Player({user, roomInfo}) {
+function Player({user, roomInfo, fetchedURL}) {
     const roomID = roomInfo.roomID
-    const videoURL = roomInfo.Playing.videoURL
+    const playing_index = roomInfo.playingIndex
+    // to be changed by fetching from db
 
     const [playerReady, setPlayerReady] = useState(false)
     const [title, setTitle] = useState("Title")
     const [author, setAuthor] = useState("Author")
-    const [url, setUrl] = useState(videoURL)
+    const [urls, setUrls] = useState(fetchedURL)
+    const [playingIndex, setPlayingIndex] = useState(playing_index)
     const [playing, setPlaying] = useState(false)
     const [played, setPlayed] = useState(0)
     const [playedText, setPlayedText] = useState("0:00")
@@ -32,12 +34,21 @@ function Player({user, roomInfo}) {
     const bar = useRef(null)
 
     useEffect(() => {
-        functions.getVideoInfo(url).then(({title, author}) => {
+        if (urls != null) {
+            // update video queue cards here
+
+        }
+    }, [urls])
+
+    useEffect(() => {
+        functions.updatePlayingIndex(roomID, playingIndex)
+
+        functions.getVideoInfo(urls[playingIndex]).then(({title, author}) => {
             setTitle(title)
             setAuthor(author)
         })
 
-    }, [url])
+    }, [playingIndex])
 
     useEffect(() => {
         if (parent_link !== "") {
@@ -86,7 +97,6 @@ function Player({user, roomInfo}) {
             socket.emit("router", roomID);
 
             socket.on("streaming", (data) => {
-                console.log(data);
                 handleActions(data);
             });
 
@@ -116,10 +126,15 @@ function Player({user, roomInfo}) {
         setMuted(true)
     }
 
-    const handleActions = (data) => {
+    var handleActions = function(data) {
         if (playerReady) {
-            if (data.isVideoChanged) {
-                setUrl(data.url);
+            if (data.addToQueue) {
+                setUrls(data.updatedURLs)
+            } else if (data.resetQueue) {
+                setUrls([data.url])
+                setPlayingIndex(0)
+            } else if (data.isVideoChanged) {
+                setUrls([...urls, data.url]);
 
                 window.scrollTo({
                     top: 0,
@@ -197,6 +212,9 @@ function Player({user, roomInfo}) {
     }
 
     const playVideo = (data) => {
+        // "addToQueue" to be changed based on the input
+        data["updatedURLs"] = [...urls, data.url]
+        data["addToQueue"] = true
         data["isVideoChanged"] = true
         socket.emit('changes', {
             roomID,
@@ -210,11 +228,30 @@ function Player({user, roomInfo}) {
         return mins + ":" + ((secs < 10) ? "0" + secs : secs)
     }
 
+    function playNextVideo() {
+        if (playingIndex + 1 < urls.length) {
+            setPlayingIndex(playingIndex + 1)
+        }
+    }
+
+    function playPreviousVideo() {
+        if (playingIndex > 0) {
+            setPlayingIndex(playingIndex - 1)
+        }
+    }
+
+    const resetURLs = () => {
+        socket.emit("resetURLs", {
+            roomID: roomID,
+            url: urls[playingIndex]
+        })
+    }
+
     return (
         <div className="left">
           <div className='player-wrapper'>
             <ReactPlayer className='react-player' width='100%' height='100%' onProgress={ (callback) => updateProgress(callback) } onDuration={ (duration) => updateDuration(duration) } onReady={ () => onPlayerReady() } muted={ muted }
-              playing={ playing } ref={ player } url={ url } config={ { youtube: { playerVars: { showinfo: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 } } } } />
+              onEnded={ () => playNextVideo() } playing={ playing } ref={ player } url={ urls[playingIndex] } config={ { youtube: { playerVars: { showinfo: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 } } } } />
           </div>
           <div id="title">
             { title }
@@ -234,6 +271,15 @@ function Player({user, roomInfo}) {
             </button>
             <button onClick={ () => handleClickFullscreen() } id="fullScreen" type="button" className="ml-2 btn btn-default">
               <span className="glyphicon glyphicon-fullscreen"></span>
+            </button>
+            <button onClick={ () => playPreviousVideo() } id="previous" type="button" className="ml-2 btn btn-default">
+              <span className="glyphicon glyphicon-step-backward"></span>
+            </button>
+            <button onClick={ () => playNextVideo() } id="next" type="button" className="ml-2 btn btn-default">
+              <span className="glyphicon glyphicon-step-forward"></span>
+            </button>
+            <button onClick={ () => resetURLs() } id="reset" type="button" className="ml-2 btn btn-default">
+              <span className="glyphicon glyphicon-refresh"></span>
             </button>
             <span id="timeline">{ playedText } / { durationText }</span>
           </div>
