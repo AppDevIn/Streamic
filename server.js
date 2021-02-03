@@ -184,6 +184,8 @@ io.on('connection', socket => {
 
 
 
+
+
     });
 
 
@@ -211,6 +213,8 @@ io.on('connection', socket => {
             mute = mute.filter(m => m !== socket.id);
             inRoom[roomID] = mute;
         }
+
+        io.to(roomID).emit("remove socket", socket.id)
 
 
 

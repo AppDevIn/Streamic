@@ -71,6 +71,7 @@ export default function ChatBox({ roomID, user, messages }) {
         socket.emit("sendMessage", { roomID, message: M })
 
         setM((prevState) => ({ value: ""}))
+        
     }
 
     //Put inside the onChange 
