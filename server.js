@@ -35,6 +35,8 @@ const muted = {}
 
 const socketToRoom = {};
 const userToRoom = {};
+const socketToUser = {};
+
 
 io.on('connection', socket => {
     socket.on('joinRoom', ({ roomID, user }) => {
@@ -43,7 +45,8 @@ io.on('connection', socket => {
         socket.emit("message", "Welcome to Streamic.");
         socket.join(roomID);
 
-        userToRoom[user.UID] = roomID
+        userToRoom[user._id] = true
+        socketToUser[socket.id] = user._id
 
 
 
@@ -53,7 +56,10 @@ io.on('connection', socket => {
 
     socket.on("usersToRoom", (user) => {
 
-        console.log(user);
+        console.log("id of user " + user);
+        let room = userToRoom[user]
+
+        console.log("retrieve the room " + room);
 
         io.to(socket.id).emit("retrieve usersToRoom", userToRoom[user])
     })
@@ -221,6 +227,13 @@ io.on('connection', socket => {
         if (mute) {
             mute = mute.filter(m => m !== socket.id);
             inRoom[roomID] = mute;
+        }
+
+        let uid = socketToUser[socket.id]
+        if (uid) {
+            if (userToRoom[uid]) {
+                userToRoom[uid] = false
+            }
         }
 
         io.to(roomID).emit("remove socket", socket.id)

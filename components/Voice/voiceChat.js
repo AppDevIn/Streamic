@@ -80,7 +80,7 @@ export default function VoiceChat({roomID, user}) {
         // userVideo.current.srcObject = stream;
 
         
-        socketRef.current.emit("joinRoom", ({roomID:roomID, user:user}));
+       
         socketRef.current.emit("join room", ({roomID:roomID, user:user}));
 
         
