@@ -10,7 +10,15 @@ export default async(req, res) => {
             await getUser(req, res);
             break;
         case "POST":
-            await handlePostRequest(req, res);
+            const type = req.query.type
+            if(type == '1'){ 
+                await updatePassword(req,res);
+            }
+            else if (type == '2'){
+                await updateProfilePic(req,res);
+            }else{ 
+                await handlePostRequest(req, res);
+            }
             break;
         default:
             res.status(405).send(`Method ${req.method} not allowed`)
@@ -42,3 +50,4 @@ export async function getUser(req, res) {
     }
 
 }
+

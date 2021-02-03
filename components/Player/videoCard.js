@@ -1,26 +1,18 @@
-import React, { useState } from 'react'
-import { Card, Image, Button, Dimmer, Segment, Icon, Divider } from 'semantic-ui-react'
+import React from 'react'
+import { Card, Image, Button } from 'semantic-ui-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 
+library.add(fab)
 
-
+function addVideoToQueue(video) {
+  console.log(video)
+}
 
 function videoCard(props) {
-  const [active, setActive] = useState(false)
-  return < Card onClick={ props.onClick } onMouseOver={ (e) => {
-                                                 setActive(true)
-                                               } } onMouseLeave={ (e) => {
-                                                                                                                                                                                             setActive(false)
-                                                                                                                                                                                           } }>
-           <Dimmer.Dimmable dimmed={ active } as={ Segment }>
-             <Image src={ props.info.thumbnail } wrapped ui={ false } width="250px" height="200px" fluid />
-             <Dimmer active={ active }>
-               <Button.Group vertical floated='right'>
-                 <Button color="youtube" enabled="false" icon='youtube' />
-                 <Divider />
-                 <Button icon='add' color='red' />
-               </Button.Group>
-             </Dimmer>
-           </Dimmer.Dimmable>
+  return < Card>
+           <Image onClick={ props.onClick } src={ props.info.thumbnail } wrapped ui={ false } width="100%" height="auto" />
            <Card.Content>
              <Card.Header>
                { props.info.title }
@@ -28,9 +20,11 @@ function videoCard(props) {
              <Card.Meta>
                <span>{ props.info.publisher }</span>
              </Card.Meta>
+             <Button basic color='blue' onClick={ () => addVideoToQueue(props.info.url) }>
+               <FontAwesomeIcon icon={ ['fab', props.info.platform] } fixedWidth /> Add To Queue
+             </Button>
            </Card.Content>
          </ Card>
-
 }
 
 export default videoCard;
