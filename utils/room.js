@@ -283,11 +283,29 @@ async function updatePlayingIndex(roomID, playingIndex) {
     const response = await axios.post(url, payload)
 }
 
+async function insertNewVideo(url, roomID) {
+    const api_url = `${baseUrl}/api/room?type=4`
+
+    const payload = {
+        roomID,
+        url
+    }
+
+    await getVideoInfo(url).then(result => {
+        payload[data] = result
+    })
+
+    const response = await axios.post(api_url, payload)
+
+    return response
+}
+
 export default {
     getVideosInfo,
     getVideoInfo,
     filterVideoURL,
     getRecommendations,
     getTrendingVideo,
-    updatePlayingIndex
+    updatePlayingIndex,
+    insertNewVideo
 }

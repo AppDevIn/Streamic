@@ -3,6 +3,7 @@ import Room from '../../models/Room.js'
 import User from '../../models/User'
 import mongoose from 'mongoose'
 import Video from '../../models/Video'
+import functions from '../../utils/room'
 
 connectDb()
 export default async(req, res) => {
@@ -19,6 +20,8 @@ export default async(req, res) => {
                 await resetURL(req, res)
             } else if (type == '3') {
                 await updatePlayingIndex(req, res)
+            } else if (type == '4') {
+                await insertNewVideo(req, res)
             } else {
                 await handlePostRequest(req, res);
             }
@@ -157,7 +160,7 @@ async function handleGetRequest(req, res) {
 }
 
 async function resetURL(req, res) {
-    const {data, roomID, url} = req.body
+    const {info, roomID, url} = req.body
 
     const room = await Room.findOne({
         roomID: roomID
@@ -172,9 +175,9 @@ async function resetURL(req, res) {
 
         if (video == null) {
             const newVideo = await new Video({
-                videoURL: data.url,
-                videoName: data.title,
-                thumbnail: data.thumbnail
+                videoURL: info.url,
+                videoName: info.title,
+                thumbnail: info.thumbnail
             }).save()
 
             const update = {
@@ -213,6 +216,30 @@ async function updatePlayingIndex(req, res) {
     }
 
     await room.updateOne(update)
+
+    res.status(200).json(room)
+}
+
+async function insertNewVideo(req, res) {
+    const {roomID, url, data} = req.body
+    console.log(url, data)
+    const room = await Room.findOne({
+        roomID: roomID
+    });
+
+    const video = await Video.findOne({
+        videoURL: url
+    });
+
+    if (video == null) {
+
+        // const newVideo = await new Video({
+        //     videoURL: result.url,
+        //     videoName: result.title,
+        //     thumbnail: result.thumbnail
+        // }).save()
+
+    }
 
     res.status(200).json(room)
 }

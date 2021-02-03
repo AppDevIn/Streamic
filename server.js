@@ -78,12 +78,13 @@ io.on('connection', socket => {
         socket.broadcast.to(roomID).emit('existingUser');
     });
 
-    socket.on('resetURLs', ({roomID, url}) => {
+    socket.on('resetURLs', ({roomID, url, info, update}) => {
         async function resetURL() {
             const request_url = `${baseUrl}/api/room?type=2`
             const payload = {
                 roomID,
-                url
+                url,
+                info
             }
             const response = await axios.post(request_url, payload)
         }
@@ -93,6 +94,7 @@ io.on('connection', socket => {
         const data = {}
         data["resetQueue"] = true
         data["url"] = url
+        data["update"] = true
 
         io.to(roomID).emit('streaming', data)
     })

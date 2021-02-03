@@ -45,14 +45,14 @@ function Player({user, roomInfo}) {
             if (ReactPlayer.canPlay(newURL)) {
                 console.log(newURL)
 
-                const data = {}
-                data["isVideoChanged"] = true
-                data["url"] = newURL
+                // need to retrieve video info
+                functions.insertNewVideo(newURL, roomID).then(result => {
+                    socket.emit("resetURLs", {
+                        roomID: roomID,
+                        url: newURL
+                    })
+                })
 
-                socket.emit('changes', {
-                    roomID,
-                    data
-                });
             } else {
                 functions.getRecommendations(parent_link)
                     .then(res => {
@@ -115,7 +115,7 @@ function Player({user, roomInfo}) {
         setMuted(true)
     }
 
-    var handleActions = function(data) {
+    var handleActions = async function(data) {
         if (playerReady) {
             if (data.addToQueue) {
                 setUrls(data.updatedURLs)
@@ -124,6 +124,13 @@ function Player({user, roomInfo}) {
             } else if (data.resetQueue) {
                 setUrls([data.url])
                 setPlayingIndex(0)
+
+                if (data.update) {
+                    functions.getVideoInfo(data.url).then(({title, author}) => {
+                        setTitle(title)
+                        setAuthor(author)
+                    })
+                }
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
@@ -200,11 +207,11 @@ function Player({user, roomInfo}) {
     }
 
     const playVideo = (data) => {
-        data["resetQueue"] = true
-        data["isVideoChanged"] = true
         socket.emit("resetURLs", {
             roomID: roomID,
-            url: data.url
+            url: data.url,
+            info: data,
+            update: true
         })
     }
 
