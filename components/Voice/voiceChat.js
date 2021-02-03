@@ -41,7 +41,7 @@ const Video = (props) => {
 // };
 
 
-export default function VoiceChat({roomID}) {
+export default function VoiceChat({roomID, user}) {
 
   const { socket } = useContext(ContextContainer);
 
@@ -59,7 +59,10 @@ export default function VoiceChat({roomID}) {
       navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
         
 
-        socketRef.current.emit("join room", roomID);
+        
+        
+        socketRef.current.emit("joinRoom", ({roomID:roomID, user:user}));
+        socketRef.current.emit("join room", ({roomID:roomID, user:user}));
 
         //Get back the array peers in this room
         socketRef.current.on("all users", users => {
@@ -90,6 +93,7 @@ export default function VoiceChat({roomID}) {
           //Add the peer
           const peer = addPeer(payload.signal, payload.callerID, stream)
 
+          console.log("User joined");
 
           peersRef.current.push({
             peerID: payload.callerID,
@@ -158,18 +162,17 @@ export default function VoiceChat({roomID}) {
   
 
 
-
-
-  return (
-    <Container>
-        <StyledVideo muted ref={userVideo} autoPlay playsInline />
-        {peers.map((peer, index) => {
-            return (
-                <Video key={index} peer={peer} />
-            );
-        })}
-    </Container>
-);
+  return <> </>
+//   return (
+//     <Container>
+//         <StyledVideo muted ref={userVideo} autoPlay playsInline />
+//         {peers.map((peer, index) => {
+//             return (
+//                 <Video key={index} peer={peer} />
+//             );
+//         })}
+//     </Container>
+// );
     
 }
 

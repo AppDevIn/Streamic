@@ -17,6 +17,7 @@ export default function ChatBox({ roomID, user, messages }) {
     const [tabItemVoice, setTabItemVoice] = useState("item")
     const [tabItemChat, setTabItemChat] = useState("active item")
     const [currentTab, setCurrentTab] = useState(1)
+    const [users, setUsers] = useState([])
 
     async function postMessage(message) {
         const url = `${baseUrl}/api/message`
@@ -25,10 +26,12 @@ export default function ChatBox({ roomID, user, messages }) {
         return response.data
     }
 
-
     useEffect(() => {
         if (socket != null) {
             console.log("initialising socket connection for message")
+
+            socket.emit("memeber add", ({user, roomID}))
+
             //Receive the messages
             socket.on("message", (message) => {
                 console.log(message);
@@ -39,6 +42,14 @@ export default function ChatBox({ roomID, user, messages }) {
                 console.log("client", message.messageContent)
                 setMsgs(messages => [...messages, message]);
             })
+
+            socket.on("memeber join", (usr) => {
+                console.log(`Member in the room: ${usr}`);
+                setUsers(usr)
+            })            
+            
+   
+      
         }
 
     }, [socket])
@@ -70,15 +81,16 @@ function Memebers({ memeberList }) {
     const dummy = useRef();
 
     useEffect(() => {
+        console.log(memeberList);
         dummy.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
     })
 
     function mapMessagesToItems(list) {
 
 
-        return messages.map(list => (
+        return list.map(user => (
             <div class="ui item label">
-                {list.authorID.username}
+                {user.username}
             </div>
         ));
     }
@@ -112,6 +124,9 @@ function Memebers({ memeberList }) {
                     setTabItemChat("item")
                     setTabItemVoice("active item")
                     setCurrentTab(2)
+
+                    socket.emit("get member", (roomID))
+
                 }} className={tabItemVoice}>Voice</div>
 
             </div>
@@ -126,7 +141,7 @@ function Memebers({ memeberList }) {
                 </div>
             </div>
             <div className={"ui bottom attached tab " + classnames({ active: currentTab == 2})}>
-                <Memebers memeberList={msgs}/>
+                <Memebers memeberList={users}/>
             </div>
         </div>
     );

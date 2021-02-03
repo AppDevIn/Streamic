@@ -36,11 +36,13 @@ Room.getInitialProps = async (ctx, user) => {
     const payload = { params: { roomID: ctx.query._id, _id: user._id } };
     const responseRoom = await axios.get(url, payload);
 
+    
+
 
     url = `${baseUrl}/api/messages`
     const responseMessage = await axios.get(url, { params: { roomID: ctx.query._id } });
 
-    return { roomInfo: responseRoom.data, roomID: ctx.query._id, messages: responseMessage.data };
+    return { roomInfo: responseRoom.data, user:user , roomID: ctx.query._id, messages: responseMessage.data };
 }
 
 export { ContextContainer };

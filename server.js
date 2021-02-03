@@ -29,6 +29,7 @@ const nextHandler = nextApp.getRequestHandler()
 
 //Keep track of the users in each room
 const users = {}
+const inRoom = {}
 
 const socketToRoom = {};
 
@@ -76,7 +77,50 @@ io.on('connection', socket => {
         io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
     });
 
-    socket.on("join room", roomID => {
+
+    socket.on("get member", (roomID) => {
+        io.to(roomID).emit("memeber join", inRoom[roomID])
+    });
+
+    socket.on("memeber add", ({ roomID, user }) => {
+
+        if (inRoom[roomID]) {
+
+            try {
+                //Add the room
+                inRoom[roomID].push(user);
+                console.log(`User ${user.username}`);
+
+            } catch (error) {
+                console.log("Error getting the user", error);
+            }
+
+
+        } else {
+
+            try {
+                //Create a new room object
+                inRoom[roomID] = [user];
+
+
+            } catch (error) {
+                console.log("Error getting the user", error);
+            }
+
+        }
+
+
+
+
+        console.log(`Member in the room: ${inRoom[roomID]}`);
+
+
+
+    });
+
+
+
+    socket.on("join room", ({ roomID, user }) => {
         //Check if the room exist
         if (users[roomID]) {
 
@@ -98,10 +142,14 @@ io.on('connection', socket => {
         //Get the users in the room
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
 
+        console.log(`Users in the room: ${usersInThisRoom}`);
+
+
         //Send all the exisitng to user details to clients
         console.log("Users");
         console.log(usersInThisRoom);
         socket.emit("all users", usersInThisRoom);
+
 
     });
 
