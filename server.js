@@ -61,9 +61,6 @@ io.on('connection', socket => {
         if (data.isVideoChanged) {
             // update the video playing for the room
 
-            // TODO: pass in the thumbnail here
-            // data["thumbnail"] = (FUNCTIONS API)
-            // data["title"] = (FUNCTIONS API)
             async function updateRoomWatching() {
                 const url = `${baseUrl}/api/room?type=1`
                 const payload = {

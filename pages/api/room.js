@@ -157,7 +157,7 @@ async function handleGetRequest(req, res) {
 }
 
 async function resetURL(req, res) {
-    const {roomID, url} = req.body
+    const {data, roomID, url} = req.body
 
     const room = await Room.findOne({
         roomID: roomID
@@ -167,15 +167,33 @@ async function resetURL(req, res) {
         videoURL: url
     })
 
+
     if (room.Playing != null) {
 
-        const update = {
-            $set: {
-                Playing: mongoose.Types.ObjectId(video._id)
-            }
-        };
+        if (video == null) {
+            const newVideo = await new Video({
+                videoURL: data.url,
+                videoName: data.title,
+                thumbnail: data.thumbnail
+            }).save()
 
-        await room.updateOne(update);
+            const update = {
+                $set: {
+                    Playing: mongoose.Types.ObjectId(newVideo._id)
+                }
+            }
+
+            await room.updateOne(update);
+
+        } else {
+            const update = {
+                $set: {
+                    Playing: mongoose.Types.ObjectId(video._id)
+                }
+            };
+
+            await room.updateOne(update);
+        }
     }
 
     res.status(200).json(room)

@@ -124,9 +124,6 @@ function Player({user, roomInfo}) {
             } else if (data.resetQueue) {
                 setUrls([data.url])
                 setPlayingIndex(0)
-            } else if (data.isVideoChanged) {
-                setUrls([...urls, data.url]);
-
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
@@ -203,14 +200,12 @@ function Player({user, roomInfo}) {
     }
 
     const playVideo = (data) => {
-        // "addToQueue" to be changed based on the input
-        data["updatedURLs"] = [...urls, data.url]
-        data["addToQueue"] = true
+        data["resetQueue"] = true
         data["isVideoChanged"] = true
-        socket.emit('changes', {
-            roomID,
-            data
-        });
+        socket.emit("resetURLs", {
+            roomID: roomID,
+            url: data.url
+        })
     }
 
     const convertTime = (value) => {
@@ -221,13 +216,28 @@ function Player({user, roomInfo}) {
 
     function playNextVideo() {
         if (playingIndex + 1 < urls.length) {
-            setPlayingIndex(playingIndex + 1)
+            const data = {}
+            data["playVideoAt"] = true
+            data["index"] = playingIndex + 1
+
+            socket.emit('changes', {
+                roomID,
+                data
+            })
         }
     }
 
     function playPreviousVideo() {
         if (playingIndex > 0) {
-            setPlayingIndex(playingIndex - 1)
+            const data = {}
+            data["playVideoAt"] = true
+            data["index"] = playingIndex - 1
+
+            socket.emit('changes', {
+                roomID,
+                data
+            })
+
         }
     }
 
@@ -277,6 +287,7 @@ function Player({user, roomInfo}) {
           <div ref={ dummy }></div>
           <CardGroup className='mt-4 cardDeck' itemsPerRow='3'>
             { cardList.map(card => {
+                  card["roomID"] = roomID
                   return <VideoCard info={ card } key={ card.url } onClick={ () => playVideo(card) } />
               }) }
           </CardGroup>
