@@ -18,8 +18,8 @@ const Container = styled.div`
 `;
 
 const StyledVideo = styled.video`
-    height: 40%;
-    width: 50%;
+    height: 100%;
+    width: 100%;
 `;
 
 const Video = (props) => {
@@ -28,14 +28,14 @@ const Video = (props) => {
     
 
     useEffect(() => {
-      console.log("Video " + props.id)
+      console.log("Video " + props.id + props.isAudio)
         props.peer.on("stream", stream => {
             ref.current.srcObject = stream
         })
     }, [props]);
 
     return (
-        <StyledVideo playsInline autoPlay ref={ref} />
+        <StyledVideo muted={props.isAudio} playsInline autoPlay ref={ref} />
     );
 }
 
@@ -65,7 +65,7 @@ export default function VoiceChat({roomID, user}) {
       socketRef.current = socket
       
       navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-        userVideo.current.srcObject = stream;
+        // userVideo.current.srcObject = stream;
 
         
         socketRef.current.emit("joinRoom", ({roomID:roomID, user:user}));
@@ -165,7 +165,6 @@ export default function VoiceChat({roomID, user}) {
       socketRef.current.emit("sending signal", {userToSignal, callerID, signal})
     });
 
-
     return peer;
 
   }
@@ -203,13 +202,11 @@ export default function VoiceChat({roomID, user}) {
     
   
       <Container>
-
-        
           
           <StyledVideo muted ref={userVideo} autoPlay playsInline />
           <div mute={mute}>
           {peersRef.map((payload, index) => {
-              return mute.includes(payload.peerID) ? <div key={index}></div> : <Video key={payload.peerID} peer={payload.peer} id={payload.peerID}/> 
+              return  <Video key={payload.peerID} isAudio={mute.includes(payload.peerID)} peer={payload.peer} id={payload.peerID}/> 
               
           
         })}

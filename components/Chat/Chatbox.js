@@ -131,6 +131,10 @@ function Memebers({ memeberList }) {
 
                 }} className={tabItemVoice}>Voice</div>
 
+                <div onClick={() => {
+                    socket.emit("mute user", ({roomID:roomID}))
+                }} className={tabItemVoice}>Mute</div>
+
             </div>
             <div className={"ui bottom attached tab " + classnames({ active: currentTab == 1})}>
                 <div >
@@ -143,8 +147,8 @@ function Memebers({ memeberList }) {
                 </div>
             </div>
             <div className={"ui bottom attached tab " + classnames({ active: currentTab == 2})}>
-                <Memebers memeberList={users}/>
-                {/* <VoiceChat {...props} mute={true} /> */}
+                {/* <Memebers memeberList={users}/> */}
+                <VoiceChat {...props} />
             </div>
         </div>
     );
