@@ -29,8 +29,13 @@ const nextHandler = nextApp.getRequestHandler()
 
 //Keep track of the users in each room
 const users = {}
+const inRoom = {}
+
+const muted = {}
 
 const socketToRoom = {};
+const userToRoom = {};
+const socketToUser = {};
 
 
 io.on('connection', socket => {
@@ -40,9 +45,24 @@ io.on('connection', socket => {
         socket.emit("message", "Welcome to Streamic.");
         socket.join(roomID);
 
+        userToRoom[user._id] = true
+        socketToUser[socket.id] = user._id
+
+
 
 
     });
+
+
+    socket.on("usersToRoom", (user) => {
+
+        console.log("id of user " + user);
+        let room = userToRoom[user]
+
+        console.log("retrieve the room " + room);
+
+        io.to(socket.id).emit("retrieve usersToRoom", userToRoom[user])
+    })
 
     socket.on('changes', ({ roomID, data }) => {
         io.to(roomID).emit('streaming', data);
@@ -73,18 +93,89 @@ io.on('connection', socket => {
     });
 
     socket.on("returning signal", payload => {
+
         io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
     });
 
-    socket.on("join room", roomID => {
+
+    socket.on("get member", (roomID) => {
+        io.to(roomID).emit("memeber join", inRoom[roomID])
+    });
+
+    socket.on("memeber add", ({ roomID, user }) => {
+
+        if (inRoom[roomID]) {
+
+            try {
+                //Add the room
+                inRoom[roomID].push({...user, sid: socket.id });
+                console.log(`User ${user.username}`);
+
+            } catch (error) {
+                console.log("Error getting the user", error);
+            }
+
+
+        } else {
+
+            try {
+                //Create a new room object
+                inRoom[roomID] = [user];
+
+
+            } catch (error) {
+                console.log("Error getting the user", error);
+            }
+
+        }
+
+
+
+
+        console.log(`Member in the room: ${inRoom[roomID]}`);
+
+
+
+    });
+
+
+
+    socket.on("mute user", ({ roomID }) => {
+
+        //Check if the room exist
+        if (muted[roomID]) {
+
+            //Add the room
+            muted[roomID].push(socket.id);
+        } else {
+            //Create a new room object
+            muted[roomID] = [socket.id];
+        }
+
+        io.to(roomID).emit("muted user", muted[roomID])
+
+    });
+
+
+    socket.on("unmute user", ({ roomID }) => {
+        console.log("Unmuting the " + socket.id);
+
+        console.log(muted[roomID]);
+        muted[roomID] = (muted[roomID]).filter(m => m !== socket.id)
+        io.to(roomID).emit("muted user", muted[roomID])
+
+    });
+
+
+    // socket.on("get mute user", ({ roomID }) => {
+    //     io.to(roomID).emit("muted user", muted[roomID])
+    // });
+
+
+
+    socket.on("join room", ({ roomID, user }) => {
         //Check if the room exist
         if (users[roomID]) {
-
-            // const length = users[roomID].length;
-            // if (length === 4) {
-            //     socket.emit("room full");
-            //     return;
-            // }
 
             //Add the room
             users[roomID].push(socket.id);
@@ -98,10 +189,17 @@ io.on('connection', socket => {
         //Get the users in the room
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
 
+        console.log(`Users in the room: ${usersInThisRoom}`);
+
+
         //Send all the exisitng to user details to clients
         console.log("Users");
         console.log(usersInThisRoom);
         socket.emit("all users", usersInThisRoom);
+
+
+
+
 
     });
 
@@ -118,6 +216,31 @@ io.on('connection', socket => {
             room = room.filter(id => id !== socket.id);
             users[roomID] = room;
         }
+
+        let rooms = inRoom[roomID];
+        if (rooms) {
+            rooms = rooms.filter(user => user.sid !== socket.id);
+            inRoom[roomID] = rooms;
+        }
+
+        let mute = muted[roomID];
+        if (mute) {
+            mute = mute.filter(m => m !== socket.id);
+            inRoom[roomID] = mute;
+        }
+
+        let uid = socketToUser[socket.id]
+        if (uid) {
+            if (userToRoom[uid]) {
+                userToRoom[uid] = false
+            }
+        }
+
+        io.to(roomID).emit("remove socket", socket.id)
+
+
+
+
     });
 
 });

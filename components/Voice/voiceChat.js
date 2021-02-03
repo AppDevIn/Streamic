@@ -7,6 +7,7 @@ import room from '../../utils/room';
 
 
 
+
 const Container = styled.div`
     padding: 20px;
     display: flex;
@@ -17,21 +18,35 @@ const Container = styled.div`
 `;
 
 const StyledVideo = styled.video`
-    height: 40%;
-    width: 50%;
+    height: 100%;
+    width: 100%;
 `;
 
 const Video = (props) => {
     const ref = useRef();
 
+    
+
     useEffect(() => {
+      console.log("Video " + props.id )
+      console.log("Destroy video " + props.destroy )
+      
+      
         props.peer.on("stream", stream => {
-            ref.current.srcObject = stream;
+            
+          if(props.destory == props.id) {
+            props.peer.destroy()
+            console.log("This has been removed");
+            
+          } else {
+            ref.current.srcObject = stream
+          }
         })
-    }, []);
+      
+    }, [props]);
 
     return (
-        <StyledVideo playsInline autoPlay ref={ref} />
+        <StyledVideo muted={props.isAudio} playsInline autoPlay ref={ref} />
     );
 }
 
@@ -41,14 +56,18 @@ const Video = (props) => {
 // };
 
 
-export default function VoiceChat({roomID}) {
+export default function VoiceChat({roomID, user}) {
 
   const { socket } = useContext(ContextContainer);
 
   const [peers, setPeers] = useState([]);
+  const [mute, setMuted] = useState([]);
+  const [destroyID, setDestoryID] = useState("");
+  const [id, setID] = useState("");
+  
   const socketRef = useRef();
   const userVideo = useRef()
-  const peersRef = useRef([])
+  const [peersRef, setRef] = useState([]);
 
     
 
@@ -56,13 +75,30 @@ export default function VoiceChat({roomID}) {
     
     if (socket != null) {
       socketRef.current = socket
-      navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then(stream => {
-        
+      
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+        // userVideo.current.srcObject = stream;
 
-        socketRef.current.emit("join room", roomID);
+        
+       
+        socketRef.current.emit("join room", ({roomID:roomID, user:user}));
+
+        
+   
 
         //Get back the array peers in this room
-        socketRef.current.on("all users", users => {
+        socketRef.current.on("muted user", muted => {     
+          console.log("Muted user: " + muted);      
+
+          setMuted(muted)
+        })
+
+              
+
+   
+
+        //Get back the array peers in this room
+        socketRef.current.on("all users", (users) => {
           const peers = []
 
           console.log(users);
@@ -72,15 +108,21 @@ export default function VoiceChat({roomID}) {
             //Create the peer
             const peer = createPeer(userID, socketRef.current.id, stream);
 
+            
+
+            
+
             //To keep track of the peers
-            peersRef.current.push({
+            peersRef.push({
               peerID: userID,
               peer,
             })
+            setRef(peersRef)
 
             //For rendering the video
             peers.push(peer)
             setPeers(peers)
+            
 
           });
         })
@@ -90,18 +132,20 @@ export default function VoiceChat({roomID}) {
           //Add the peer
           const peer = addPeer(payload.signal, payload.callerID, stream)
 
+          console.log("User joined");
 
-          peersRef.current.push({
-            peerID: payload.callerID,
-            peer,
-          })
-
+            setRef(peersRef => [...peersRef, {
+              peerID: payload.callerID,
+              peer,
+            }])
           //Update to be render the video again
           setPeers(users => [...users, peer])
+          
         })
             
         socketRef.current.on("receiving returned signal", payload => {
-          const item = peersRef.current.find(p => p.peerID === payload.id);
+          console.log("reciveing signal");
+          const item = peersRef.find(p => p.peerID === payload.id);
           item.peer.signal(payload.signal)
         });
         
@@ -115,6 +159,35 @@ export default function VoiceChat({roomID}) {
   }, [socket])
 
 
+  useEffect(() => {
+
+    // console.log(mute);
+    console.log("Peer ref" + peersRef);
+
+
+    if(socket != null){
+
+      socket.on("remove socket", id => {     
+        console.log("Remove socket id = " + id);
+
+
+        peersRef.forEach((payload) => {
+          if (payload.peerID == id) {
+            console.log("Destroying peer " + payload.peerID);
+            payload.peer.destroy()
+          }
+          
+        })
+
+        setDestoryID(id)
+      })
+    }
+
+    
+
+  }, [peersRef, socket])
+
+
   //Create peer 
   function createPeer(userToSignal, callerID, stream) {
     const peer = new Peer({
@@ -123,11 +196,12 @@ export default function VoiceChat({roomID}) {
       stream,
     });
 
+
     // This is called instantly upon craetion of the peer
     peer.on("signal", signal => {
+      console.log("Sending signal");
       socketRef.current.emit("sending signal", {userToSignal, callerID, signal})
     });
-
 
     return peer;
 
@@ -142,6 +216,8 @@ export default function VoiceChat({roomID}) {
       stream,
     });
 
+    console.log("Peer id: " + peer.id);
+
     //This will be triggered when someone want to make contact when accepted than it will be send 
     peer.on("signal", signal => {
       console.log("Getting signal from connection");
@@ -151,6 +227,7 @@ export default function VoiceChat({roomID}) {
     //This will triggert the signal ☝️
     peer.signal(incomingSignal)
 
+
     return peer;
 
   }
@@ -158,17 +235,24 @@ export default function VoiceChat({roomID}) {
   
 
 
-
-
+  // return <> </>
   return (
-    <Container>
-        <StyledVideo muted ref={userVideo} autoPlay playsInline />
-        {peers.map((peer, index) => {
-            return (
-                <Video key={index} peer={peer} />
-            );
+    
+  
+      <Container>
+          
+          <StyledVideo muted ref={userVideo} autoPlay playsInline />
+          <div mute={mute} destroy={destroyID}>
+          {peersRef.map((payload, index) => {
+              return payload.peerID != destroyID ?  <Video key={payload.peerID} isAudio={mute.includes(payload.peerID)} peer={payload.peer} destroy={destroyID} id={payload.peerID}/> : <div key={index}></div>
+
+              
+          
         })}
-    </Container>
+        </div>
+      </Container>
+    
+    
 );
     
 }
