@@ -11,27 +11,17 @@ var Webcam = require("node-webcam");
 
 
 
-const bodyParser = require('body-parser');
-const cors = require('cors');
+// const bodyParser = require('body-parser');
+// const cors = require('cors');
 
-app.use(cors());
-app.options('*', cors())
+// app.use(cors());
 
-// Add Access Control Allow Origin headers
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    next();
-});
-
-// Configuring body parser middleware
-// app.use(bodyParser.urlencoded({
-//     extended: false
-// }));
+// // Configuring body parser middleware
+// app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(bodyParser.json());
+
+// import register from './pages/api/register'
+
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
@@ -58,7 +48,7 @@ io.on('connection', socket => {
     socket.on('joinRoom', ({ roomID, user }) => {
         console.log(user);
         console.log(`${user._id} has joined the ${roomID}`);
-        socket.emit("message", "Welcome to Streamic.");
+        socket.emit("message", "Welcome to Streamic. " + socket.id);
         socket.join(roomID);
 
         userToRoom[user._id] = true
@@ -173,7 +163,10 @@ io.on('connection', socket => {
 
             try {
                 //Create a new room object
-                inRoom[roomID] = [user];
+                inRoom[roomID] = [{
+                    ...user,
+                    sid: socket.id
+                }];
 
 
             } catch (error) {
@@ -225,6 +218,11 @@ io.on('connection', socket => {
     // });
 
 
+    socket.on("socket room", ({ roomID, user }) => {
+        socketToRoom[socket.id] = roomID;
+        console.log("🚀 ~ file: server.js ~ line 185 ~ socket.on ~ socketToRoom", socketToRoom)
+    })
+
 
     socket.on("join room", ({ roomID, user }) => {
         //Check if the room exist
@@ -236,8 +234,6 @@ io.on('connection', socket => {
             //Create a new room object
             users[roomID] = [socket.id];
         }
-
-        socketToRoom[socket.id] = roomID;
 
         //Get the users in the room
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
@@ -262,8 +258,11 @@ io.on('connection', socket => {
     socket.on('disconnect', () => {
         console.log(`${socket.id} has left the room`);
 
+
         //For voice 
         const roomID = socketToRoom[socket.id];
+
+        console.log("🚀 ~ file: server.js ~ line 222 ~ socket.on ~ roomID", roomID)
         let room = users[roomID];
         if (room) {
             room = room.filter(id => id !== socket.id);
@@ -274,6 +273,7 @@ io.on('connection', socket => {
         if (rooms) {
             rooms = rooms.filter(user => user.sid !== socket.id);
             inRoom[roomID] = rooms;
+            console.log("🚀 ~ file: server.js ~ line 232 ~ socket.on ~ rooms", rooms)
         }
 
         let mute = muted[roomID];

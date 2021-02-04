@@ -71,13 +71,14 @@ export default function VoiceChat({roomID, user}) {
     if (socket != null) {
       socketRef.current = socket;
 
+      socketRef.current.emit("socket room", { roomID: roomID, user: user });
       //Get list of cameras
       navigator.getMedia = ( navigator.getUserMedia || // use the proper vendor prefix
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia ||
         navigator.msGetUserMedia);
 
-      
+        
 
         navigator.getMedia(
           { video: true },
@@ -116,8 +117,9 @@ export default function VoiceChat({roomID, user}) {
 
 
   function streaming(stream) {
-
+    
     socketRef.current.emit("join room", { roomID: roomID, user: user });
+    
 
     //Get back the array peers in this room
     socketRef.current.on("muted user", (muted) => {
@@ -258,7 +260,7 @@ export default function VoiceChat({roomID, user}) {
   
       <Container>
           
-          <StyledVideo muted ref={userVideo} autoPlay playsInline />
+          {/* <StyledVideo muted ref={userVideo} autoPlay playsInline /> */}
           <div mute={mute} destroy={destroyID}>
           {peersRef.map((payload, index) => {
               return payload.peerID != destroyID ?  <Video key={payload.peerID} isAudio={mute.includes(payload.peerID)} peer={payload.peer} destroy={destroyID} id={payload.peerID}/> : <div key={index}></div>
