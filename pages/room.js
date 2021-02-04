@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import PlayerHeader from "../components/_App/PlayerHeader"
 import { Container } from "semantic-ui-react";
-import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
-import ChatBox from '../components/Chat/Chatbox';
-import VoiceChat from '../components/Voice/voiceChat';
 import io from 'socket.io-client';
 import Router from 'next/router'
+import ChatBox from '../components/Chat/Chatbox';
+import VoiceChat from '../components/Voice/voiceChat';
+import baseUrl from '../utils/baseUrl';
+import PlayerHeader from "../components/_App/PlayerHeader"
 
 
 // Create context container in a global scope so it can be visible by every component
@@ -41,10 +41,12 @@ function Room(props) {
             socket.on("retrieve usersToRoom", (room) => {
                 if (room) {
                     Router.push('/index')
+                } else {
+                    socket.emit("joinRoom", ({roomID:props.roomID, user:props.user}));
                 }
             })
         
-            socket.emit("joinRoom", ({roomID:props.roomID, user:props.user}));
+            
 
             
 

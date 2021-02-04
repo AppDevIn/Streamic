@@ -7,6 +7,8 @@ const baseUrl = process.env.NODE_ENV === "production" ?
     'http://localhost:3000';
 const axios = require('axios').default;
 require('dotenv').config();
+var Webcam = require("node-webcam");
+
 
 
 // const bodyParser = require('body-parser');
@@ -38,6 +40,8 @@ const userToRoom = {};
 const socketToUser = {};
 
 
+
+
 io.on('connection', socket => {
     socket.on('joinRoom', ({ roomID, user }) => {
         console.log(user);
@@ -52,6 +56,9 @@ io.on('connection', socket => {
 
 
     });
+
+
+
 
 
     socket.on("usersToRoom", (user) => {
@@ -229,7 +236,10 @@ io.on('connection', socket => {
             inRoom[roomID] = mute;
         }
 
+
+
         let uid = socketToUser[socket.id]
+        console.log("🚀 ~ file: server.js ~ line 239 ~ socket.on ~ socketToUser", socketToUser)
         if (uid) {
             if (userToRoom[uid]) {
                 userToRoom[uid] = false

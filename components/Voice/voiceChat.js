@@ -62,102 +62,118 @@ export default function VoiceChat({roomID, user}) {
   const [mute, setMuted] = useState([]);
   const [destroyID, setDestoryID] = useState("");
   const [id, setID] = useState("");
-  
+
   const socketRef = useRef();
-  const userVideo = useRef()
+  const userVideo = useRef();
   const [peersRef, setRef] = useState([]);
 
-    
-
   useEffect(() => {
-
-    
-    
-    
     if (socket != null) {
-      socketRef.current = socket
-      
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-        // userVideo.current.srcObject = stream;
+      socketRef.current = socket;
 
-        
-       
-        socketRef.current.emit("join room", ({roomID:roomID, user:user}));
-
-        
-   
-
-        //Get back the array peers in this room
-        socketRef.current.on("muted user", muted => {     
-          console.log("Muted user: " + muted);      
-
-          setMuted(muted)
-        })
-
-              
-
-   
-
-        //Get back the array peers in this room
-        socketRef.current.on("all users", (users) => {
-          const peers = []
-
-          console.log(users);
-
-          users.forEach(userID => {
-            console.log("User id, ", userID);
-            //Create the peer
-            const peer = createPeer(userID, socketRef.current.id, stream);
-
-            
-
-            
-
-            //To keep track of the peers
-            peersRef.push({
-              peerID: userID,
-              peer,
-            })
-            setRef(peersRef)
-
-            //For rendering the video
-            peers.push(peer)
-            setPeers(peers)
-            
-
-          });
-        })
-
-        //For those that is already in the room
-        socketRef.current.on("user joined", payload => {
-          //Add the peer
-          const peer = addPeer(payload.signal, payload.callerID, stream)
-
-          console.log("User joined");
-
-            setRef(peersRef => [...peersRef, {
-              peerID: payload.callerID,
-              peer,
-            }])
-          //Update to be render the video again
-          setPeers(users => [...users, peer])
-          
-        })
-            
-        socketRef.current.on("receiving returned signal", payload => {
-          console.log("reciveing signal");
-          const item = peersRef.find(p => p.peerID === payload.id);
-          item.peer.signal(payload.signal)
-        });
-        
-        
-      });
+      //Get list of cameras
+      navigator.getMedia = ( navigator.getUserMedia || // use the proper vendor prefix
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia);
 
       
+
+        navigator.getMedia(
+          { video: true },
+          function () {
+            console.log(
+              "🚀 ~ file: voiceChat.js ~ line 79 ~ navigator.getMedia ~ video",
+              "Camera avaiable"
+            );
+            navigator.mediaDevices
+              .getUserMedia({ video: true, audio: true })
+              .then((stream) => {
+                // userVideo.current.srcObject = stream;
+
+                streaming(stream);
+              });
+          },
+          function () {
+            console.log(
+              "🚀 ~ file: voiceChat.js ~ line 79 ~ navigator.getMedia ~ video",
+              "Camera Unavailable"
+            );
+            navigator.mediaDevices
+              .getUserMedia({ video: false, audio: true })
+              .then((stream) => {
+                // userVideo.current.srcObject = stream;
+                streaming(stream);
+              });
+          }
+        );
+   
+
+
+ 
     }
+  }, [socket]);
 
 
-  }, [socket])
+  function streaming(stream) {
+
+    socketRef.current.emit("join room", { roomID: roomID, user: user });
+
+    //Get back the array peers in this room
+    socketRef.current.on("muted user", (muted) => {
+      console.log("Muted user: " + muted);
+
+      setMuted(muted);
+    });
+
+    //Get back the array peers in this room
+    socketRef.current.on("all users", (users) => {
+      const peers = [];
+
+      console.log(users);
+
+      users.forEach((userID) => {
+        console.log("User id, ", userID);
+        //Create the peer
+        const peer = createPeer(userID, socketRef.current.id, stream);
+
+        //To keep track of the peers
+        peersRef.push({
+          peerID: userID,
+          peer,
+        });
+        setRef(peersRef);
+
+        //For rendering the video
+        peers.push(peer);
+        setPeers(peers);
+      });
+    });
+
+    //For those that is already in the room
+    socketRef.current.on("user joined", (payload) => {
+      //Add the peer
+      const peer = addPeer(payload.signal, payload.callerID, stream);
+
+      console.log("User joined");
+
+      setRef((peersRef) => [
+        ...peersRef,
+        {
+          peerID: payload.callerID,
+          peer,
+        },
+      ]);
+      //Update to be render the video again
+      setPeers((users) => [...users, peer]);
+    });
+
+    socketRef.current.on("receiving returned signal", (payload) => {
+      console.log("reciveing signal");
+      const item = peersRef.find((p) => p.peerID === payload.id);
+      item.peer.signal(payload.signal);
+    });
+  }
 
 
   useEffect(() => {
