@@ -11,33 +11,21 @@ var Webcam = require("node-webcam");
 
 
 
-const bodyParser = require('body-parser');
-const cors = require('cors');
+// const bodyParser = require('body-parser');
+// const cors = require('cors');
 
-app.use(cors());
-app.options('*', cors())
+// app.use(cors());
 
-// Add Access Control Allow Origin headers
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    next();
-});
-
-// Configuring body parser middleware
-// app.use(bodyParser.urlencoded({
-//     extended: false
-// }));
+// // Configuring body parser middleware
+// app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(bodyParser.json());
+
+// import register from './pages/api/register'
+
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
-const nextApp = next({
-    dev
-})
+const nextApp = next({ dev })
 const nextHandler = nextApp.getRequestHandler()
 
 
@@ -58,7 +46,7 @@ io.on('connection', socket => {
     socket.on('joinRoom', ({ roomID, user }) => {
         console.log(user);
         console.log(`${user._id} has joined the ${roomID}`);
-        socket.emit("message", "Welcome to Streamic.");
+        socket.emit("message", "Welcome to Streamic. " + socket.id);
         socket.join(roomID);
 
         userToRoom[user._id] = true
@@ -77,6 +65,7 @@ io.on('connection', socket => {
 
         console.log("id of user " + user);
         let room = userToRoom[user]
+
         console.log("retrieve the room " + room);
 
         io.to(socket.id).emit("retrieve usersToRoom", userToRoom[user])
@@ -87,13 +76,9 @@ io.on('connection', socket => {
         io.to(roomID).emit('streaming', data);
         if (data.isVideoChanged) {
             // update the video playing for the room
-
             async function updateRoomWatching() {
                 const url = `${baseUrl}/api/room?type=1`
-                const payload = {
-                    roomID,
-                    data
-                }
+                const payload = { roomID, data }
                 const response = await axios.post(url, payload)
             }
 
@@ -105,27 +90,6 @@ io.on('connection', socket => {
         socket.broadcast.to(roomID).emit('existingUser');
     });
 
-    socket.on('resetURLs', ({ roomID, url, info, update }) => {
-        async function resetURL() {
-            const request_url = `${baseUrl}/api/room?type=2`
-            const payload = {
-                roomID,
-                url,
-                info
-            }
-            const response = await axios.post(request_url, payload)
-        }
-
-        resetURL()
-
-        const data = {}
-        data["resetQueue"] = true
-        data["url"] = url
-        data["update"] = true
-
-        io.to(roomID).emit('streaming', data)
-    })
-
     socket.on('sendMessage', (data) => {
         const { message, roomID } = data
         console.log("Message reveived from " + roomID);
@@ -133,18 +97,12 @@ io.on('connection', socket => {
     })
 
     socket.on("sending signal", payload => {
-        io.to(payload.userToSignal).emit('user joined', {
-            signal: payload.signal,
-            callerID: payload.callerID
-        });
+        io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
     });
 
     socket.on("returning signal", payload => {
 
-        io.to(payload.callerID).emit('receiving returned signal', {
-            signal: payload.signal,
-            id: socket.id
-        });
+        io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
     });
 
 
@@ -158,10 +116,7 @@ io.on('connection', socket => {
 
             try {
                 //Add the room
-                inRoom[roomID].push({
-                    ...user,
-                    sid: socket.id
-                });
+                inRoom[roomID].push({...user, sid: socket.id });
                 console.log(`User ${user.username}`);
 
             } catch (error) {
@@ -173,7 +128,7 @@ io.on('connection', socket => {
 
             try {
                 //Create a new room object
-                inRoom[roomID] = [user];
+                inRoom[roomID] = [{...user, sid: socket.id }];
 
 
             } catch (error) {
@@ -238,6 +193,7 @@ io.on('connection', socket => {
         }
 
         socketToRoom[socket.id] = roomID;
+        console.log("🚀 ~ file: server.js ~ line 196 ~ socket.on ~ socketToRoom", socketToRoom)
 
         //Get the users in the room
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
@@ -262,8 +218,11 @@ io.on('connection', socket => {
     socket.on('disconnect', () => {
         console.log(`${socket.id} has left the room`);
 
+
         //For voice 
         const roomID = socketToRoom[socket.id];
+
+        console.log("🚀 ~ file: server.js ~ line 222 ~ socket.on ~ roomID", roomID)
         let room = users[roomID];
         if (room) {
             room = room.filter(id => id !== socket.id);
@@ -274,6 +233,7 @@ io.on('connection', socket => {
         if (rooms) {
             rooms = rooms.filter(user => user.sid !== socket.id);
             inRoom[roomID] = rooms;
+            console.log("🚀 ~ file: server.js ~ line 232 ~ socket.on ~ rooms", rooms)
         }
 
         let mute = muted[roomID];
@@ -315,8 +275,7 @@ nextApp.prepare().then(() => {
 
 
     server.listen(port, (err) => {
-        if (err)
-            throw err
+        if (err) throw err
         console.log(`> Ready on http://localhost:${port}`)
     })
 })

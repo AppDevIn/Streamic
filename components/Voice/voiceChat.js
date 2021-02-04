@@ -77,7 +77,7 @@ export default function VoiceChat({roomID, user}) {
         navigator.mozGetUserMedia ||
         navigator.msGetUserMedia);
 
-      
+        socketRef.current.emit("join room", { roomID: roomID, user: user });
 
         navigator.getMedia(
           { video: true },
@@ -117,7 +117,7 @@ export default function VoiceChat({roomID, user}) {
 
   function streaming(stream) {
 
-    socketRef.current.emit("join room", { roomID: roomID, user: user });
+    
 
     //Get back the array peers in this room
     socketRef.current.on("muted user", (muted) => {
