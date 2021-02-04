@@ -3,7 +3,8 @@ body {
     font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
-.iframe-container {
+
+/* .iframe-container {
     position: relative;
     width: 90%;
     padding-bottom: 50%;
@@ -22,6 +23,19 @@ body {
     pointer-events: none;
     max-width: 1000px;
     position: relative;
+} */
+
+.player-wrapper {
+    position: relative;
+    /* Player ratio: 100 / (1280 / 720) */
+    padding-top: 56.25%
+}
+
+.react-player {
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .left {
@@ -45,7 +59,7 @@ body {
 }
 
 #progress {
-    width: 90%;
+    width: 100%;
     margin-top: 10px;
     height: 12px;
     border: 1px solid black;
@@ -69,7 +83,11 @@ body {
 }
 
 #play,
-#pause {
+#pause,
+#fullScreen,
+#previous,
+#next,
+#reset {
     background-color: grey;
     border: none;
     color: rgb(214, 216, 218);
@@ -152,6 +170,10 @@ body {
     }
 }
 
+.ui.label {
+    font-size: 1.5rem !important;
+}
+
 .cardDeck {
     width: 90%;
 }
@@ -203,4 +225,15 @@ select:focus {
     .left {
         width: 70%;
     }
+}
+
+div.scroll {
+    height: 600px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+.videoCardCenter{ 
+    position: absolute;
+    top: 50%;
 }

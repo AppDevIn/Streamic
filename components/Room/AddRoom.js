@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Header, Image, Modal, Form } from 'semantic-ui-react'
+import { Button, Divider, Image, Modal, Form } from 'semantic-ui-react'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add';
 import baseUrl from '../../utils/baseUrl'
@@ -15,18 +15,24 @@ const INITIAL_ROOM = {
     file: ""
 }
 
-export default function AddRoom({ user }) {
+export default function AddRoom({user}) {
     const [open, setOpen] = React.useState(false)
 
     const [room, setName] = React.useState(INITIAL_ROOM);
 
     function handleChange(event) {
-        const { name, value } = event.target
+        const {name, value} = event.target
         if (name == 'file') {
             let file = event.target.files[0]
-            setName((prevState) => ({ ...prevState, [name]: file }))
+            setName((prevState) => ({
+                ...prevState,
+                [name]: file
+            }))
         } else
-            setName((prevState) => ({ ...prevState, [name]: value }))
+            setName((prevState) => ({
+                ...prevState,
+                [name]: value
+            }))
         console.log(room)
     }
 
@@ -52,7 +58,9 @@ export default function AddRoom({ user }) {
                 console.log("imageUrl", imageUrl)
                 const url = `${baseUrl}/api/room`
                 const payload = {
-                    name: room.name, file: imageUrl, _id: user._id
+                    name: room.name,
+                    file: imageUrl,
+                    _id: user._id
                 }
                 await axios.post(url, payload)
                 console.log(room)
@@ -74,47 +82,27 @@ export default function AddRoom({ user }) {
     // }, [user])
 
     return (
-        <Modal
-            onClose={() => setOpen(false)}
-            onOpen={() => setOpen(true)}
-            open={open}
-            size={'tiny'}
-            trigger={<Fab color="primary" aria-label="add" variant="extended" className="float-right"> <AddIcon /> Add Room </Fab>}
-        >
-            <Modal.Header>Create a room</Modal.Header>
-            <Modal.Content>
-                <Form.Field>
-                    <Form.Input
-                        onChange={handleChange}
-                        fluid
-                        iconPosition='left'
-                        placeholder='Room Name'
-                        type="Email"
-                        name="name"
-                    />
-                    <Form.Input
-                        onChange={handleChange}
-                        fluid
-                        iconPosition='left'
-                        placeholder='Room Name'
-                        type="file"
-                        name="file"
-                    />
-
-                </Form.Field>
-            </Modal.Content>
-            <Modal.Actions>
-                <Button color='black' onClick={() => setOpen(false)}>
-                    Cancel
-                </Button>
-                <Button
-                    content="Create"
-                    labelPosition='right'
-                    icon='checkmark'
-                    onClick={handleAddRoom}
-                    positive
-                />
-            </Modal.Actions>
+        <Modal onClose={ () => setOpen(false) } onOpen={ () => setOpen(true) } open={ open } size={ 'tiny' } trigger={ <Fab color="primary" aria-label="add" variant="extended" className="float-right">
+                                                                                                                 <AddIcon /> Add Room </Fab> }>
+          <Modal.Header>Create a room</Modal.Header>
+          <Modal.Content>
+            <Form.Field>
+              <Form.Input onChange={ handleChange } fluid iconPosition='left' placeholder='Room Name' type="Email" name="name" />
+              <Form.Input onChange={ handleChange } fluid iconPosition='left' placeholder='Room Name' type="file" name="file" />
+            </Form.Field>
+            <Divider hidden/>
+            <Divider hidden/>
+          </Modal.Content>
+          <Modal.Actions>
+            <Divider hidden/>
+            <Divider hidden/>
+            <Button.Group floated='right'>
+              <Button color='black' onClick={ () => setOpen(false) }>
+                Cancel
+              </Button>
+              <Button content="Create" labelPosition='right' icon='checkmark' onClick={ handleAddRoom } positive />
+            </Button.Group>
+          </Modal.Actions>
         </Modal>
     )
 }
