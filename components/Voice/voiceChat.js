@@ -130,6 +130,7 @@ export default function VoiceChat({roomID, user}) {
 
     //Get back the array peers in this room
     socketRef.current.on("all users", (users) => {
+      console.log("🚀 ~ file: voiceChat.js ~ line 133 ~ socketRef.current.on ~ users", users)
       const peers = [];
 
       console.log(users);
@@ -261,7 +262,7 @@ export default function VoiceChat({roomID, user}) {
       <Container>
           
           {/* <StyledVideo muted ref={userVideo} autoPlay playsInline /> */}
-          <div mute={mute} destroy={destroyID}>
+          <div mute={mute} peerRef={peersRef} destroy={destroyID}>
           {peersRef.map((payload, index) => {
               return payload.peerID != destroyID ?  <Video key={payload.peerID} isAudio={mute.includes(payload.peerID)} peer={payload.peer} destroy={destroyID} id={payload.peerID}/> : <div key={index}></div>
 
