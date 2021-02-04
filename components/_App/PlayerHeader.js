@@ -1,6 +1,8 @@
 import React, {useState, useContext} from 'react';
-import {Navbar, Form, FormControl, Button, Nav} from 'react-bootstrap';
+import {Navbar, Form, FormControl, Nav} from 'react-bootstrap';
 import {ContextContainer} from '../../pages/room';
+import { removeCookie } from '../../utils/auth'
+import { Button } from 'semantic-ui-react'
 
 function playerHeader(){
 
@@ -18,6 +20,12 @@ function playerHeader(){
         event.preventDefault();
         setLink(event.target.value);
     }
+
+    function logout() {
+        console.log("Logging out");
+    
+        removeCookie("token")
+      }
 
     return <>
     <Navbar className="playerNavbar" variant="dark">
@@ -37,6 +45,16 @@ function playerHeader(){
             <FormControl type="text" placeholder="Search" className="mr-sm-2" id="searchInput" value={link} onChange={(e) => changeLink(e)} />
             <Button id="searchBtn" type="submit"><span className="glyphicon glyphicon-search"></span></Button>
         </Form>
+
+        <Nav className="justify-content-end">
+          <Button color='blue' as='a' href="/profile" >
+            Profile Page
+          </Button>
+
+          <Button color='red' onClick={() => logout()} >
+            Logout
+          </Button>
+        </Nav >
 
     </Navbar>
   </>

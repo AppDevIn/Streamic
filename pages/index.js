@@ -9,7 +9,6 @@ import { Button, Icon } from 'semantic-ui-react'
 import mongoose from 'mongoose'
 import AddRoom from '../components/Room/AddRoom'
 import Layout from '../components/Index/Layout'
-import { removeCookie } from '../utils/auth'
 
 import JoinRoom from '../components/Room/JoinRoom'
 
@@ -28,7 +27,7 @@ export default function Home({ rooms, user }) {
 
 
   useEffect(() => {
-
+    document.body.style.backgroundColor = "#242A2E";
   }, [])
 
   async function handleAddRoom(event) {
@@ -51,13 +50,6 @@ export default function Home({ rooms, user }) {
     }
   }
 
-  function logout() {
-    console.log("Logging out");
-
-    removeCookie("token")
-  }
-
-
 
   async function handleJoinRoom(event) {
     event.preventDefault();
@@ -76,14 +68,6 @@ export default function Home({ rooms, user }) {
         <link rel="stylesheet" type="text/css" href="../static/room.css" />
       </Head>
       <Layout>
-        <Button color='red' onClick={() => logout()} >
-          <Icon name='sign-out' />
-          Logout
-        </Button>
-        <Button color='blue' as='a' href="/profile" >
-          <Icon name='address card' />
-          Profile Page
-        </Button>
         <RoomList rooms={rooms} />
         <JoinRoom user={user}></JoinRoom>
         <AddRoom user={user} />
