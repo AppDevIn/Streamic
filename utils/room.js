@@ -77,7 +77,7 @@ async function getTwitchVideoInfo(url) {
             console.log(result)
             title = result.data.data[0].title
             author = result.data.data[0].user_name
-            thumbnail = result.data.data[0]["thumbnail_url"]
+            thumbnail = `${result.data.data[0]["thumbnail_url"].split('%{width}')[0]}640x360.jpg`
         })
         .catch(error => {
             console.log(error)
