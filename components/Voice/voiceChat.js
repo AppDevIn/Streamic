@@ -16,8 +16,8 @@ const Container = styled.div`
 `;
 
 const StyledVideo = styled.video`
-    height: 100%;
-    width: 100%;
+    height: 50%;
+    width: 50%;
 `;
 
 const Video = (props) => {
@@ -190,13 +190,15 @@ export default function VoiceChat({roomID, user}) {
         console.log("Remove socket id = " + id);
 
 
-        peersRef.forEach((payload) => {
+        peersRef.forEach((payload, index) => {
           if (payload.peerID == id) {
             console.log("Destroying peer " + payload.peerID);
             payload.peer.destroy()
           }
           
         })
+
+        setRef(peersRef.filter(payload => payload.peerID !== destroyID))
 
         setDestoryID(id)
       })
