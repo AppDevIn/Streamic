@@ -5,6 +5,7 @@ import axios from 'axios'
 import { handleLogin, handleRegister } from '../utils/auth'
 import Head from 'next/head'
 import Layout from '../components/Register/Layout'
+import { GoogleLogin } from 'react-google-login';
 
 
 const INITIAL_USER = {
@@ -80,6 +81,11 @@ export default function Login(props) {
     }
   }
 
+  const responseGoogle = (response) => {
+    console.log(response);
+  }
+  
+
 
   return (
     <>
@@ -124,6 +130,14 @@ export default function Login(props) {
             </Form>
           </Grid.Column>
         </Grid>
+        <GoogleLogin
+          clientId="923560120356-o0qjo2jhb2j0a66l04r1ibb7qm3rseq0.apps.googleusercontent.com"
+          buttonText="Login"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+          cookiePolicy={'single_host_origin'}
+        />,
+  
       </Layout>
 
     </>
