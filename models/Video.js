@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
 
 const videoSchema = mongoose.Schema({
-    videoID: {
+    videoURL: {
         type: String,
-        default: "VHJd6QwU91A"
+        default: "https://www.youtube.com/watch?v=VHJd6QwU91A&ab_channel=PlayStation"
     },
     videoName: {
         type: String,
@@ -12,10 +12,6 @@ const videoSchema = mongoose.Schema({
     thumbNail: {
         type: String,
         default: "https://i.ytimg.com/vi/VHJd6QwU91A/mqdefault.jpg"
-    },
-    sourceType: {
-        type: String,
-        default: "Youtube"
     }
 })
 

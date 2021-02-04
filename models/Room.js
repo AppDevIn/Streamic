@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import shortid from 'shortid'
 
-const { String, Boolean } = mongoose.Schema.Types
+const {String, Boolean} = mongoose.Schema.Types
 
 const roomSchema = mongoose.Schema({
     roomID: {
@@ -10,15 +10,34 @@ const roomSchema = mongoose.Schema({
     },
     roomName: String,
     isTemporary: Boolean,
+    playingIndex: {
+        type: Number,
+        default: 0
+    },
     mediaUrl: {
         type: String,
         default: "https://react.semantic-ui.com/images/avatar/large/matthew.png"
     },
-    admins: [{ type: mongoose.Schema.Types.ObjectID, ref: "User" }],
-    memebers: [{ type: mongoose.Schema.Types.ObjectID, ref: "User" }],
-    Messages: [{ type: mongoose.Schema.Types.ObjectID, ref: "Message" }],
-    Playing: { type: mongoose.Schema.Types.ObjectID, ref: "Video" },
-    Watchers: [{ type: mongoose.Schema.Types.ObjectID, ref: "User" }],
+    admins: [{
+        type: mongoose.Schema.Types.ObjectID,
+        ref: "User"
+    }],
+    memebers: [{
+        type: mongoose.Schema.Types.ObjectID,
+        ref: "User"
+    }],
+    Messages: [{
+        type: mongoose.Schema.Types.ObjectID,
+        ref: "Message"
+    }],
+    Playing: [{
+        type: mongoose.Schema.Types.ObjectID,
+        ref: "Video"
+    }],
+    Watchers: [{
+        type: mongoose.Schema.Types.ObjectID,
+        ref: "User"
+    }],
 })
 
 
