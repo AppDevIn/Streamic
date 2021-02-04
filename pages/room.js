@@ -16,6 +16,7 @@ function Room(props) {
 
     const [parent_link, updateLink] = useState("");
     const [socket, setSocket] = useState(null);
+    const [existingUser, setexistingUser] = useState(true);
 
     useEffect(() => {
         document.body.style.backgroundColor = "#242A2E";
@@ -43,6 +44,7 @@ function Room(props) {
                     Router.push('/index')
                 } else {
                     socket.emit("joinRoom", ({roomID:props.roomID, user:props.user}));
+                    setexistingUser(false)
                 }
             })
         
@@ -58,7 +60,7 @@ function Room(props) {
         }
     }, [socket])
 
-    return <ContextContainer.Provider value={{ parent_link, updateLink, socket, setSocket }}>
+    return existingUser ? <></> : <ContextContainer.Provider value={{ parent_link, updateLink, socket, setSocket }}>
         <PlayerHeader />
         <Container fluid className="mt-5 ct">
             <ChatBox {...props} />

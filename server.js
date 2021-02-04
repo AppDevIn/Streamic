@@ -69,6 +69,7 @@ io.on('connection', socket => {
         console.log("retrieve the room " + room);
 
         io.to(socket.id).emit("retrieve usersToRoom", userToRoom[user])
+
     })
 
     socket.on('changes', ({ roomID, data }) => {
