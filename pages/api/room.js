@@ -221,8 +221,8 @@ async function updatePlayingIndex(req, res) {
 }
 
 async function insertNewVideo(req, res) {
-    const {roomID, url, data} = req.body
-    console.log(url, data)
+    const {roomID, url, result} = req.body
+
     const room = await Room.findOne({
         roomID: roomID
     });
@@ -233,11 +233,11 @@ async function insertNewVideo(req, res) {
 
     if (video == null) {
 
-        // const newVideo = await new Video({
-        //     videoURL: result.url,
-        //     videoName: result.title,
-        //     thumbnail: result.thumbnail
-        // }).save()
+        const newVideo = await new Video({
+            videoURL: result.url,
+            videoName: result.title,
+            thumbnail: result.thumbnail
+        }).save()
 
     }
 
