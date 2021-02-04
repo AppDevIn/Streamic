@@ -132,13 +132,24 @@ export default function Login(props) {
                 placeholder="Password"
                 type="password"
               />
+
               <GoogleLogin
                 clientId="923560120356-o0qjo2jhb2j0a66l04r1ibb7qm3rseq0.apps.googleusercontent.com"
+                render={(renderProps) => (
+                  <Button
+                    fluid
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                  >
+                    Login with Google
+                  </Button>
+                )}
                 buttonText="Login"
                 onSuccess={handleGoogleSubmit}
                 // onFailure={responseGoogle}
                 cookiePolicy={"single_host_origin"}
               />
+
               <Message>
                 <a href="/register">Sign Up</a> .{" "}
                 <a href="/forgotpassword">Forgot Password</a> .{" "}
