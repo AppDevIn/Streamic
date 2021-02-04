@@ -228,3 +228,8 @@ div.scroll {
     overflow-x: hidden;
     overflow-y: auto;
   }
+
+.videoCardCenter{ 
+    position: absolute;
+    top: 50%;
+}
