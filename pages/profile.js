@@ -21,8 +21,6 @@ const CLOUDINARY_UPLOAD_PRESET = 'midfduhh';
 export default function Profile({user}) {
     const INITIAL_User = {
         user : user,
-        confirmPassword: "",
-        newPassword: "",
         photo: ""
     }
     const [active,
@@ -58,21 +56,21 @@ export default function Profile({user}) {
         }
     }
 
-    async function changePassword(event) {
-        event.preventDefault();
-        try {
-            print(User.confirmPassword,user.password)
-            const url = `${baseUrl}/api/user`
-            const payload = { params: { password: user.password , _id: user._id } }
-            const response = await axios.get(url, payload)
-            setOpen(false)
-            Router.push("/")
-        } catch (error) {
-            console.log(error);
-        } finally { 
-            setOpen(false)
-        }
-    }
+    // async function changePassword(event) {
+    //     event.preventDefault();
+    //     try {
+    //         print(User.confirmPassword,user.password)
+    //         const url = `${baseUrl}/api/user`
+    //         const payload = { params: { password: user.password , _id: user._id } }
+    //         const response = await axios.get(url, payload)
+    //         setOpen(false)
+    //         Router.push("/")
+    //     } catch (error) {
+    //         console.log(error);
+    //     } finally { 
+    //         setOpen(false)
+    //     }
+    // }
 
     async function changeProfile(event) {
         event.preventDefault();
@@ -167,11 +165,11 @@ export default function Profile({user}) {
                         </Dimmer.Dimmable>
 
                 <Header as='h1'>{user.username}</Header>
-                <Header as='h1'>{user.email}</Header>
+                <Header as='h1'>{user.email.split("&")[0]}</Header>
                 <Divider hidden/>
                 <Divider hidden/> 
                 
-                <Modal
+                {/* <Modal
                     onClose={() => setOpen(false)}
                     onOpen={() => setOpen(true)}
                     open={open}
@@ -206,7 +204,7 @@ export default function Profile({user}) {
                             onClick={changePassword}
                             positive/>
                     </Modal.Actions>
-                </Modal>
+                </Modal> */}
 
            </Container>
         </>

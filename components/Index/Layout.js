@@ -1,8 +1,9 @@
 import Head from "next/head";
 import {Navbar, Nav} from 'react-bootstrap';
-import { Button } from 'semantic-ui-react'
+import { Button,Icon } from 'semantic-ui-react'
 import { removeCookie } from '../../utils/auth'
-
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 function Layout({ children }) {
 
   function logout() {
@@ -39,12 +40,14 @@ function Layout({ children }) {
 
         <span id="brandname">Streamic</span>
 
-        <Nav className="justify-content-end ml-auto">
-          <Button color='blue' as='a' href="/profile" >
+        <Nav className="justify-content-end ml-auto" text-align="center">
+          <Button color='blue' as='a' href="/profile" > 
+            <ExitToAppIcon/>
             Profile Page
           </Button>
 
           <Button color='red' onClick={() => logout()} >
+            <AccountCircleIcon/>
             Logout
           </Button>
         </Nav >
