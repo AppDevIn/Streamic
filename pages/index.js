@@ -71,8 +71,6 @@ export default function Home({ rooms, user }) {
         <RoomList rooms={rooms} />
         <JoinRoom user={user}></JoinRoom>
         <AddRoom user={user} />
-        {/* <AddRoom user={user}/> */}
-
       </Layout>
     </>
   )

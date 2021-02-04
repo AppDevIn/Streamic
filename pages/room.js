@@ -3,11 +3,13 @@ import PlayerHeader from "../components/_App/PlayerHeader"
 import Player from '../components/Player/Player'
 import VideoQueue from '../components/Player/VideoQueue'
 import { Container } from "semantic-ui-react";
-import baseUrl from '../utils/baseUrl';
 import axios from 'axios';
+import io from 'socket.io-client';
+import Router from 'next/router'
 import ChatBox from '../components/Chat/Chatbox';
 import VoiceChat from '../components/Voice/voiceChat';
-import io from 'socket.io-client';
+import baseUrl from '../utils/baseUrl';
+
 
 // Create context container in a global scope so it can be visible by every component
 const ContextContainer = React.createContext(null);
@@ -18,6 +20,7 @@ function Room(props) {
     const [socket, setSocket] = useState(null);
     const [urls, setUrls] = useState(props.fetchedURL)
     const [playingIndex, setPlayingIndex] = useState(props.roomInfo.playingIndex)
+    const [existingUser, setexistingUser] = useState(true);
 
     useEffect(() => {
         document.body.style.backgroundColor = "#242A2E";
@@ -26,18 +29,34 @@ function Room(props) {
         }
     }, [])
 
-    return <ContextContainer.Provider value={ { parent_link, updateLink, socket, setSocket, urls, setUrls, playingIndex, setPlayingIndex } }>
-             <PlayerHeader />
-             <Container fluid className="mt-5 ct">
-               <Player {...props}/>
-               <VideoQueue {...props} />
-               { /* <ChatBox {...props} /> */ }
-               { /* <VoiceChat {...props} /> */ }
-             </Container>
-           </ContextContainer.Provider>
+    useEffect(() => {
+        
+        if (socket != null) {
+
+            socket.emit("usersToRoom", props.user._id);
+
+            socket.on("retrieve usersToRoom", (room) => {
+                if (room) {
+                    Router.push('/index')
+                } else {
+                    socket.emit("joinRoom", ({roomID:props.roomID, user:props.user}));
+                    setexistingUser(false)
+                }
+            })
+        }
+    }, [socket])
+
+    return existingUser ? <></> : <ContextContainer.Provider value={ { parent_link, updateLink, socket, setSocket, urls, setUrls, playingIndex, setPlayingIndex } }>
+        <PlayerHeader />
+        <Container fluid className="mt-5 ct">
+            <Player {...props}/>
+            <ChatBox {...props} />
+        </Container>
+    </ContextContainer.Provider >   
 }
 
 Room.getInitialProps = async (ctx, user) => {
+    
     var url = `${baseUrl}/api/room`
     const payload = {
         params: {
@@ -62,6 +81,7 @@ Room.getInitialProps = async (ctx, user) => {
 
     return {
         roomInfo: responseRoom.data,
+        user:user,
         roomID: ctx.query._id,
         messages: responseMessage.data,
         fetchedURL: fetchedURL

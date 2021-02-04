@@ -33,6 +33,8 @@ class MyApp extends App {
         }
         const response = await axios.get(url, payload)
 
+        // console.log("Check user: " + response.data);
+
         pageProps.user = response.data
       } catch (error) {
         console.log("Error getting the user", error);

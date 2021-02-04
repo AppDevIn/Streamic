@@ -37,9 +37,8 @@ function PlayingVideoCard(props) {
   )
 }
 
-function VideoQueue({roomInfo}) {
+function VideoQueue({roomID}) {
 
-  const roomID = roomInfo.roomID
   const {socket, urls, setUrls, playingIndex, setPlayingIndex} = useContext(ContextContainer);
   const [videos, setVideos] = useState([])
 

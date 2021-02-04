@@ -1,7 +1,8 @@
-import User from '../../models/User'
-import connectDB from '../../utils/connectDb'
 import mongoose from 'mongoose'
 import jwt from "jsonwebtoken"
+import User from '../../models/User'
+import connectDB from '../../utils/connectDb'
+
 
 connectDB()
 export default async(req, res) => {

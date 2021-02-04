@@ -110,6 +110,8 @@ async function updateRoomWatching(req, res) {
 }
 
 
+
+
 async function handleGetRequest(req, res) {
     const {roomID, _id} = req.query;
 
