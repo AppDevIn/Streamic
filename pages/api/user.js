@@ -63,7 +63,7 @@ async function updatePassword(req, res) {
         }
     }
 
-    await user.updateOne(update)
+    return await user.updateOne(update)
 }
 
 async function updateProfilePic(req, res) {
@@ -73,6 +73,7 @@ async function updateProfilePic(req, res) {
     const user = await User.findOne({
         UID: userID
     });
+    
     console.log(user)
 
     const update = {
@@ -81,5 +82,5 @@ async function updateProfilePic(req, res) {
         }
     }
 
-    await user.updateOne(update)
+    return await user.updateOne(update)
 }
