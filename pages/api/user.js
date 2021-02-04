@@ -69,7 +69,7 @@ async function updateProfilePic(req, res) {
     }
 
     const success = await user.updateOne(update)
-    if(succes){ 
+    if(success){ 
         res.status(200).json(user)
     }else{
         res.status(404).json("user cannot be updated")
