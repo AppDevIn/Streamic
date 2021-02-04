@@ -1,7 +1,8 @@
-import User from '../../models/User'
-import connectDB from '../../utils/connectDb'
 import mongoose from 'mongoose'
 import jwt from "jsonwebtoken"
+import User from '../../models/User'
+import connectDB from '../../utils/connectDb'
+
 
 connectDB()
 export default async(req, res) => {
@@ -10,7 +11,15 @@ export default async(req, res) => {
             await getUser(req, res);
             break;
         case "POST":
-            await handlePostRequest(req, res);
+            const type = req.query.type
+            if(type == '1'){ 
+                await updatePassword(req,res);
+            }
+            else if (type == '2'){
+                await updateProfilePic(req,res);
+            }else{ 
+                await handlePostRequest(req, res);
+            }
             break;
         default:
             res.status(405).send(`Method ${req.method} not allowed`)
@@ -41,4 +50,29 @@ export async function getUser(req, res) {
         }
     }
 
+}
+
+async function updateProfilePic(req, res) {
+    const {userID , photo} = req.body
+    console.log(userID, photo)
+
+    const user = await User.findOne({
+        UID: userID
+    });
+    
+    console.log(user)
+
+    const update = {
+        $set: {
+            "photo" : photo
+        }
+    }
+
+    const success = await user.updateOne(update)
+    if(succes){ 
+        res.status(200).json(user)
+    }else{
+        res.status(404).json("user cannot be updated")
+    }
+    
 }

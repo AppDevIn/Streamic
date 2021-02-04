@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react'
-import { Button, Form, Comment, Header } from '../Player/node_modules/semantic-ui-react'
+import { Button, Form, Comment, Header } from 'semantic-ui-react'
 import moment from 'moment'
 
 export default function ChatBox({ messages }) {
@@ -13,6 +13,7 @@ export default function ChatBox({ messages }) {
 
 
         return messages.map(message => (
+            
             <Comment key={message._id} className="messages_content">
                 <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
                 <Comment.Content >
