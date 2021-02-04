@@ -139,6 +139,17 @@ io.on('connection', socket => {
 
 
     socket.on("get member", (roomID) => {
+
+        let publishArray = []
+        let restrict = []
+        inRoom[roomID].forEach(user => {
+            if (!restrict.includes(user.UID)) {
+                restrict.push(user.UID)
+                publishArray.push(user)
+            }
+
+        });
+
         io.to(roomID).emit("memeber join", inRoom[roomID])
     });
 
