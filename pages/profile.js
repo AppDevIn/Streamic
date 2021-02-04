@@ -103,7 +103,7 @@ export default function Profile({user}) {
                 await axios.post(url, payload)
                 Router.push("/")
                 setOpen(false)
-                Location.reload("/profile")
+                window.location.reload();
             } catch (err) {
                 console.error(err);
             }

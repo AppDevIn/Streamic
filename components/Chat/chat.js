@@ -25,11 +25,11 @@ export default function ChatBox({messages}) {
               <Comment.Avatar src={ message.authorID.photo } />
               <Comment.Content>
                 <span>
-                                                                                                                                                <Comment.Author as='a'>{ message.authorID.username }</Comment.Author>
-                                                                                                                                                <Comment.Metadata>
-                                                                                                                                                    <div>{ moment(message.dateTime).format("LT") }</div>
-                                                                                                                                                </Comment.Metadata>
-                                                                                                                                            </span>
+                                                                                                                                                                                                                                                <Comment.Author as='a'>{ message.authorID.username }</Comment.Author>
+                                                                                                                                                                                                                                                <Comment.Metadata>
+                                                                                                                                                                                                                                                    <div>{ moment(message.dateTime).format("LT") }</div>
+                                                                                                                                                                                                                                                </Comment.Metadata>
+                                                                                                                                                                                                                                            </span>
                 <Comment.Text>
                   { message.messageContent }
                 </Comment.Text>
