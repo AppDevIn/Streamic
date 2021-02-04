@@ -49,7 +49,7 @@ function Room(props) {
     return existingUser ? <></> : <ContextContainer.Provider value={ { parent_link, updateLink, socket, setSocket, urls, setUrls, playingIndex, setPlayingIndex } }>
         <PlayerHeader />
         <Container fluid className="mt-5 ct">
-            <Player {...props}/>
+            <Player {...props } />
             <ChatBox {...props} />
         </Container>
     </ContextContainer.Provider >   
