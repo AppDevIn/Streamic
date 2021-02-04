@@ -25,7 +25,9 @@ var Webcam = require("node-webcam");
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
-const nextApp = next({ dev })
+const nextApp = next({
+    dev
+})
 const nextHandler = nextApp.getRequestHandler()
 
 
@@ -65,7 +67,6 @@ io.on('connection', socket => {
 
         console.log("id of user " + user);
         let room = userToRoom[user]
-
         console.log("retrieve the room " + room);
 
         io.to(socket.id).emit("retrieve usersToRoom", userToRoom[user])
@@ -76,9 +77,13 @@ io.on('connection', socket => {
         io.to(roomID).emit('streaming', data);
         if (data.isVideoChanged) {
             // update the video playing for the room
+
             async function updateRoomWatching() {
                 const url = `${baseUrl}/api/room?type=1`
-                const payload = { roomID, data }
+                const payload = {
+                    roomID,
+                    data
+                }
                 const response = await axios.post(url, payload)
             }
 
@@ -90,6 +95,27 @@ io.on('connection', socket => {
         socket.broadcast.to(roomID).emit('existingUser');
     });
 
+    socket.on('resetURLs', ({ roomID, url, info, update }) => {
+        async function resetURL() {
+            const request_url = `${baseUrl}/api/room?type=2`
+            const payload = {
+                roomID,
+                url,
+                info
+            }
+            const response = await axios.post(request_url, payload)
+        }
+
+        resetURL()
+
+        const data = {}
+        data["resetQueue"] = true
+        data["url"] = url
+        data["update"] = true
+
+        io.to(roomID).emit('streaming', data)
+    })
+
     socket.on('sendMessage', (data) => {
         const { message, roomID } = data
         console.log("Message reveived from " + roomID);
@@ -97,12 +123,18 @@ io.on('connection', socket => {
     })
 
     socket.on("sending signal", payload => {
-        io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
+        io.to(payload.userToSignal).emit('user joined', {
+            signal: payload.signal,
+            callerID: payload.callerID
+        });
     });
 
     socket.on("returning signal", payload => {
 
-        io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
+        io.to(payload.callerID).emit('receiving returned signal', {
+            signal: payload.signal,
+            id: socket.id
+        });
     });
 
 
@@ -116,7 +148,10 @@ io.on('connection', socket => {
 
             try {
                 //Add the room
-                inRoom[roomID].push({...user, sid: socket.id });
+                inRoom[roomID].push({
+                    ...user,
+                    sid: socket.id
+                });
                 console.log(`User ${user.username}`);
 
             } catch (error) {
@@ -128,7 +163,10 @@ io.on('connection', socket => {
 
             try {
                 //Create a new room object
-                inRoom[roomID] = [{...user, sid: socket.id }];
+                inRoom[roomID] = [{
+                    ...user,
+                    sid: socket.id
+                }];
 
 
             } catch (error) {
@@ -275,7 +313,8 @@ nextApp.prepare().then(() => {
 
 
     server.listen(port, (err) => {
-        if (err) throw err
+        if (err)
+            throw err
         console.log(`> Ready on http://localhost:${port}`)
     })
 })
