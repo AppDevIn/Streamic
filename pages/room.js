@@ -65,6 +65,7 @@ function Room(props) {
 }
 
 Room.getInitialProps = async (ctx, user) => {
+    
     var url = `${baseUrl}/api/room`
     const payload = { params: { roomID: ctx.query._id, _id: user._id } };
     const responseRoom = await axios.get(url, payload);

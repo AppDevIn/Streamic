@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useContext, useRef} from 'react'
-import { ContextContainer } from '../../pages/room';
 var Peer = require('simple-peer')
 import styled from "styled-components";
-import room from '../../utils/room';
-
+import { ContextContainer } from '../../pages/room';
 
 
 
@@ -72,6 +70,9 @@ export default function VoiceChat({roomID, user}) {
     
 
   useEffect(() => {
+
+    
+    
     
     if (socket != null) {
       socketRef.current = socket
@@ -235,7 +236,7 @@ export default function VoiceChat({roomID, user}) {
   
 
 
-  // return <> </>
+  
   return (
     
   
