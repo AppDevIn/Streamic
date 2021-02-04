@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Card, CardGroup, Image, Comment, Header } from 'semantic-ui-react'
+import { Card, Image, Comment, Header, Button, Segment, Divider } from 'semantic-ui-react'
 import { ContextContainer } from '../../pages/room';
 import functions from '../../utils/room';
 
@@ -62,12 +62,20 @@ function VideoQueue({roomInfo}) {
     })
   }
 
+  const clearQueue = () => {
+    setVideos([])
+  }
+
   return (
     <div className="chat chat-main chat-sidebar right">
       <Comment.Group>
-        <Header as='h3' dividing>
-          Video Queue
-        </Header>
+        <Segment>
+          <Header as='h1' dividing>
+            Video Queue
+            <Button onClick={ clearQueue }>Clear Queue</Button>
+          </Header>
+        </Segment>
+        <Divider hidden/>
         <div className="scroll">
           { videos.map((video, index) => {
               return (
@@ -76,11 +84,6 @@ function VideoQueue({roomInfo}) {
             }) }
         </div>
         </ Comment.Group>
-        { /* <CardGroup className='mt-4 cardDeck' itemsPerRow='1'>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              { videos.map((video, index) => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    return (<> <p>{index} </p> <VideoCard info={ video } key={ `VQ${video.url}` } onClick={ () => playVideoAt(index) } /> </> )
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }) }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </CardGroup> */ }
     </div>
   )
 }
