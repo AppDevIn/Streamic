@@ -69,7 +69,7 @@ function VideoQueue({roomID}) {
   }
 
   return (
-    <div className="chat chat-main chat-sidebar right">
+    <div className="">
       <Comment.Group>
         <Segment>
           <Header as='h1' dividing>
