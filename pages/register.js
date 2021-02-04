@@ -39,6 +39,7 @@ export default function Register() {
   //Put inside the onChange
   function handleChange(event) {
     const { name, value } = event.target;
+    console.log("🚀 ~ file: register.js ~ line 42 ~ handleChange ~ name, value", name, value)
     setUser((prevState) => ({ ...prevState, [name]: value }));
   }
 
