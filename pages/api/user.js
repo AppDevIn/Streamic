@@ -51,3 +51,27 @@ export async function getUser(req, res) {
 
 }
 
+async function updateProfilePic(req, res) {
+    const {userID , photo} = req.body
+    console.log(userID, photo)
+
+    const user = await User.findOne({
+        UID: userID
+    });
+    
+    console.log(user)
+
+    const update = {
+        $set: {
+            "photo" : photo
+        }
+    }
+
+    const success = await user.updateOne(update)
+    if(succes){ 
+        res.status(200).json(user)
+    }else{
+        res.status(404).json("user cannot be updated")
+    }
+    
+}

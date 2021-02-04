@@ -95,13 +95,14 @@ export default function Profile({user}) {
                 }
 
                 console.log("imageUrl", imageUrl)
-                const url = `${baseUrl}/api/user`
+                const url = `${baseUrl}/api/user?type=2`
                 const payload = {
-                    photo: imageUrl,
-                    _id: user._id
+                    userID: user.UID,
+                    photo: imageUrl
                 }
                 await axios.post(url, payload)
                 Router.push("/")
+                setOpen(false)
             } catch (err) {
                 console.error(err);
             }
