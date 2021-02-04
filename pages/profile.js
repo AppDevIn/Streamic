@@ -8,11 +8,11 @@ import {
     Modal,
     Form
 } from 'semantic-ui-react'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import baseUrl from '../utils/baseUrl'
 import axios from 'axios'
 import Router from 'next/router'
-
+import Layout from '../components/Index/Layout'
 
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dbccwphl1/image/upload"
@@ -31,6 +31,10 @@ export default function Profile({user}) {
         setProfileOpen] = useState(false)
     const [User,
         setUser] = useState(INITIAL_User)
+
+    useEffect(() => {
+        document.body.style.backgroundColor = "#242A2E";
+    }, [])
 
     function handleChange(event) {
         const {name, value} = event.target
@@ -111,6 +115,7 @@ export default function Profile({user}) {
 
     return (
         <>
+        <Layout>
             <Divider hidden/>
             <Divider hidden/>
             <Divider hidden/>
@@ -164,8 +169,8 @@ export default function Profile({user}) {
                         </Dimmer>
                         </Dimmer.Dimmable>
 
-                <Header as='h1'>{user.username}</Header>
-                <Header as='h1'>{user.email.split("&")[0]}</Header>
+                <Header inverted color='grey' as='h1'>{user.username}</Header>
+                <Header inverted color='grey' as='h1'>{user.email.split("&")[0]}</Header>
                 <Divider hidden/>
                 <Divider hidden/> 
                 
@@ -207,6 +212,8 @@ export default function Profile({user}) {
                 </Modal> */}
 
            </Container>
+           </Layout>
         </>
+        
     )
 }
