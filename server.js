@@ -180,6 +180,11 @@ io.on('connection', socket => {
     // });
 
 
+    socket.on("socket room", ({ roomID, user }) => {
+        socketToRoom[socket.id] = roomID;
+        console.log("🚀 ~ file: server.js ~ line 185 ~ socket.on ~ socketToRoom", socketToRoom)
+    })
+
 
     socket.on("join room", ({ roomID, user }) => {
         //Check if the room exist
@@ -191,9 +196,6 @@ io.on('connection', socket => {
             //Create a new room object
             users[roomID] = [socket.id];
         }
-
-        socketToRoom[socket.id] = roomID;
-        console.log("🚀 ~ file: server.js ~ line 196 ~ socket.on ~ socketToRoom", socketToRoom)
 
         //Get the users in the room
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
