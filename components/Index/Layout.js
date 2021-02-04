@@ -41,14 +41,12 @@ function Layout({ children }) {
         <span id="brandname">Streamic</span>
 
         <Nav className="justify-content-end ml-auto" text-align="center">
-          <Button color='blue' as='a' href="/profile" > 
-            <ExitToAppIcon/>
-            Profile Page
+          <Button color='blue' as='a' href="/profile" title="Profile page" > 
+          <AccountCircleIcon/>
           </Button>
 
-          <Button color='red' onClick={() => logout()} >
-            <AccountCircleIcon/>
-            Logout
+          <Button color='red' onClick={() => logout()} title="Logout" >            
+            <ExitToAppIcon/>
           </Button>
         </Nav >
         

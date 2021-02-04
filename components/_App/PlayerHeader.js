@@ -3,6 +3,8 @@ import {Navbar, Form, FormControl, Nav} from 'react-bootstrap';
 import {ContextContainer} from '../../pages/room';
 import { removeCookie } from '../../utils/auth'
 import { Button } from 'semantic-ui-react'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 function playerHeader(){
 
@@ -46,13 +48,13 @@ function playerHeader(){
             <Button id="searchBtn" type="submit"><span className="glyphicon glyphicon-search"></span></Button>
         </Form>
 
-        <Nav className="justify-content-end">
-          <Button color='blue' as='a' href="/profile" >
-            Profile Page
+        <Nav className="justify-content-end" text-align="center">
+          <Button color='blue' as='a' href="/profile" title="Profile page" > 
+          <AccountCircleIcon/>
           </Button>
 
-          <Button color='red' onClick={() => logout()} >
-            Logout
+          <Button color='red' onClick={() => logout()} title="Logout" >            
+            <ExitToAppIcon/>
           </Button>
         </Nav >
 
