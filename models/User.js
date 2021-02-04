@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
     UID: {
         type: String,
         unique: true,
-        default: shortid.generate()
+        default: shortid.generate
     },
     email: {
         type: String,
