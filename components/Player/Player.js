@@ -248,13 +248,6 @@ function Player({user, roomInfo}) {
         }
     }
 
-    const resetURLs = () => {
-        socket.emit("resetURLs", {
-            roomID: roomID,
-            url: urls[playingIndex]
-        })
-    }
-
     return (
         <div className="left">
           <div className='player-wrapper'>
@@ -285,9 +278,6 @@ function Player({user, roomInfo}) {
             </button>
             <button onClick={ () => playNextVideo() } id="next" type="button" className="ml-2 btn btn-default">
               <span className="glyphicon glyphicon-step-forward"></span>
-            </button>
-            <button onClick={ () => resetURLs() } id="reset" type="button" className="ml-2 btn btn-default">
-              <span className="glyphicon glyphicon-refresh"></span>
             </button>
             <span id="timeline">{ playedText } / { durationText }</span>
           </div>

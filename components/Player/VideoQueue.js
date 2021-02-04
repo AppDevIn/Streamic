@@ -62,8 +62,11 @@ function VideoQueue({roomInfo}) {
     })
   }
 
-  const clearQueue = () => {
-    setVideos([])
+  const resetURLs = () => {
+    socket.emit("resetURLs", {
+      roomID: roomID,
+      url: urls[playingIndex]
+    })
   }
 
   return (
@@ -72,7 +75,7 @@ function VideoQueue({roomInfo}) {
         <Segment>
           <Header as='h1' dividing>
             Video Queue
-            <Button onClick={ clearQueue }>Clear Queue</Button>
+            <Button onClick={ () => resetURLs() }>Clear Queue</Button>
           </Header>
         </Segment>
         <Divider hidden/>
