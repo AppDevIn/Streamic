@@ -29,7 +29,7 @@
         "jsonwebtoken": "^8.5.1",
         "mocha": "^8.2.1",
         "moment": "^2.29.1",
-        "mongoose": "^5.10.14",
+        "mongoose": "^5.11.19",
         "next": "^10.0.5",
         "node-webcam": "^0.7.0",
         "nodemon": "^2.0.6",
