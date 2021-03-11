@@ -50,7 +50,7 @@
         "shortid": "^2.2.16",
         "simple-peer": "^9.9.3",
         "socket.io": "^3.0.1",
-        "socket.io-client": "^3.0.1",
+        "socket.io-client": "^4.0.0",
         "styled-components": "^5.2.1"
     },
     "engines": {
