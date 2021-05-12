@@ -49,7 +49,7 @@
         "semantic-ui-react": "^2.0.3",
         "shortid": "^2.2.16",
         "simple-peer": "^9.9.3",
-        "socket.io": "^3.0.1",
+        "socket.io": "^4.1.1",
         "socket.io-client": "^3.0.1",
         "styled-components": "^5.2.1"
     },
